@@ -3,3 +3,9 @@
 ################################################################################
 
 /.vs
+/Flowtick.Frontend/.config
+/Flowtick.Frontend/bin
+/Flowtick.Frontend/obj
+/Flowtick.Frontend/Properties/PublishProfiles
+*.csproj
+*.user
