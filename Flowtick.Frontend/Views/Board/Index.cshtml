@@ -1,0 +1,1421 @@
+﻿@* Views/Board/Index.cshtml *@
+@model Flowtick.Frontend.Controllers.BoardViewModel
+
+@{
+    ViewData["Title"] = "Project Board";
+    Layout = "_FlowtickLayout";
+}
+
+@section Styles {
+    <style>
+        :root {
+            --primary-color: #0d9488;
+            --primary-hover: #0f766e;
+            --border-color: #e5e7eb;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+
+        body {
+            background-color: var(--gray-50);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+            .search-box input {
+                padding: 0.5rem 1rem 0.5rem 2.5rem;
+                border: 1px solid var(--border-color);
+                border-radius: 0.5rem;
+                width: 250px;
+                font-size: 0.875rem;
+                transition: all 0.2s;
+            }
+
+                .search-box input:focus {
+                    outline: none;
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+                }
+
+            .search-box svg {
+                position: absolute;
+                left: 0.75rem;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 1.25rem;
+                height: 1.25rem;
+                color: var(--gray-600);
+            }
+
+        .icon-btn {
+            padding: 0.5rem;
+            border: none;
+            background: transparent;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .icon-btn:hover {
+                background: var(--gray-100);
+            }
+
+            .icon-btn svg {
+                width: 1.25rem;
+                height: 1.25rem;
+                color: var(--gray-600);
+            }
+
+        .user-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+            .user-avatar:hover {
+                transform: scale(1.05);
+            }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .filter-btn {
+            padding: 0.375rem 0.75rem;
+            border: none;
+            background: transparent;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+            .filter-btn:hover {
+                background: var(--gray-100);
+            }
+
+            .filter-btn svg {
+                width: 1rem;
+                height: 1rem;
+            }
+
+        .create-btn {
+            margin-left: auto;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+            .create-btn:hover {
+                background: var(--primary-hover);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .create-btn:active {
+                transform: translateY(0);
+            }
+
+        /* Board Container */
+        .board-container {
+            padding: 1.5rem;
+            overflow-x: auto;
+            height: calc(100vh - 130px);
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .board-columns {
+            display: flex;
+            gap: 1rem;
+            min-width: max-content;
+            height: 100%;
+        }
+
+        /* Column */
+        .board-column {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .column-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .column-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0;
+        }
+
+        .column-count {
+            padding: 0.125rem 0.5rem;
+            background: var(--gray-200);
+            color: var(--gray-700);
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 9999px;
+        }
+
+        .column-content {
+            background: var(--gray-100);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+            .column-content.in-progress {
+                background: #eff6ff;
+            }
+
+            .column-content.review {
+                background: #faf5ff;
+            }
+
+            .column-content.done {
+                background: #f0fdf4;
+            }
+
+        /* Task Card */
+        .task-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+            .task-card::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: 0.5rem;
+                opacity: 0;
+                transition: opacity 0.2s;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            }
+
+            .task-card:hover::before {
+                opacity: 1;
+            }
+
+            .task-card:hover {
+                transform: translateY(-2px);
+                border-color: var(--primary-color);
+            }
+
+        .task-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .task-type-icon {
+            width: 1rem;
+            height: 1rem;
+        }
+
+            .task-type-icon.epic {
+                color: #9333ea;
+            }
+
+            .task-type-icon.story {
+                color: #10b981;
+            }
+
+            .task-type-icon.task {
+                color: #3b82f6;
+            }
+
+            .task-type-icon.bug {
+                color: #ef4444;
+            }
+
+        .task-id {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        .task-menu {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .task-card:hover .task-menu {
+            opacity: 1;
+        }
+
+        .task-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-900);
+            margin: 0 0 0.5rem 0;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .task-labels {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-label {
+            padding: 0.125rem 0.5rem;
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 0.25rem;
+        }
+
+        .task-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.75rem;
+        }
+
+        .task-indicators {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .priority-icon {
+            width: 0.875rem;
+            height: 0.875rem;
+        }
+
+            .priority-icon.high {
+                color: #dc2626;
+            }
+
+            .priority-icon.medium {
+                color: #f97316;
+            }
+
+            .priority-icon.low {
+                color: var(--gray-600);
+            }
+
+        .subtask-count {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+            .subtask-count svg {
+                width: 0.875rem;
+                height: 0.875rem;
+            }
+
+        .assignee-avatar {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.625rem;
+            font-weight: 500;
+        }
+
+        /* Scrollbar Styling */
+        .column-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .column-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .column-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+            .column-content::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
+
+        /* Animations */
+        @@keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .task-card {
+            animation: slideIn 0.3s ease-out;
+        }
+    </style>
+    <style>
+        .sidebar {
+            background: white;
+            width: 260px;
+            border-right: 1px solid var(--border-color);
+            /* padding: 1.5rem 0; */
+            padding: 1.5rem 0.3rem 1.5rem 0.3rem;
+            transition: all 0.3s ease;
+            position: absolute;
+            z-index: 100;
+            height:100vh;
+        }
+
+            .sidebar.collapsed {
+                margin-left: -260px;
+            }
+
+        .sidebar-item {
+            padding: 0.75rem 1.5rem;
+            color: #616161;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+        }
+
+            .sidebar-item:hover {
+                background: #F5F5F5;
+                color: var(--primary-color);
+                border-left-color: var(--primary-color);
+            }
+
+            .sidebar-item.active {
+                background: #E8F5E9;
+                color: var(--primary-color);
+                border-left-color: var(--primary-color);
+                font-weight: 500;
+            }
+
+            .sidebar-item i {
+                width: 24px;
+                margin-right: 12px;
+                text-align: center;
+            }
+
+        .sidebar-divider {
+            margin: 1rem 1.5rem;
+            border: 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+    </style>
+}
+<!-- Top Navigation -->
+<div class="top-nav">
+    <div class="nav-left">
+        <button class="icon-btn" id="menuToggle">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+        <h1 class="nav-title">@Model.ProjectName / @Model.BoardName</h1>
+    </div>
+    <div class="nav-right">
+        <div class="search-box">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search tasks..." />
+        </div>
+        <button class="icon-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+        </button>
+        <button class="icon-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        </button>
+        <div class="user-avatar">@Model.CurrentUser.Initials</div>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+    <button class="filter-btn">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        All assignees
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 1rem; height: 1rem;">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+    </button>
+    <button class="filter-btn">
+        Type: All
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 1rem; height: 1rem;">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+    </button>
+    <button class="filter-btn">
+        Sprint
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 1rem; height: 1rem;">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+    </button>
+    <button class="create-btn" onclick="showCreateModal()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 1rem; height: 1rem;">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Create Issue
+    </button>
+</div>
+
+<!-- Board Container -->
+<div class="board-container">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-user"></i> All assignees
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-list"></i> Type: All
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-rocket"></i> Sprint
+        </a>
+        <hr class="sidebar-divider">
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-briefcase"></i> Fophex-ERP
+        </a>
+        <a href="#" class="sidebar-item active">
+            <i class="fas fa-clone"></i> App Clone
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-users"></i> Teams
+        </a>
+        <a href="#" class="sidebar-item">
+            <i class="fas fa-bullseye"></i> Goals
+        </a>
+    </div>
+    <div class="board-columns">
+        @foreach (var column in Model.Columns)
+        {
+            <div class="board-column">
+                <div class="column-header">
+                    <div class="column-title-wrapper">
+                        <h2 class="column-title">@column.Title</h2>
+                        <span class="column-count">@column.Tasks.Count</span>
+                    </div>
+                    <button class="icon-btn">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="column-content @column.CssClass">
+                    @foreach (var task in column.Tasks)
+                    {
+                        <div class="task-card" onclick="showTaskModal('@task.Id')">
+                            <div class="task-card-header">
+                                <div class="task-meta">
+                                    @if (task.Type == "Epic")
+                                    {
+                                        <svg class="task-type-icon epic" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    }
+                                    else if (task.Type == "Story")
+                                    {
+                                        <svg class="task-type-icon story" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    }
+                                    else if (task.Type == "Bug")
+                                    {
+                                        <svg class="task-type-icon bug" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                    }
+                                    else
+                                    {
+                                        <svg class="task-type-icon task" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="10" stroke-width="2" />
+                                        </svg>
+                                    }
+                                    <span class="task-id">@task.Id</span>
+                                </div>
+                                <button class="icon-btn task-menu">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <h3 class="task-title">@task.Title</h3>
+                            @if (task.Labels.Any())
+                            {
+                                <div class="task-labels">
+                                    @foreach (var label in task.Labels)
+                                    {
+                                        <span class="task-label">@label</span>
+                                    }
+                                </div>
+                            }
+                            <div class="task-footer">
+                                <div class="task-indicators">
+                                    <svg class="priority-icon @task.Priority.ToLower()" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                                    </svg>
+                                    @if (task.SubtaskCount > 0)
+                                    {
+                                        <div class="subtask-count">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>@task.CompletedSubtasks/@task.SubtaskCount</span>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="assignee-avatar" title="@task.Assignee.Name">@task.Assignee.Initials</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<style>
+
+
+    .modal-container {
+        background: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        width: 100%;
+        max-width: 1200px;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        animation: slideUp 0.3s ease-out;
+    }
+
+    @@keyframes slideUp {
+        from {
+            opacity: 0 !important;
+            transform: translateY(20px) !important;
+        }
+
+        to {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+    }
+
+    .modal-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 1rem 1.5rem !important;
+        border-bottom: 1px solid var(--border-color) !important;
+    }
+
+    .modal-header-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+    }
+
+    .task-type-icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: #3b82f6;
+    }
+
+    .task-id {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--gray-600);
+    }
+
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        background: #ccfbf1;
+        color: #0d9488;
+        font-size: 0.75rem;
+        font-weight: 500;
+        border-radius: 0.375rem;
+    }
+
+    .modal-header-right {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+    }
+
+    .icon-btn {
+        padding: 0.5rem;
+        border: none;
+        background: transparent;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .icon-btn:hover {
+            background: var(--gray-100);
+            transform: scale(1.05);
+        }
+
+        .icon-btn svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--gray-600);
+        }
+
+    .modal-body {
+        display: grid !important;
+        grid-template-columns: 1fr 320px !important;
+        gap: 1.5rem !important;
+        padding: 1.5rem !important;
+        overflow-y: auto !important;
+        flex: 1 !important;
+    }
+
+        .modal-body::-webkit-scrollbar {
+            width: 8px !important;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: transparent !important;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #cbd5e1 !important;
+            border-radius: 4px !important;
+        }
+
+    .main-content {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+    }
+
+    .title-input {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--gray-900);
+        border: 2px solid transparent;
+        outline: none;
+        padding: 0.5rem;
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        width: 100%;
+    }
+
+        .title-input:hover {
+            border-color: var(--gray-200);
+        }
+
+        .title-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+    .section-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 0.5rem;
+    }
+
+    .description-editor {
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        overflow: hidden;
+        transition: all 0.2s;
+    }
+
+        .description-editor:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+    .editor-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.5rem;
+        background: var(--gray-50);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .toolbar-btn {
+        padding: 0.375rem;
+        border: none;
+        background: transparent;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--gray-700);
+        transition: all 0.2s;
+    }
+
+        .toolbar-btn:hover {
+            background: var(--gray-200);
+        }
+
+    .description-textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 1rem;
+        border: none;
+        outline: none;
+        resize: vertical;
+        font-family: inherit;
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
+    .child-items-section {
+        margin-top: 1rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+    }
+
+    .add-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.375rem 0.75rem;
+        background: transparent;
+        border: none;
+        color: var(--primary-color);
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .add-btn:hover {
+            background: #ccfbf1;
+        }
+
+        .add-btn svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+    .child-items-table {
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+        .child-items-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .child-items-table thead {
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .child-items-table th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+        }
+
+        .child-items-table tbody tr {
+            border-bottom: 1px solid var(--gray-100);
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+            .child-items-table tbody tr:hover {
+                background: var(--gray-50);
+            }
+
+        .child-items-table td {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+        }
+
+    .task-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+        .task-link:hover {
+            color: #2563eb;
+        }
+
+        .task-link svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+    .activity-section {
+        margin-top: 1.5rem;
+    }
+
+    .activity-tabs {
+        display: flex;
+        gap: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 1rem;
+    }
+
+    .activity-tab {
+        padding: 0.5rem 0.25rem;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--gray-600);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .activity-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .activity-tab:hover {
+            color: var(--gray-900);
+        }
+
+    .comment-input-wrapper {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .user-avatar {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #14b8a6, #0d9488);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 500;
+        flex-shrink: 0;
+    }
+
+    .comment-input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        font-family: inherit;
+        font-size: 0.875rem;
+        outline: none;
+        resize: vertical;
+        transition: all 0.2s;
+    }
+
+        .comment-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+    .sidebar-temp {
+        background: var(--gray-50);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .sidebar-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .sidebar-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--gray-600);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .sidebar-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.5rem;
+        background: transparent;
+        border: none;
+        border-radius: 0.5rem;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .sidebar-btn:hover {
+            background: white;
+            transform: translateX(2px);
+        }
+
+        .sidebar-btn svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--gray-600);
+        }
+
+        .sidebar-btn .user-avatar {
+            width: 2rem;
+            height: 2rem;
+        }
+
+    .sidebar-user-name {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--gray-900);
+    }
+
+    .sidebar-divider {
+        height: 1px;
+        background: var(--gray-200);
+    }
+
+    .priority-flag {
+        width: 1rem;
+        height: 1rem;
+    }
+
+        .priority-flag.medium {
+            color: #f97316;
+        }
+
+    .sprint-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.875rem;
+        transition: color 0.2s;
+    }
+
+        .sprint-link:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+    .btn-save {
+        margin-top: 1rem;
+        padding: 0.625rem 1.5rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+        .btn-save:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-save:active {
+            transform: translateY(0);
+        }
+</style>
+
+<div class="modal-container">
+    <!-- Header -->
+    <div class="modal fade" id="addPeopleModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <svg class="task-type-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" stroke-width="2" />
+                    </svg>
+                    <span class="task-id">Model - TaskId</span>
+                    <span class="status-badge">Model - Status</span>
+                </div>
+                <div class="modal-header-right">
+                    <button class="icon-btn">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                    </button>
+                    <button class="icon-btn">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                        </svg>
+                    </button>
+                    <button class="icon-btn" onclick="window.close()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+                <!-- Main Content -->
+                <div class="main-content">
+                    <form asp-action="UpdateTask" method="post">
+                        <input type="hidden" />
+
+                        <input type="text" class="title-input" />
+
+                        <div>
+                            <label class="section-title">Description</label>
+                            <div class="description-editor">
+                                <div class="editor-toolbar">
+                                    <button type="button" class="toolbar-btn">B</button>
+                                    <button type="button" class="toolbar-btn"><i>I</i></button>
+                                    <button type="button" class="toolbar-btn"><u>U</u></button>
+                                </div>
+                                <textarea class="description-textarea" placeholder="Add a detailed description..."></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-save">Save Changes</button>
+                    </form>
+
+                    <!-- Child Items -->
+                    <div class="child-items-section">
+                        <div class="section-header">
+                            <h3 class="section-title">Child Items</h3>
+                            <button class="add-btn">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Add child
+                            </button>
+                        </div>
+
+                        <div class="child-items-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Work</th>
+                                        <th>Priority</th>
+                                        <th>Assignee</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr onclick="window.location.href='/Board/Task/1'">
+                                        <td>
+                                            <a href="/Board/Task/1" class="task-link">
+                                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="10" stroke-width="2" />
+                                                </svg>
+                                                <span>TaskId</span>
+                                                <span style="color: var(--gray-700);">Title</span>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <svg class="priority-flag medium" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                                            </svg>
+                                        </td>
+                                        <td>
+                                            <div class="user-avatar">SU</div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge">ToDo</span>
+                                        </td>
+                                    </tr>
+                                    <tr onclick="window.location.href='/Board/Task/1'">
+                                        <td>
+                                            <a href="/Board/Task/1" class="task-link">
+                                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <circle cx="12" cy="12" r="10" stroke-width="2" />
+                                                </svg>
+                                                <span>TaskId</span>
+                                                <span style="color: var(--gray-700);">Title</span>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <svg class="priority-flag medium" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                                            </svg>
+                                        </td>
+                                        <td>
+                                            <div class="user-avatar">SU</div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge">ToDo</span>
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Activity -->
+                    <div class="activity-section">
+                        <div class="activity-tabs">
+                            <button class="activity-tab active">Comments</button>
+                            <button class="activity-tab">Activity</button>
+                            <button class="activity-tab">History</button>
+                        </div>
+
+                        <div class="comment-input-wrapper">
+                            <div class="user-avatar">Model - CurrentUser.Initials</div>
+                            <textarea class="comment-input" rows="3" placeholder="Add a comment..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <label class="sidebar-label">Assignee</label>
+                        <button class="sidebar-btn">
+                            <div class="user-avatar">Model - Assignee.Initials</div>
+                            <span class="sidebar-user-name">Model - Assignee.Name</span>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <label class="sidebar-label">Reviewer</label>
+                        <button class="sidebar-btn">
+                            <div class="user-avatar">Model - Reviewer.Initials</div>
+                            <span class="sidebar-user-name">Model - Reviewer.Name</span>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <label class="sidebar-label">Reporter</label>
+                        <button class="sidebar-btn">
+                            <div class="user-avatar">Model - Reporter.Initials</div>
+                            <span class="sidebar-user-name">Model - Reporter.Name</span>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-divider"></div>
+
+                    <div class="sidebar-section">
+                        <label class="sidebar-label">Priority</label>
+                        <button class="sidebar-btn">
+                            <svg class="priority-flag medium" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                            </svg>
+                            <span class="sidebar-user-name">Model - Priority</span>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <label class="sidebar-label">Labels</label>
+                        <button class="sidebar-btn">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                            <span style="color: var(--primary-color); font-size: 0.875rem; font-weight: 500;">Add labels</span>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <label class="sidebar-label">Sprint</label>
+                        <button class="sidebar-btn">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <a href="#" class="sprint-link">Model - Sprint</a>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <label class="sidebar-label">Estimated Time</label>
+                        <button class="sidebar-btn">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span style="color: var(--gray-600); font-size: 0.875rem;">Add estimate</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            
+
+            // Toggle sidebar
+            $('#menuToggle').on('click', function () {
+                $('#sidebar').toggleClass('collapsed');
+            });
+        });
+        function showTaskModal(taskId) {
+            window.location.href = `/Board/Task/${taskId}`;
+        }
+
+        function showCreateModal() {
+            //window.location.href = '/Board/Create';
+            $('#addPeopleModal').modal('show');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const taskCards = document.querySelectorAll('.task-card');
+
+            taskCards.forEach(card => {
+                const title = card.querySelector('.task-title').textContent.toLowerCase();
+                const id = card.querySelector('.task-id').textContent.toLowerCase();
+
+                if (title.includes(searchTerm) || id.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}

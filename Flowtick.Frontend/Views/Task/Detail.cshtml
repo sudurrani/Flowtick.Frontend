@@ -1,0 +1,2011 @@
+﻿@{
+    ViewData["Title"] = "Task View";
+    Layout = "~/Views/Shared/_FlowtickLayout.cshtml";
+}
+<style>
+    /* 	assigne dropdown css */
+
+    .flowtick-dropdown {
+        width: 280px;
+        padding: 0;
+        border-radius: 10px;
+        border: 1px solid #E4E6EA;
+        overflow: hidden;
+        z-index: 99999;
+        transform: translateY(2px);
+    }
+
+
+    .flowtick-dropdown-search {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-bottom: 1px solid #E7E9ED;
+    }
+
+        .flowtick-dropdown-search .dropdown-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .flowtick-dropdown-search input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            flex-grow: 1;
+        }
+
+    /* User List */
+    .dropdown-list {
+        max-height: 240px;
+        overflow-y: auto;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+        /* Scrollbar like Jira */
+        .dropdown-list ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .dropdown-list ::-webkit-scrollbar-thumb {
+            background: #C6C9CE;
+            border-radius: 10px;
+        }
+
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+        .dropdown-item:hover {
+            background-color: #e4f7fa !important;
+        }
+
+        .dropdown-item:hover {
+            background: #F4F5F7;
+        }
+
+    .dropdown-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+    }
+
+    .empty-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .user-name {
+        font-size: 13px;
+    }
+    /* Hide Bootstrap caret icon */
+    .no-caret::after {
+        display: none !important;
+    }
+
+    /* ===== MODAL Design Start ===== */
+    .task-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(140, 144, 152, 0.75);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /*    backdrop-filter: blur(3px);*/
+        z-index: 9999;
+        overflow: auto;
+        padding: 20px;
+    }
+
+
+    /* ===== MODAL BOX ===== */
+    .task-modal-box {
+        width: 1265px;
+        max-width: 89%;
+        height: 610px;
+        max-height: 100%;
+        background: #FFFFFF;
+        border-radius: 4px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        /*    box-shadow: 0 8px 30px rgba(0,0,0,0.15);*/
+    }
+
+    /* ===== HEADER ===== */
+    .task-modal-header {
+        display: flex;
+        align-items: center;
+        padding: 0px 16px;
+        gap: 12px;
+        width: 100%;
+        border-bottom: 1px solid #E3E6EA;
+        background: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        justify-content: space-between;
+    }
+
+    /* HEADER ICONS LEFT & RIGHT */
+    .header-left-icons,
+    .header-right-icons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .header-left-icons .icon-btn,
+        .header-right-icons .icon-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px 6px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+            .header-left-icons .icon-btn:hover,
+            .header-right-icons .icon-btn:hover {
+                background: #F1F2F4;
+            }
+
+        .header-left-icons a.task-code {
+            font-weight: 600;
+            font-size: 14px;
+            color: #5e6c84;
+            text-decoration: none;
+        }
+
+            .header-left-icons a.task-code:hover {
+                text-decoration: underline;
+            }
+
+    /* TASK ID */
+    /*      .task-id {
+                                                 background-color: #E2C6FF;
+                                                 color: #5D3FD3;
+                                                 font-weight: 600;
+                                                 font-size: 14px;
+                                                 padding: 6px 10px;
+                                                 border-radius: 6px;
+                                             } */
+
+    /* TASK TITLE */
+    .task-left .task-title {
+        margin-bottom: 12px;
+    }
+
+    .task-left .task-title-input {
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        outline: none;
+        padding: 10px 0px 10px 0px;
+        width: 100%;
+        background: transparent;
+    }
+
+        .task-left .task-title-input:focus {
+            border: 1px solid #00757D;
+        }
+
+
+    .header-right-icon {
+        background: transparent;
+        border: 1px solid #F1F2F4;
+        border-radius: 6px;
+        font-size: 20px;
+        cursor: pointer;
+        width: 35px;
+        height: 35px;
+        margin-right: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #444;
+        padding: 0;
+        transition: background 0.2s;
+    }
+
+        .header-right-icon:hover {
+            background: #F1F2F4;
+        }
+
+    /* ===== BODY ===== */
+    .task-modal-body {
+        flex: 1;
+        display: flex;
+        gap: 16px;
+        padding: 16px 16px;
+        background: #fff;
+        overflow: hidden;
+        padding-top: 0px;
+    }
+
+    /* ===== LEFT PANEL ===== */
+    .task-left {
+        width: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 16px;
+        /*    padding-left: 12px;*/
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .description-text {
+        font-size: 14px;
+        color: #5e6c84;
+        cursor: pointer;
+        padding: 6px 0;
+    }
+
+    /* EDITOR */
+    #editor-toolbar {
+        margin-bottom: 6px;
+        border: 1px solid #dcdcdc;
+        border-radius: 6px 6px 0 0;
+    }
+
+    #editorContainer {
+        height: 160px;
+        border: 1px solid #dcdcdc;
+        border-top: none;
+        border-radius: 0 0 6px 6px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    /* ACTION BUTTONS */
+    .action-buttons {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+    }
+
+    .primary-button {
+        background: #0052cc;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+    }
+
+    .cancel-button {
+        border: 1px solid #dcdcdc;
+        background: #fff;
+        padding: 6px 12px;
+        border-radius: 4px;
+    }
+
+    /* PANELS */
+    .panel-section {
+        margin-top: 32px;
+    }
+
+    .panel-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    /* COMMENTS */
+    .comment-box {
+        width: 100%;
+        height: 90px;
+        border: 1px solid #dcdcdc;
+        border-radius: 6px;
+        padding: 8px;
+        resize: none;
+    }
+
+    /* ===== RIGHT PANEL ===== */
+    .task-right {
+        width: 30%;
+        display: flex;
+        flex-direction: column;
+        overflow-x: auto;
+        overflow-y: auto;
+    }
+
+    /* Right panel scroll content wrapper */
+    .right-scroll {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+    .status-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .detail-block {
+        margin-bottom: 18px;
+    }
+
+        .detail-block .label {
+            font-size: 16px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        .detail-block .value {
+            font-size: 13px;
+            color: #333;
+        }
+
+    .link-item {
+        font-size: 13px;
+        color: #0052cc;
+        cursor: pointer;
+    }
+
+    /*
+                                                 child work item table css */
+
+    .child-panel {
+        /* 		margin-top: 20px; */
+    }
+
+        /* Remove default triangle icon */
+        .child-panel summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 10px 0px;
+            display: flex;
+            align-items: center;
+        }
+
+
+
+    /* Custom arrow icon */
+    .arrow-icon {
+        width: 12px;
+        height: 12px;
+        border-right: 2px solid #333;
+        border-bottom: 2px solid #333;
+        /* 		margin-right: 8px; */
+        justify-content: center;
+        transform: rotate(-42deg); /* v */
+        transition: transform .2s ease;
+    }
+
+    /* Rotate arrow when opened */
+    .child-panel[open] .arrow-icon {
+        transform: rotate(45deg);
+    }
+
+    /* Panel content */
+    .child-panel-content {
+        padding: 0 0px 12px;
+    }
+
+    /* Table */
+    .child-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+        .child-table th {
+            text-align: left;
+            padding: 8px 0;
+            border-bottom: 1px solid #e3e6ea;
+            font-weight: 600;
+            color: #505258;
+        }
+
+        .child-table td {
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+    /* Form UI */
+    .task-no {
+        font-weight: 500;
+        margin-right: 6px;
+        color: #00757D;
+    }
+
+    /* 	.child-task-title{
+
+                                                 } */
+
+    .profile-img {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        margin-right: 6px;
+    }
+
+    .status-select {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+    }
+
+    .dropdown-menu .dropdown-submenu {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: -0px;
+    }
+
+    .dropdown-menu .dropdown-submenu-left {
+        right: 100%;
+        left: auto;
+    }
+
+    .dropdown-menu > li:hover > .dropdown-submenu {
+        display: block;
+    }
+
+
+    /*child work add row css*/
+    .child-add-wrapper {
+        padding: 8px;
+    }
+
+    #subTaskForm {
+        display: contents;
+    }
+
+    .child-add-type {
+        width: 120px;
+    }
+
+    .child-add-action {
+        cursor: pointer;
+        color: #6c757d;
+    }
+
+        .child-add-action span:hover,
+        .child-add-action span:focus {
+            color: #1868db;
+            outline: 2px solid #1868db;
+            outline-offset: 2px;
+            border-radius: 4px; /* nice rounded border */
+        }
+
+    .child-add-row td {
+        background: #fafafa;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    /*task editor css here*/
+    .ql-editor:hover {
+        background-color: #f0f0f0; /* light gray */
+        transition: background-color 0.3s; /* smooth effect */
+    }
+
+    .create-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        color: #374151;
+        margin-bottom: 12px;
+        background: none;
+        border: none;
+    }
+
+        .create-btn span:first-child {
+            font-size: 22px;
+            font-weight: bold;
+            line-height: 0;
+        }
+
+        .create-btn:hover {
+            background-color: #F0F1F2;
+        }
+    /*
+                               Create Card css */
+    .flowtick-create-card {
+        background: #ffffff;
+        border: 2px solid #4688EC;
+        border-radius: 5px;
+        padding: 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        width: 100%;
+    }
+
+    .flowtick-textarea {
+        width: 100%;
+        border: none;
+        outline: none;
+        resize: vertical;
+        padding: 10px 10px 0px 10px;
+        /* font-size: 14px;
+                        font-family: Arial, sans-serif; */
+        min-height: 60px;
+    }
+
+    .flowtick-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 12px;
+        border-top: 1px solid #e8e8e8;
+    }
+
+    .left-icons .icon-btn,
+    .right-icon .icon-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        /*       margin-right: 10px; */
+        color: #5f6368;
+    }
+
+        .left-icons .icon-btn:last-child {
+            margin-right: 0;
+        }
+
+    .icon-btn:hover {
+        color: #1a73e8;
+    }
+
+    .left-icons .dropdown {
+        display: inline-block;
+        /*         margin-right: 10px; */
+    }
+
+
+    .dropdown-menu .dropdown-item i {
+        font-size: 16px;
+    }
+
+    #childTaskTypeID {
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+    }
+
+    #btnClearFilter:hover {
+        text-decoration: underline;
+        color: blue;
+    }
+</style>
+<div class="row" style="overflow-x:hidden;">
+    <div class="col-12">
+        <div class="task-modal-header border-bottom-0">
+
+            <!-- LEFT ICONS -->
+            <div class="header-left-icons" style="display:flex; align-items:center; gap:0px;">
+                @* <button class="icon-btn"><img src="your-uploaded-icon.png" alt="icon" style="width:20px;height:20px;"></button> *@
+                @* <i class="bi bi-lightning-charge task-icon"></i> *@
+                <!-- project Epics dropdown  dropdown -->
+                <div class="dropdown d-flex align-items-center">
+                    <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown" id="epicDropdown">
+                        <div class=" d-flex align-items-center">
+                            <div id="epicParentLink" style="cursor:pointer;" class="selected-epic-code "><i class="bi bi-lightning-charge task-icon" id="epicParentLinkIcon" style="color: #a259ff;"></i><span class="task-code">no-parent</span></div>
+                        </div>
+                    </div>
+                    <i class="bi bi-slash-lg link-icon" style="transform: rotate(-20deg);font-size:15px;font-weight:600 !important;"></i>
+                    <div class="dropdown-menu flowtick-dropdown" style="width:365px">
+                        <div class="flowtick-dropdown-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" class="seach-user-dropdown" placeholder="Search Epic">
+                        </div>
+
+                        <ul class="dropdown-list project-epics-list"></ul>
+                    </div>
+
+                </div>
+
+                <div class="dropdown">
+                    <a class="text-decoration-none  no-caret dropdown-toggle " data-bs-toggle="dropdown" id="" tabindex="0">
+                        <span id="modalTaskTypeIcon" style="cursor:pointer;"><i></i></span>
+                    </a>
+
+                    <ul class="dropdown-menu task-type-menu">
+                        <!-- Dynamic items will load here -->
+                    </ul>
+                </div>
+                <span href="#" class="task-code ms-1" id="modalTaskCode"></span>
+            </div>
+
+            
+
+        </div>
+    </div>
+</div>
+
+<div class="row ps-2 pe-2">
+    <div class="col-9">
+        <div class="row">
+            <div class="col-12">
+                <div class="task-left w-100">
+
+                    <!-- TASK TITLE MOVED HERE -->
+                    <div class="task-title" style="margin-bottom:12px;">
+                        <input type="text" class="task-title-input" value="Landlord Management v1.0" id="modalTaskTitle" />
+                    </div>
+
+                    <label class="section-title">Description</label>
+
+                    <div id="description-view">
+                        <div id="description-display" class="description-text">
+                            Edit description
+                        </div>
+                    </div>
+
+                    <!-- EDITOR -->
+                    <div id="description-editor-wrapper" style="display:none;">
+
+                        <!-- Toolbar -->
+                        <div id="editor-toolbar">
+                            <span class="ql-formats">
+                                <button class="ql-bold"></button>
+                                <button class="ql-italic"></button>
+                                <button class="ql-underline"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-list" value="ordered"></button>
+                                <button class="ql-list" value="bullet"></button>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-link"></button>
+                                <button class="ql-image"></button>
+                                <button class="ql-code-block"></button>
+                            </span>
+                        </div>
+
+                        <div id="editorContainer">
+                            Add Description.
+                        </div>
+
+                        <div class="action-buttons">
+                            <button id="updateTask" class="btn-create"><i class="bi bi-plus"></i>Save</button>
+                            @* 	<button id="cancel-description" class="cancel-button">Cancel</button> *@
+                        </div>
+                    </div>
+
+                    <!-- CHILD ITEMS -->
+                    <div class="panel-section" id="childWorkPanel">
+                        <details class="child-panel">
+                            <summary class="panel-title d-flex align-items-center justify-content-between">
+
+                                <!-- LEFT SIDE: Arrow + Title -->
+                                <div class="d-flex align-items-center gap-2" style="color:var(--primary-color)">
+                                    <span class="header-right-icon"> <i class="arrow-icon"></i></span>
+                                    <span>Child work items</span>
+                                </div>
+
+                                <!-- RIGHT SIDE: Icons -->
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <!-- Three dots -->
+                                    <span class="right-icon more-options">
+                                        <span class="header-right-icon"> <i class="bi bi-three-dots"></i></span>
+                                    </span>
+
+                                    <!-- Configuration -->
+                                    @* 								<span class="right-icon config-icon">
+                                    <span class="header-right-icon"><i class="bi bi-gear"></i></span>
+                                    </span> *@
+
+                                    <!-- Plus -->
+                                    <span class="right-icon " id="btnAddChildWork">
+                                        <span class="header-right-icon"><i class="bi bi-plus-lg"></i></span>
+                                    </span>
+
+                                </div>
+
+                            </summary>
+
+                            <div class="child-panel-content">
+                                <table class="child-table" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:50%">Work</th>
+                                            <th style="width:15%">Priority</th>
+                                            @* <th style="width:25%">Story</th> *@
+                                            <th style="width:20%">Assignee</th>
+                                            <th style="width:15%">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="childWorkTableTbody">
+                                        @* 			<tr>
+                                        <td>
+                                        <i class="bi bi-check-square me-2" style="color:#4E8CE3"></i>
+                                        <span class="task-no">TASK-01</span>
+                                        <span class="child-task-title">Build UI Layout</span>
+                                        </td>
+                                        <td>
+                                        <i class="bi bi-filter " style="color:#E06C00"></i>
+                                        Medium
+                                        </td>
+                                        <td>Add Story Points</td>
+                                        <td>
+                                        <img src="https://i.pravatar.cc/24" class="profile-img">
+                                        Aman Ullah
+                                        </td>
+                                        <td>
+                                        <select class="status-select">
+                                        <option>To Do</option>
+                                        <option>In Progress</option>
+                                        <option>Review</option>
+                                        <option>Done</option>
+                                        </select>
+                                        </td>
+                                        </tr> *@
+                                    </tbody>
+                                </table>
+                            </div>
+                        </details>
+
+                    </div>
+
+                    <!-- LINKED ITEMS -->
+                    <div class="panel-section">
+                        <div class="panel-title">Linked work items</div>
+                        <a class="link-item">Add linked work item</a>
+                    </div>
+
+
+
+                    <div class="container mt-5">
+                        <div class="d-flex justify-content-between align-items-center tab-container">
+                            <h6 class="mb-0 fw-bold tab-container">Activity</h6>
+                            <!-- Tab Navigation -->
+                            <ul class="nav nav-tabs tab-buttons" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link " id="allTab" data-bs-toggle="tab" href="#allTabContent" role="tab">
+                                        All
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="commentsTab" data-bs-toggle="tab" href="#commentsTabContent" role="tab">
+                                        Comments
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="historyTab" data-bs-toggle="tab" href="#historyTabContent" role="tab">
+                                        History
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="workLogTab" data-bs-toggle="tab" href="#workLogTabContent" role="tab">
+                                        Work log
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <div class="tab-pane fade " id="allTabContent" role="tabpanel">
+                                <h4>All</h4>
+
+                            </div>
+                            <div class="tab-pane fade show active" id="commentsTabContent" role="tabpanel">
+                                <!-- COMMENTS -->
+                                <div class="panel-section">
+                                    <textarea class="comment-box">Add a Comment</textarea>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane fade" id="historyTabContent" role="tabpanel">
+                                <h4>history</h4>
+
+                            </div>
+                            <div class="tab-pane fade" id="workLogTabContent" role="tabpanel">
+                                <h4>workLogTabContent</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="row">
+            <div class="status-row">
+                <!-- Task staus dropdown -->
+                <div class="dropdown">
+                    <a class="text-decoration-none dropdown-toggle btn-task-status btn-create fw-bold p-2 cursor-pointer" data-bs-toggle="dropdown" style="font-size: 0.8rem;">
+                        <span id="taskStatusID"></span>
+                    </a>
+                    <ul class="dropdown-menu task-status-list select-status">
+                        <!-- Dynamic items will load here -->
+                    </ul>
+                </div>
+                <span class="header-right-icon"><i class="bi bi-lightning-charge task-icon"></i></span>
+            </div>
+        </div>
+        <div class="right-scroll">
+            <div class="detail-block">
+                <div class="label">Assignee</div>
+                <div class="dropdown mt-2">
+                    <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+                        <div class="selected-assignee d-flex align-items-center" id="modalAssigneeID" style="cursor:pointer">
+                            @* selected value here *@
+                        </div>
+                    </div>
+                    <div class="dropdown-menu flowtick-dropdown">
+                        <div class="flowtick-dropdown-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" class="seach-user-dropdown" placeholder="Search users">
+                        </div>
+                        <ul class="dropdown-list asignee-user-list">
+                            @* 	dropdown list  here *@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-block">
+                <div class="label">Reviewer</div>
+                <div class="dropdown mt-2">
+                    <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+                        <div class="selected-reviewer d-flex align-items-center" id="modalReviewerID" style="cursor:pointer">
+                            @* selected value here *@
+                        </div>
+                    </div>
+
+                    <div class="dropdown-menu flowtick-dropdown">
+                        <div class="flowtick-dropdown-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" class="seach-user-dropdown" placeholder="Search users">
+                        </div>
+
+                        <ul class="dropdown-list reviewer-user-list">
+                            @* 	dropdown list  here *@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-block">
+                <div class="label">Reporter</div>
+                <div class="dropdown mt-2">
+                    <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+                        <div class="selected-reporter d-flex align-items-center" id="modalReporterID" style="cursor:pointer">
+                            @* selected value here *@
+                        </div>
+                    </div>
+                    <div class="dropdown-menu flowtick-dropdown">
+                        <div class="flowtick-dropdown-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" class="seach-user-dropdown" placeholder="Search users">
+                        </div>
+                        <ul class="dropdown-list reporter-user-list">
+                            @* 	dropdown list  here *@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-block">
+                <div class="label">Labels</div>
+                <a class="link-item">Add labels</a>
+            </div>
+
+            <div class="detail-block">
+                <div class="d-flex align-items-center">
+                    <div class="label">Sprint </div>
+                    <i class="bi bi-info-circle ms-2"></i>
+                </div>
+                <a class="link-item">Till - Dec-25</a>
+            </div>
+
+            <div class="detail-block">
+                <div class="label">Priority</div>
+
+                <div class="dropdown mt-2">
+                    <span class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+                        <i class="priority-icon bi bi-filter"
+                           style="color:#E06C00;"></i>
+                        <span class="user-name ms-2 " id="selectedPriority">Medium</span>
+                    </span>
+                    <div class="dropdown-menu flowtick-dropdown">
+                        <ul class="dropdown-list">
+
+                            <li class="dropdown-item priority-option">
+                                <i class="bi bi-chevron-double-up priority-icon-item"
+                                   data-icon="bi bi-chevron-double-up"
+                                   data-color="#4E8CE3" style="color:#4E8CE3"></i>
+                                <span class="user-name">Highest</span>
+                            </li>
+                            <li class="dropdown-item priority-option">
+                                <i class="bi bi-chevron-up priority-icon-item"
+                                   data-icon="bi bi-chevron-up"
+                                   data-color="#4E8CE3" style="color:#4E8CE3"></i>
+                                <span class="user-name">High</span>
+                            </li>
+                            <li class="dropdown-item priority-option">
+                                <i class="bi bi-filter priority-icon-item"
+                                   data-icon="bi bi-filter"
+                                   data-color="#E06C00" style="color:#E06C00"></i>
+                                <span class="user-name">Medium</span>
+                            </li>
+                            <li class="dropdown-item priority-option">
+                                <i class="bi bi-chevron-down priority-icon-item"
+                                   data-icon="bi bi-chevron-down"
+                                   data-color="#E06C00" style="color:#E06C00"></i>
+                                <span class="user-name">Low</span>
+                            </li>
+                            <li class="dropdown-item priority-option">
+                                <i class="bi bi-chevron-double-down priority-icon-item"
+                                   data-icon="bi bi-chevron-double-down"
+                                   data-color="#E06C00" style="color:#E06C00"></i>
+                                <span class="user-name">Lowest</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="~/layout/js/quill.js"></script>
+<script>    
+    var _taskStatusesArray = [];    
+    var _projectMember = []
+        , _getProjectEpics = []
+        , _projectTasksArray = []
+        ;    
+    var _taskTypes = [];
+
+    let statusID = 0, projectId = 0;
+    var assigneeID;
+    var reporterID;
+    var reviewerID;
+    var taskId = 0;
+
+
+    // Initialize on document ready
+    $(document).ready(function () {
+
+        //take data from access token
+        const token = localStorage.getItem("accessToken");
+        const tokenData = parseJwt(token);
+        var userId = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+        loginUserID = userId;
+
+        //end
+
+        var urlParams = new URLSearchParams(window.location.search);
+
+        //taskId = urlParams.get('id');
+        taskId = (getAndDecryptID(urlParams.get('id')));
+
+        projectId = (getAndDecryptID(urlParams.get('projectId')));
+
+        
+
+        // Save description
+        $('#save-description').on('click', function () {
+            let html = quill.root.innerHTML;
+            $('#description-display').text($(html).text());
+            $('#description-editor-wrapper').hide();
+            $('#description-view').show();
+        });
+        // editor js end
+        // Filter  dropdown
+        $(document).on('keyup', '.seach-user-dropdown', function (e) {
+            e.stopImmediatePropagation();
+            let value = $(this).val().toLowerCase();
+
+            let dropdown = $(this).closest('.flowtick-dropdown');
+
+            dropdown.find('.dropdown-item').each(function () {
+                $(this).toggle(
+                    $(this).find('.user-name').text().toLowerCase().includes(value)
+                );
+            });
+        });
+
+        getTaskStatus();
+
+
+
+
+        $("#updateTask").click(function () {
+            updateTask();
+        });
+
+        initTooltips();
+
+        // Enable Bootstrap tooltips
+        $('[data-bs-toggle="tooltip"]').tooltip();
+
+        // Search Functionality
+        $('#searchInput').on('input', function () {
+            const searchTerm = $(this).val().toLowerCase();
+
+            $('.task-card').each(function () {
+                const title = $(this).find('.task-title').text().toLowerCase();
+                const id = $(this).find('.task-id').text().toLowerCase();
+
+                if (title.includes(searchTerm) || id.includes(searchTerm)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            // Update column counts
+            $('.board-column').each(function () {
+                const visibleCount = $(this).find('.task-card:visible').length;
+                $(this).find('.column-count').text(visibleCount);
+            });
+        });
+
+
+
+    });
+
+    function getTaskStatus() {
+        apiRequest({
+            url: 'flowtick/task/statuses',
+            type: 'GET',
+            data: {},
+            callBack: getTaskStatusCallBack
+        });
+    }
+
+        
+    var getTaskStatusCallBack = function (response) {
+
+        if (response.request.status === 200) {
+            isTaskStatusesLoaded = true;
+            _taskStatusesArray = response.data;
+            loadStatusDropdown();
+
+            getTaskTypes();
+
+        }
+        else {
+            _taskStatusesArray = [];
+            errorExtractor(response);
+        }
+    };
+
+    function getTaskTypes() {
+
+        apiRequest({
+            url: 'flowtick/task/types',
+            type: 'GET',
+            data: {},
+            callBack: getTaskTypesCallBack
+        });
+
+    }
+    var getTaskTypesCallBack = function (response) {
+        if (response.request.status === 200) {
+
+
+            _taskTypes = response.data; // your array
+            loadTaskTypeDropdown();
+            getProjectMembers();
+
+
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+
+    function loadTaskTypeDropdown() {
+
+        // default selected type in create task  id = 3
+        var defaultItem = _taskTypes.find(x => x.id == 3);
+        if (defaultItem) {
+            $(".task-type-btn").attr("data-id", defaultItem.id);
+            $(".task-type-btn i").attr("class", defaultItem.icon).attr("style", defaultItem.iconCSS.replace('style="', '').replace('"', ''));
+
+            $(".task-type-btn span").text(defaultItem.description);
+        }
+
+        // default selected type in create Subtask  id = 4
+        var defaultItemForSubTask = _taskTypes.find(x => x.id == 4);
+        if (defaultItemForSubTask) {
+            $(".default-selected-value").attr("data-id", defaultItemForSubTask.id);
+            $(".default-selected-value i").attr("class", defaultItemForSubTask.icon).attr("style", defaultItemForSubTask.iconCSS.replace('style="', '').replace('"', ''));
+
+            $(".default-selected-value span").text(defaultItemForSubTask.description);
+            $(".default-selected-value").attr("readonly");
+        }
+
+        var $taskTypeMenu = $('.task-type-menu');
+
+        $taskTypeMenu.empty(); // Clear old items
+        $taskTypeMenu.append(`
+                                                      <li selected>
+                                                          <a class="dropdown-item" href="#" data-id="${0}">
+
+                                                             All
+                                                          </a>
+                                                      </li>
+                                                  `);
+        $.each(_taskTypes, function (index, item) {
+            var li = `
+                                                  <li>
+                                                      <a class="dropdown-item" href="#" data-id="${item.id}">
+                                                          <i class="${item.icon} " ${item.iconCSS}></i>
+                                                          ${item.description}
+                                                      </a>
+                                                  </li>
+                                              `;
+
+            $taskTypeMenu.append(li);
+        });
+    }
+
+    function getProjectMembers() {
+
+        let url = `flowtick/project/${projectId}/members`;
+        apiRequest({
+            url: url,
+            type: 'GET',
+            data: {},
+            callBack: getProjectMembersCallBack
+        });
+    }
+    var getProjectMembersCallBack = function (response) {
+        if (response.request.status === 200) {
+            _projectMember = response.data
+            setTimeout(function () {
+                loadProjectUserDropdown("card-user-list", "selected-card-assignee");
+                loadProjectUserDropdown("create-task-user-list", "create-task-user", loginUserID);
+            }, 500);
+
+            
+            getSubTaskById(taskId);
+        }
+        else {
+            _projectMember = [];
+            errorExtractor(response);
+        }
+    };
+    function getSubTaskById(subTaskId = null) {
+        let url = `flowtick/tasks/${subTaskId}`;
+        apiRequest({
+            url: url,
+            type: 'GET',
+            data: {},
+            callBack: function (response) {
+                if (response.request.status === 200) {
+                    openTaskModal(response.data)
+                }
+                else {
+                    errorExtractor(response);
+                }
+            }
+        });
+    }
+
+
+
+    function loadStatusDropdown() {
+        var selectedItem = _taskStatusesArray.find(x => x.id == statusID);
+        if (selectedItem) {
+            $(".btn-task-status").attr("data-id", selectedItem.id);
+
+            $(".btn-task-status span").text(selectedItem.description);
+        }
+
+        var $taskStatusList = $('.task-status-list');
+
+        $taskStatusList.empty(); // Clear old items
+
+        $.each(_taskStatusesArray, function (index, item) {
+            var li = `
+                                                                                                     <li>
+                                                                                                         <a class="dropdown-item" href="#" data-id="${item.id}" style="font-size:13px;">
+                                                                                                             <i class="${item.icon} " ${item.iconCSS}></i>
+                                                                                                             ${item.description}
+                                                                                                         </a>
+                                                                                                     </li>
+                                                                                                 `;
+
+            $taskStatusList.append(li);
+        });
+    }
+
+
+
+    // Handle for assigne user in create task selection
+    $(document).on("click", ".create-task-user-list .dropdown-item", function () {
+
+        let userId = $(this).data("id");
+        let username = $(this).data("name");
+        let avatar = `<div class="assignee-avatar-sm profile-image" data-id="${userId}">${getInitials(username)}</div>`;
+
+        $(this).closest(".dropdown").find('.create-task-user').html(avatar);
+    });
+
+    // Handle for assignee in  task card
+    $(document).on("click", ".card-user-list .dropdown-item", function (e) {
+        e.stopPropagation();
+
+        let userId = $(this).data("id");
+        let username = $(this).data("name");
+
+        let avatar = `<div class="assignee-avatar-sm" data-id="${userId}">${getInitials(username)}</div>`;
+
+        $(this).closest(".dropdown").find(".selected-card-assignee").html(avatar);
+
+        const selectedTasId = $(this).closest(".task-card").data("task-id");
+        updateTaskAssignee(selectedTasId, userId);
+
+    });
+    // handle click for assignee in modal
+    $(document).on("click", ".asignee-user-list .dropdown-item", function () {
+
+        let name = $(this).data("name");
+        let userId = $(this).data("id");
+        let avatar = `<div class="assignee-avatar-sm" data-id="${userId}">${getInitials(name)}</div>`;
+        $(".selected-assignee").html(`${avatar} <span class="user-name ms-2">${name}</span> `);
+
+        const taskId = $("#modalTaskID").val().trim();
+        updateTaskAssignee(taskId, userId);
+    });
+    // handle click for reporter
+    $(document).on("click", ".reporter-user-list .dropdown-item", function () {
+
+        let name = $(this).data("name");
+        let reporterId = $(this).data("id");
+
+        let avatar = `<div class="assignee-avatar-sm" data-id="${reporterId}">${getInitials(name)}</div> `;
+
+        $(".selected-reporter").html(` ${avatar} <span class="user-name ms-2">${name}</span>`);
+
+        const taskId = $("#modalTaskID").val().trim();
+        updateTaskReporter(taskId, reporterId);
+
+    });
+
+    // handle click for reviewer
+    $(document).on("click", ".reviewer-user-list .dropdown-item", function () {
+
+        let name = $(this).data("name");
+        let reviewerId = $(this).data("id");
+
+        let avatar = `<div class="assignee-avatar-sm" data-id="${reviewerId}">${getInitials(name)}</div> `;
+
+        $(".selected-reviewer").html(`  ${avatar}  <span class="user-name ms-2">${name}</span>`);
+
+        const taskId = $("#modalTaskID").val().trim();
+        updateTaskReviewer(taskId, reviewerId);
+
+    });
+
+    //handle click of task user in  task subtask table
+    $(document).on("click", ".subtask-user-list .dropdown-item", function () {
+        //debugger;
+        let name = $(this).data("name");
+        let selectedUserId = $(this).data("id");
+
+        let avatar = `<div class="assignee-avatar-sm" data-id="${selectedUserId}">${getInitials(name)}</div> `;
+
+        $(this).closest(".dropdown").find(".subtask-selected-assignee").html(` ${avatar} <span class="user-name ms-2">${name}</span> `);
+
+        const selectedRowTaskId = $(this).closest("tr").data("id");
+
+        updateTaskAssignee(selectedRowTaskId, selectedUserId);
+    });
+    // Priority dropdown
+    $(document).on('click', '.priority-option', function () {
+
+        let selectedText = $(this).find('.user-name').text();
+        let selectedIcon = $(this).find('.priority-icon-item').data('icon');
+        let selectedColor = $(this).find('.priority-icon-item').data('color');
+
+        // Update icon + color
+        $('.priority-icon')
+            .removeClass()
+            .addClass('priority-icon bi ' + selectedIcon)
+            .css('color', selectedColor);
+
+        // Update text
+        $('#selectedPriority').text(selectedText);
+    });
+    //handle click of task status
+    $(document).on("click", ".select-status .dropdown-item", function () {
+        // get values from clicked element
+        var selectedStatusId = $(this).data("id");
+        var text = $(this).text().trim();
+
+        // update selected text
+        $(".btn-task-status").attr("data-id", selectedStatusId);
+        $(".btn-task-status span").text(text);
+
+        const taskId = $("#modalTaskID").val().trim();
+        updateTaskStatus(taskId, selectedStatusId);
+
+
+    });
+
+    //handle click of task status in  task subtask table
+    $(document).on("click", ".select-task-subTask-status .dropdown-item", function () {
+        // get values from clicked element
+        var id = $(this).data("id");
+        var text = $(this).text().trim();
+
+        // update selected text
+        const $dropdown = $(this).closest(".dropdown");
+        $dropdown.find(".btn-task-subtask-status").attr("data-id", id);
+        $dropdown.find(".btn-task-subtask-status span").text(text);
+
+        // find nearest row
+        const selectedRowTaskId = $(this).closest("tr").data("id");
+
+        updateTaskStatus(selectedRowTaskId, id);
+
+    });
+    // hnadle click Epic  dropdown in modal
+    $(document).on('click', '.selecte-epic', function () {
+        //debugger;
+        let code = $(this).data("code");
+        let epicId = $(this).data("id");
+
+        // Update text
+        $('.selected-epic-code span').text(code);
+        $('.selected-epic-code').attr('data-id', epicId);
+
+    });
+    $(document).click(function (e) {
+        if (!$(e.target).closest("#createCardBox, #createBtn").length) {
+            $("#createCardBox").hide();
+            $("#createBtn").show();
+        }
+    });
+
+    //handle click of task type
+    $(document).on("click", ".task-type-menu .dropdown-item", function (e) {
+        e.preventDefault();
+
+        // Get values from clicked element
+        var id = $(this).data("id");
+        var icon = $(this).find("i").attr("class");
+        var style = $(this).find("i").attr("style");
+        var text = $(this).text().trim();
+
+        // Find the specific dropdown button for this menu
+        var $btn = $(this).closest(".dropdown").find(".task-type-btn");
+
+        // Update only this button
+        $btn.attr("data-id", id);
+        $btn.find("i").attr("class", icon).attr("style", style);
+        $(".task-type-btn span").text(text);
+    });
+
+    //add subtask row to create subtask inside task
+    $(document).on("click", "#btnAddChildWork", function (e) {
+        // Stop click from propagating to parent elements
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        getTaskTypes();
+        // loadTaskTypeDropdown();
+
+        const $tbody = $("#childWorkTableTbody");
+
+        // Prevent multiple add rows
+        if ($tbody.find(".child-add-row").length) return;
+
+        const rowHtml = `
+                                <tr class="child-add-row">
+                                  <td colspan="5">
+                                    <div class="d-flex align-items-center gap-2 child-add-wrapper">
+                                    <form id="subTaskForm">
+                                      <input tabindex="0" type="text" class="form-control child-add-input" placeholder="What needs to be done?" id="childWorkTitle" required/>
+                                     </form>
+                                      <!-- Epic/Task/Bug dropdown -->
+                                              <div class="dropdown">
+                                                   <a class="text-decoration-none icon-btn dropdown-toggle task-type-btn default-selected-value" data-bs-toggle="dropdown" id="childTaskTypeID" >
+                                                          <i class=""></i><span class="ms-2 text-black"></span>
+                                                  </a>
+
+                                              </div>
+                                      <span class="child-add-action">
+                                       <span  tabindex="0"  onclick="createTask('subTask');"  onkeypress="if(event.key==='Enter') createTask('subTask')"> <i class="bi bi-arrow-return-left"></i>  </span>
+                                      </span>
+                                    </div>
+                                  </td>
+                                </tr>
+                              `;
+
+        $tbody.append(rowHtml);
+
+        // Auto focus
+        $tbody.find(".child-add-input").focus();
+    });
+
+
+    // Render Board
+    function renderBoard() {
+        const container = $('#boardColumns');
+        container.empty();
+        // console.log(_taskStatusesArray);
+        _taskStatusesArray.forEach(column => {
+            const tasks = [];//boardData.tasks.filter(task => task.status === column.id);
+
+            const columnHtml = `
+                                                                 <div class="board-column">
+                                                                     <div class="column-header">
+                                                                         <div class="column-title-wrapper">
+                                                                                 <h2 class="column-title">${column.description}</h2>
+                                                                             <span class="column-count">${tasks.length}</span>
+                                                                         </div>
+                                                                         <button class="icon-btn">
+                                                                             <i class="bi bi-plus-lg"></i>
+                                                                         </button>
+                                                                     </div>
+                                                                     <div class="column-content ${column.cssClass}" data-status="${column.id}">
+                                                                         ${tasks.map(task => renderTaskCard(task)).join('')}
+                                                                     </div>
+                                                                 </div>
+                                                             `;
+
+            container.append(columnHtml);
+        });
+    }
+
+    // Render Task Card
+    function renderTaskCard(task) {
+        // console.log(task);
+        const typeIcons = {
+            epic: '<i class="bi bi-lightning-charge task-type-icon epic"></i>',
+            story: '<i class="bi bi-check-circle task-type-icon story"></i>',
+            task: '<i class="bi bi-circle task-type-icon task"></i>',
+            bug: '<i class="bi bi-bug task-type-icon bug"></i>'
+        };
+
+        const labels = task.labels && task.labels.length > 0
+            ? `<div class="task-labels">${task.labels.map(label =>
+                `<span class="task-label">${label}</span>`
+            ).join('')}</div>`
+            : '';
+        const parentTask = task.parent != null
+            ? `<div class="task-labels">
+                                                         <span class="task-label"> ${task.parent.title} </span>
+                                                     </div>`
+            : '';
+
+        const subtasks = task.child
+            ? `<div class="subtask-info">
+                                                                      <i class="bi bi-check-circle"></i>
+                                                                          <span>${0}/${task.child.length}</span>
+                                                                    </div>`
+            : '';
+
+        return `<div class="task-card cursor-pointer" onclick="filterTaskById(${task.id})">
+                                              <div class="task-card-header">
+                                                  <div class="task-meta" data-type-id="${task.type.id}">
+                                                      <i class="${task.type.icon}" ${task.type.iconCSS}></i>
+                                                          <span class="task-id">${task.code}</span>
+                                                  </div>
+                                                  <button class="task-menu-btn">
+                                                      <i class="bi bi-three-dots"></i>
+                                                  </button>
+                                              </div>
+                                              <h3 class="task-title">${task.title}</h3>
+                                                  ${parentTask}
+                                              ${labels}
+                                              <div class="task-footer">
+                                                  <div class="task-indicators">
+                                                      <i class="bi bi-flag priority-icon ${task.priority}"></i>
+                                                      ${subtasks}
+                                                  </div>
+
+                                                   <div class="dropdown">
+                                                      <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+                                                           <div class="selected-card-assignee d-flex align-items-center"onclick="event.stopPropagation();">
+                                                               <div class="assignee-avatar-sm" data-assignee-id="${task.assignee.id}">${getInitials(task.assignee.name)} </div>
+                                                          </div>
+                                                      </div>
+
+                                                      <div class="dropdown-menu flowtick-dropdown">
+                                                         <div class="flowtick-dropdown-search">
+                                                            <i class="bi bi-search"></i>
+                                                           <input type="text" class="seach-user-dropdown" placeholder="Search users">
+                                                         </div>
+
+                                                         <ul class="dropdown-list   card-user-list" ></ul>
+                                                       </div>
+                                                   </div>
+                                              </div>
+                                      </div>`;
+
+
+    }
+    function filterTaskById(id = null) {
+        const task = (_projectTasksArray || []).find(row => row.id == id);
+        openTaskModal(task);
+    }
+    function openTaskModal(task = null) {
+        // debugger;
+
+        if (task.type.description == 'Sub-task') {
+            $('#childWorkPanel').hide();
+        }
+        else {
+            $('#childWorkPanel').show();
+        }
+        //  Get task data
+        const typeIcon = task ? task.type.icon : '';// $(this).data("type-icon");
+        const typeStyle = task ? task.type.iconCSS : ''; // $(this).data("type-style");
+
+        if (typeIcon) {
+            //if icon exsist show this
+            $("#modalTaskTypeIcon i").attr("class", (task ? task.type.icon : '')).attr("style", (task ? task.type.iconCSS.replace(/^style="|"$|'/g, '') : ''));
+        }
+        else {
+            //if not  exsist show this dummy icon
+            $("#modalTaskTypeIcon i").attr("class", "bi bi-circle").attr("style", "");
+        }
+        if (task.type.description == 'Task' || task.type.description == 'Story') {// typeIcon === 'bi bi-check-square' || typeIcon === 'bi bi-check2-square') {
+            $('#epicDropdown').show();
+            $(".link-icon").css("display", "block");
+        } else {
+            $('#epicDropdown').hide();
+            $(".link-icon").css("display", "none");
+        }
+
+        $(".project-epics-list").empty();
+
+        $(".task-modal").fadeIn(500);
+
+        getTaskDetail(task ? task.id : 0);
+
+        getProjectEpics();
+    }
+    function loadProjectUserDropdown(dropdownList, targetSelectedUser, selectedUserId = null) {
+        // debugger;
+        let html = "";
+        let users = _projectMember;
+
+        // If a selected user is passed, use that one
+        let selectedUser = selectedUserId ? users.find(x => x.userId == selectedUserId) : null;
+        let hideName = (targetSelectedUser === "create-task-user" || targetSelectedUser === "selected-card-assignee") ? "d-none" : "";
+
+
+        if (selectedUser) {
+            let userProfile = "";
+            userProfile = `
+
+                                                      <div class="assignee-avatar-sm profile-image" data-user-id="${selectedUser.userId}" >${getInitials(selectedUser.user)} </div>
+                                                     <span class="user-name ms-2  ${hideName}">${selectedUser.user}</span>
+                                                 `;
+
+            $("." + targetSelectedUser).html(userProfile);
+        }
+        else {
+            // If Selected User is not pass CLEAR previous modal data & show default and for task cards show the selected in the loop which we set not set there
+            if (targetSelectedUser !== "selected-card-assignee" && targetSelectedUser !== "subtask-selected-assignee") {
+                $("." + targetSelectedUser).html(`
+                                                     <img src="https://ui-avatars.com/api/?name=U&background=cccccc&color=ffffff&size=32"
+                                                          class="dropdown-avatar" />
+                                                     <span class="user-name ms-2">Unassigned</span>
+                                                 `);
+            }
+        }
+
+        // Render dropdown list
+        users.forEach(user => {
+            html += `
+                                                     <li class="dropdown-item" data-name="${user.user}" data-id="${user.userId}">
+                                                         <div class="assignee-avatar-sm profile-image">${getInitials(user.user)} </div>
+                                                         <span class="user-name ms-2">${user.user}</span>
+                                                     </li>
+                                                 `;
+        });
+
+        $("." + dropdownList).html(html);
+    }
+
+    function getProjectEpics() {
+
+        if (_getProjectEpics.length > 0) {
+
+            var $projectEpics = $(".project-epics-list");
+            $projectEpics.empty();
+
+            $.each(_getProjectEpics, function (index, item) {
+                var li = `
+                                                     <li class="dropdown-item selecte-epic"  data-id="${item.id}"data-code="${item.code}">
+                                                          <i class="bi bi-lightning-charge task-icon"></i>
+                                                             <span class="user-name epic-code">${item.code}</span>
+                                                         <span class="user-name ms-2">${item.title}</span>
+                                                     </li>
+                                             `;
+                $projectEpics.append(li);
+            });
+            return;
+
+        }
+        let url = `flowtick/project/${projectId}/tasks/epic`;
+        apiRequest({
+            url: url,
+            type: 'GET',
+            data: {},
+            callBack: getProjectEpicsCallBack
+        });
+    }
+    var getProjectEpicsCallBack = function (response) {
+
+        if (response.request.status === 200) {
+
+            _getProjectEpics = response.data; // your array
+
+            /* console.log(_getProjectEpics);*/
+
+            var $projectEpics = $(".project-epics-list");  // jQuery object
+            $projectEpics.empty();
+
+            $.each(_getProjectEpics, function (index, item) {
+                var li = `
+                                                     <li class="dropdown-item selecte-epic"  data-id="${item.id}"data-code="${item.code}">
+                                                          <i class="bi bi-lightning-charge task-icon"></i>
+                                                             <span class="user-name epic-code">${item.code}</span>
+                                                         <span class="user-name ms-2">${item.title}</span>
+                                                     </li>
+                                             `;
+                $projectEpics.append(li);
+            });
+
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+
+    function createTask(taskType = null) {
+        debugger;
+
+
+        var inputJSON = {
+            "title": null,
+            "assigneeId": loginUserID,
+            "reporterId": loginUserID,
+            "reviewerId": loginUserID,
+            "statusId": 1,
+            "typeId": null,
+            "parentId": null   // epicId is empty
+        };
+
+
+        if (taskType == 'subTask') {
+            if (!customValidateForm('subTaskForm')) {
+                return; // stop execution
+            }
+            inputJSON.title = $("#childWorkTitle").val().trim();
+
+            inputJSON.typeId = $("#childTaskTypeID").data("id");
+
+            inputJSON.parentId = $("#modalTaskID").val();
+
+        }
+        else {
+            /*      cheack validation for task only*/
+            if (!customValidateForm('creatTaskForm')) {
+                return; // stop execution
+            }
+            inputJSON.title = $("#taskTitle").val().trim();
+
+            inputJSON.typeId = $("#createTaskTypeID").data("id");
+
+            inputJSON.assigneeId = $("#createTaskUserID .profile-image").data("id");
+        }
+
+
+        let url = `flowtick/project/${projectId}/tasks`;
+
+
+        apiRequest({
+            url: url,
+            type: 'POST',
+            data: inputJSON,
+            callBack: createTaskCallBack
+        });
+
+
+    }
+    var createTaskCallBack = function (response) {
+        if (response.request.status === 201) {
+
+            getProjectTasks();
+            $("#createCardBox").hide();
+            $("#createBtn").show();
+            $("#taskTitle").val("");
+
+            setTimeout(function () {
+                loadProjectUserDropdown("card-user-list", "selected-card-assignee");
+                loadProjectUserDropdown("create-task-user-list", "create-task-user", loginUserID);
+            }, 300);
+
+            successToastr("saved successfully", 'success');
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+
+    function getTaskDetail(taskID) {
+        //debugger;
+        let url = `flowtick/tasks/${taskID}`;
+        apiRequest({
+            url: url,
+            type: 'GET',
+            data: {},
+            callBack: getTaskDetailCallBack
+        });
+    }
+    var getTaskDetailCallBack = function (response) {
+        //debugger;
+        if (response.request.status === 200) {
+            //debugger;
+            const getTaskData = response.data
+            assigneeID = getTaskData.assignee.id;
+            reviewerID = getTaskData.reviewerId;
+            reporterID = getTaskData.reporterId;
+            statusID = getTaskData.status.id;
+
+            // $("#taskStatusID").text(getTaskData.status.name)
+            $("#modalTaskID").val(getTaskData.id);
+            /*     $("#modalSubTaskID").val("");*/
+            $("#modalTaskCode").text(getTaskData.code);
+            $("#modalTaskTitle").val(getTaskData.title);
+            if (getTaskData.description && getTaskData.description.trim() !== "") {
+                quill.root.innerHTML = getTaskData.description;
+            } else {
+                quill.root.innerHTML = "Add description here.";
+            }
+
+            /*   selected epic code and id */
+            $('.selected-epic-code span').text('no-parent');
+            $('.selected-epic-code').attr('data-id', '');
+
+            const getChild = getTaskData.child;
+
+            //getAllSubTaskOfModal(getChild)
+
+            var $subtasktbody = $('#childWorkTableTbody');
+            $subtasktbody.empty(); // Clear old items
+
+            $.each(getChild, function (index, item) {
+                var tr = `
+                                                             <tr data-id="${item.id}">
+                                                                 <td>
+                                                                 <i class="${item.type ? item.type.icon : ''} task-icon" ${item.type ? item.type.iconCSS : ''}></i>
+                                                                     <span class="task-no sub-task-detail cursor-pointer" onclick="getSubTaskById(${item.id});">${item.code}</span>
+                                                                     <span class="child-task-title">${item.title}</span>
+                                                                 </td>
+                                                                 <td>
+                                                                     <i class="bi bi-filter " style="color:#E06C00"></i>
+                                                                         Medium
+                                                                 </td>
+                                                                 <td hidden>${getTaskData.title}</td>
+                                                                 <td>
+                                                                 <div class="dropdown">
+                                                                     <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+                                                                         <div class="subtask-selected-assignee d-flex align-items-center">
+                                                                                   <div class="assignee-avatar-sm">${getInitials(item.assignee.name)} </div>
+                                                                             <span class="user-name ms-2">${item.assignee ? item.assignee.name : ''}</span>
+                                                                         </div>
+                                                                     </div>
+
+                                                                     <div class="dropdown-menu flowtick-dropdown">
+                                                                         <div class="flowtick-dropdown-search">
+                                                                             <i class="bi bi-search"></i>
+                                                                             <input type="text" class="seach-user-dropdown" placeholder="Search users">
+                                                                         </div>
+
+                                                                         <ul class="dropdown-list  subtask-user-list" ></ul>
+                                                                     </div>
+                                                                 </div>
+                                                                 </td>
+                                                                 <td>
+                                                                    <div class="dropdown">
+                                                                      <a class="text-decoration-none dropdown-toggle btn-task-subtask-status btn-create" data-bs-toggle="dropdown"data-id="${item.status.id}">
+                                                                           <span>${item.status.name}</span>
+                                                                      </a>
+
+                                                                     <ul class="dropdown-menu task-status-list select-task-subTask-status">
+                                                                          <!-- Dynamic items will load here -->
+                                                                     </ul>
+                                                                   </div>
+                                                                 </td>
+                                                             </tr>
+                                                          `;
+                $subtasktbody.append(tr);
+            });
+
+            loadProjectUserDropdown("asignee-user-list", "selected-assignee", assigneeID);
+            loadProjectUserDropdown("reporter-user-list", "selected-reporter", reporterID);
+            loadProjectUserDropdown("reviewer-user-list", "selected-reviewer", reviewerID);
+
+            setTimeout(function () {
+                loadProjectUserDropdown("subtask-user-list", "subtask-selected-assignee");
+            }, 300);
+
+            loadStatusDropdown();
+
+        }
+        else {
+            //debugger;
+            errorExtractor(response);
+        }
+    };
+
+    function updateTask() {
+        // debugger;
+        const id = $("#modalTaskID").val();
+        const taskTitle = $("#modalTaskTitle").val().trim();
+        const taskDescription = quill.root.innerHTML;
+        const assignedId = $("#modalAssigneeID .profile-image").data("user-id");
+        const reviewerId = $("#modalReviewerID .profile-image").data("user-id");
+        const reporterId = $("#modalReporterID .profile-image").data("user-id");
+        const statusId = $('.btn-task-status').data("id");
+
+
+        let url = `flowtick/project/${projectId}/tasks/${id}`;
+        apiRequest({
+            url: url,
+            type: 'PUT',
+            data: {
+                "title": taskTitle,
+                "description": taskDescription,
+                "assigneeId": assignedId,
+                "statusId": statusId,
+                "reviewerId": reviewerId,
+                "reporterId": reporterId,
+                "parentId": null
+            },
+            callBack: updateTaskCallBack
+        });
+
+    }
+    var updateTaskCallBack = function (response) {
+        if (response.request.status === 204) {
+            successToastr("saved successfully", 'success');
+            getProjectTasks();
+
+            setTimeout(function () {
+                loadProjectUserDropdown("card-user-list", "selected-card-assignee");
+                loadProjectUserDropdown("create-task-user-list", "create-task-user", loginUserID);
+            }, 300);
+
+
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+
+    function toggleCreateCard() {
+        $("#createCardBox").show();
+        $("#createBtn").hide();
+    }
+
+    function updateTaskStatus(taskId, selectedStatusId) {
+
+        let url = `flowtick/tasks/${taskId}/status`;
+        apiRequest({
+            url: url,
+            type: 'PUT',
+            data: {
+                "statusId": selectedStatusId
+            },
+            callBack: updateTaskStatusCallBack
+        });
+    }
+    var updateTaskStatusCallBack = function (response) {
+        if (response.request.status === 204) {
+
+            getProjectTasks();
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+
+    function updateTaskAssignee(taskId, selectedAssigneeId) {
+
+        let url = `flowtick/tasks/${taskId}/assignee`;
+        apiRequest({
+            url: url,
+            type: 'PUT',
+            data: {
+                "assigneeId": selectedAssigneeId
+            },
+            callBack: updateTaskAssigneeCallBack
+        });
+    }
+    var updateTaskAssigneeCallBack = function (response) {
+        if (response.request.status === 204) {
+
+            getProjectTasks();
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+
+    function updateTaskReporter(taskId, reporterId) {
+
+        let url = `flowtick/tasks/${taskId}/reporter`;
+        apiRequest({
+            url: url,
+            type: 'PUT',
+            data: {
+                "reporterId": reporterId
+            },
+            callBack: updateTaskReporterCallBack
+        });
+    }
+    var updateTaskReporterCallBack = function (response) {
+        if (response.request.status === 204) {
+
+            getProjectTasks();
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+
+    function updateTaskReviewer(taskId, reviewerId) {
+
+        let url = `flowtick/tasks/${taskId}/reviewer`;
+        apiRequest({
+            url: url,
+            type: 'PUT',
+            data: {
+                "reviewerId": reviewerId
+            },
+            callBack: updateTaskReviewerCallBack
+        });
+    }
+    var updateTaskReviewerCallBack = function (response) {
+        if (response.request.status === 204) {
+
+            getProjectTasks();
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+
+
+</script>

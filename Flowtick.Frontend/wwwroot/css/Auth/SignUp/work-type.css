@@ -1,0 +1,162 @@
+﻿
+body {
+    background-color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    max-width: 900px;
+    margin: 25px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+/* Top icon and text */
+.top-logo-text {
+    /* margin-bottom: 20px;*/
+}
+
+.top-logo-text img {
+    font-size: 42px;
+    height: 50px;
+    width: 50px;
+    margin-bottom: 15px;
+}
+
+.top-logo-text span {
+    color: #000000;
+    font-size: 42px;
+}
+
+.wrapper h2 {
+    font-weight: 800;
+    font-size: 25px;
+    margin-bottom: 8px;
+    color: #101214;
+    word-spacing: -2.5px;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+}
+
+    .wrapper h2 span {
+        border-bottom: 2px solid #FDBF45;
+    }
+
+.wrapper p.subtext {
+    font-size: 14px;
+    color: #766A81;
+    margin-bottom: 25px;
+}
+
+.grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-width: 350px;
+}
+
+.card {
+    background-color: #f4f8ff;
+    border-radius: 8px;
+    padding: 16px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    display: flex;
+    gap: 12px;
+    text-align: left;
+}
+
+    .card:hover {
+        border-color: #dfe1e6;
+    }
+
+    .card.selected {
+        border-color: #046f76;
+    }
+
+.card-inner {
+    display: flex;
+    align-items: center;
+    /*  gap: 16px;*/
+}
+
+.icon {
+    font-size: 20px;
+    background-color: #e9efff;
+    border-radius: 6%;
+    width: 40px;
+    height: 40px;
+    color: #0052cc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.content {
+    flex: 1;
+    margin-left: 16px;
+}
+
+.label {
+    font-weight: 700;
+    font-size: 15px;
+    color: #172b4d;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+.desc {
+    font-size: 11.36px;
+    font-weight: 400;
+    color: #5e6c84;
+    line-height: 1.4;
+}
+
+.btn-flowtick {    
+    padding: 10px 35px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;        
+    transition: opacity 0.3s;
+    background-color: #00777F;
+    color: white;
+    font-weight: 600;
+}
+
+    .btn-flowtick:hover {
+        background-color: #008b99;
+        color: #FFFFFF;
+    }
+
+    .btn-flowtick.hide {
+        opacity: 0;
+        pointer-events: none;
+    }
+    .btn-flowtick.show {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+.cheaked {
+    display: none;
+    color: #28a745;
+    font-size: 20px;
+    margin-left: auto;
+}
+
+.card.selected .cheaked {
+    display: block;
+}

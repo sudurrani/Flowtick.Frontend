@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_FlowtickLayout";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+</div>
+@* Editr Code Below *@
+<div class="row">
+    <div class="col-6">
+@await Html.PartialAsync(
+        "~/Views/Shared/PartialViews/Common/_EditorPartialView.cshtml",
+        new Flowtick.Frontend.Models.EditorPartialView.EditorPartialViewInputModel
+    {
+        IdAttr = "DescriptionEditor"
+    })
+
+@* Editor Code Above *@
+
+
+    </div>
+</div>

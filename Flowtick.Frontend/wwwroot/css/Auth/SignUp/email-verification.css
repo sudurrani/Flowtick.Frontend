@@ -1,0 +1,244 @@
+﻿
+body {
+    background-color: #f4f8ff;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Curved top background */
+.top-wave {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 250px;
+    background: #eaf2fe;
+    border-bottom-left-radius: 150px 80px;
+    z-index: 0;
+}
+
+.signup-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+/* Top icon */
+.top-logo-text {
+    /* margin-bottom: 20px;*/
+}
+
+    .top-logo-text img {
+        font-size: 42px;
+        height: 50px;
+        width: 50px;
+        margin-bottom: 15px;
+    }
+
+    .top-logo-text span {
+        color: #000000;
+        font-size: 42px;
+    }
+
+/* Card styling */
+.signup-card {
+    background-color: #FFFFFF;
+    border-radius: 7px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    max-width: 570px;
+    width: 100%;
+    padding: 70px 60px 100px 65px;
+    text-align: center;
+    z-index: 2;
+    border: 3px solid #EBEDEF;
+}
+
+    .signup-card h2 {
+        font-weight: 800;
+        font-size: 25px;
+        margin-bottom: 8px;
+        color: #101214;
+    }
+
+        .signup-card h2 span {
+            border-bottom: 2px solid #FDBF45;
+        }
+
+    .signup-card p.subtext {
+        font-size: 14px;
+        color: #766A81;
+        margin-bottom: 25px;
+    }
+
+/* Email + button inline */
+.email-group {
+    display: flex;
+    gap: 10px;
+}
+
+.input-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+    .input-wrapper .form-label {
+        float: left;
+        color: #080D0C;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .input-wrapper input {
+        border-radius: 30px;
+        border: 2px solid #dfe1e6;
+        padding: 7px 35px 7px 15px;
+        width: 100%;
+        font-size: 14px;
+        transition: 0.2s;
+        color: #080D0C;
+    }
+
+        .input-wrapper input:focus {
+            border-color: #046f76;
+            outline: none;
+        }
+
+    .input-wrapper i {
+        position: absolute;
+        right: 15px;
+        top: 71%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #046f76;
+        display: none; /* hidden by default */
+    }
+
+.btn-signup {
+    background-color: #00777F;
+    border: none;
+    border-radius: 30px;
+    padding: 5px 20px;
+    height: 37px;
+    margin-top: 27px;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 13px;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+    .btn-signup:hover {
+        background-color: #008b99;
+        color: #FFFFFF;
+    }
+
+    .btn-signup:active {
+        background-color: #008b99 !important; /* darker shade for click effect */
+        color: #FFFFFF !important;
+    }
+
+
+.note-text {
+    color: gray;
+    font-size: 9.5px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.or-divider {
+    display: flex;
+    align-items: center;
+    color: #5e6c84;
+    font-weight: bold;
+    font-size: 13px;
+    margin: 15px 0;
+}
+
+    .or-divider::before,
+    .or-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #dfe1e6;
+        margin: 0 10px;
+    }
+
+/* Social buttons 2x2 */
+
+.social-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.social-btn {
+    border: 1px solid #dfe1e6;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+    background: white;
+}
+
+    .social-btn:hover {
+        background: #f4f5f7;
+    }
+
+    .social-btn img {
+        height: 20px;
+    }
+
+    .social-btn i {
+        font-size: 15px;
+    }
+
+.footer-text {
+    font-size: 12px;
+    margin-top: 25px;
+    color: #5e6c84;
+    font-weight: bold;
+}
+
+    .footer-text a {
+        color: #7fbce9;
+        font-weight: 500;
+    }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+
+.bottomLogo {
+    margin-top: 25px;
+    width: 100px;
+}
+
+    .bottomLogo i {
+        color: #6F727A;
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .bottomLogo span {
+        color: #6F727A;
+        text-transform: uppercase;
+        font-size: 17px;
+        font-weight: bold;
+    }
+.readonly {
+    pointer-events: none; 
+    opacity: 0.6; 
+    cursor: not-allowed; 
+}
+
+

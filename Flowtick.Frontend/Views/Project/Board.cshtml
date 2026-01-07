@@ -1,0 +1,504 @@
+﻿@{
+	ViewBag.Title = "Board";
+}
+<link href="~/css/project/board.css" rel="stylesheet" />
+
+
+<div id="mainContent" class="main-content">
+	<div class="board-container">
+		<div class="row">
+			<div class="col-12 mb-2">
+				<h4> <span id="projectName"></span> / <span style="color:#00757D">Board</span>  </h4>
+			</div>
+		</div>
+		<div class="row gx-3">
+			
+			<div class="col-12 col-xl-3 col-lg-3 col-md-6" >
+				<!-- TO DO -->
+				<div class="column">
+					<div class="column-title">TO DO</div>
+					<div class="task-list" id="toDoTasksList">
+
+
+					</div>
+
+					<button id="createBtn" class="create-btn" onclick="toggleCreateCard()">
+						<span>+</span> Create
+					</button>
+				
+					<div id="createCardBox" style="display:none;">
+						<div class="flowtick-create-card" id="flowtickCard">
+				         <form id="creatTaskForm">
+							<textarea class="flowtick-textarea" id="taskTitle" placeholder="Write something..." required tabindex="0"></textarea>
+						</form>
+							<div class="flowtick-footer">
+								<div class="left-icons">
+									<!-- Epic/Task/Bug dropdown -->
+									<div class="dropdown">
+										<a class="text-decoration-none icon-btn dropdown-toggle task-type-btn" data-bs-toggle="dropdown" id="createTaskTypeID" tabindex="0">
+											<i></i><span class="d-none"></span>
+										</a>
+
+										<ul class="dropdown-menu task-type-menu">
+											<!-- Dynamic items will load here -->
+										</ul>
+									</div>
+
+									<div class="dropdown">
+										<a class="icon-btn dropdown-toggle no-caret create-task-user" data-bs-toggle="dropdown" id="createTaskUserID" tabindex="0">
+											@* <img src="https://i.pravatar.cc/32?img=1" class="assigne-avatar rounded-circle" /> *@
+                                       </a>
+										<!-- Assign Dropdown -->
+										<div class="dropdown-menu assign-dropdown">
+
+											<!-- Search -->
+											<div class="assign-search">
+												<i class="bi bi-search"></i>
+												<input type="text" class="seach-user-dropdown" placeholder="Search users">
+											</div>
+
+											<!-- List -->
+											<ul class="assign-list create-task-user-list" ></ul>
+										</div>
+									</div>
+								</div>
+								<div class="right-icon">
+									<button class="icon-btn" id="btnCreateTask"><i class="bi bi-box-arrow-right"></i></button>
+								</div>
+							</div>
+						
+						</div>
+					</div>
+				
+				</div>
+
+			</div>
+			<div class="col-12 col-xl-3 col-lg-3 col-md-6" >
+				<!-- IN PROGRESS -->
+				<div class="column">
+					<div class="column-title">IN PROGRESS</div>
+					<div class="task-list" id="inProgressTasksList">
+
+
+					</div>
+				</div>
+
+			</div>
+			<div class="col-12 col-xl-3 col-lg-3 col-md-6" >
+				<!-- REVIEW -->
+				<div class="column">
+					<div class="column-title">REVIEW</div>
+					<div class="task-list" id="reviewTasksList">
+
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-xl-3 col-lg-3 col-md-6" >
+				<!-- DONE -->
+				<div class="column">
+					<div class="column-title">DONE</div>
+					<div class="task-list" id="doneTasksList">
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+ </div>
+
+<div class="task-modal" style="display:none">
+	<input type="hidden" id="modalTaskID" />
+	<input type="hidden" id="modalSubTaskID" />
+	<div class="task-modal-box">
+
+		<!-- HEADER -->
+		<div class="task-modal-header">
+
+			<!-- LEFT ICONS -->
+			<div class="header-left-icons" style="display:flex; align-items:center; gap:0px;">
+				@* <button class="icon-btn"><img src="your-uploaded-icon.png" alt="icon" style="width:20px;height:20px;"></button> *@
+				@* <i class="bi bi-lightning-charge task-icon"></i> *@
+				<!-- project Epics dropdown  dropdown -->
+				<div class="dropdown mt-2 d-flex align-items-center" >
+					<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown" id="epicDropdown">
+						<div class=" d-flex align-items-center mb-1" >
+							<div id="epicParentLink" style="cursor:pointer;" class="selected-epic-code "><i class="bi bi-lightning-charge task-icon" id="epicParentLinkIcon"></i><span class="task-code ms-1 me-1"></span></div>
+						</div>
+					</div>
+					<i class="bi bi-slash-lg mb-1 me-1 link-icon"></i>
+					<div class="dropdown-menu assign-dropdown" style="width:365px">
+						<div class="assign-search">
+							<i class="bi bi-search"></i>
+							<input type="text" class="seach-user-dropdown" placeholder="Search Epic">
+						</div>
+
+						<ul class="assign-list project-epics-list"></ul>
+					</div>
+					
+				</div>
+			
+				<div class="dropdown">
+					<a class="text-decoration-none  no-caret dropdown-toggle " data-bs-toggle="dropdown" id="" tabindex="0">
+						<span id="modalTaskTypeIcon" style="cursor:pointer;"><i></i></span>
+					</a>
+
+					<ul class="dropdown-menu task-type-menu">
+						<!-- Dynamic items will load here -->
+					</ul>
+				</div>
+				<span href="#" class="task-code ms-1" id="modalTaskCode"></span>
+		 </div>
+
+			<!-- RIGHT ICONS -->
+			<div class="header-right-icons" style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+				@* <button id="updateTask" class="primary-button" style="background-color:#00757D; margin-right:10px; padding:4px 12px;"> <i class="bi bi-plus text-white "></i> Save</button> *@
+				<span class="header-right-icon">	<i class="bi bi-eye"></i></span>
+				<span class="header-right-icon">	<i class="bi bi-share"></i></span>
+				<span class="header-right-icon"><i class="bi bi-three-dots"></i></span>
+				<span class="header-right-icon"><i class="bi bi-arrows-angle-contract"></i></span>
+				<span class="header-right-icon"><i class="bi bi-x-lg btn-close-modal"></i></span>
+			</div>
+
+		</div>
+
+		<!-- BODY -->
+		<div class="task-modal-body">
+
+			<!-- LEFT PANEL -->
+			<div class="task-left">
+
+				<!-- TASK TITLE MOVED HERE -->
+				<div class="task-title" style="margin-bottom:12px;">
+					<input type="text" class="task-title-input" value="Landlord Management v1.0" id="modalTaskTitle"/>
+				</div>
+
+				<label class="section-title">Description</label>
+
+				<div id="description-view">
+					<div id="description-display" class="description-text">
+						Edit description
+					</div>
+				</div>
+
+				<!-- EDITOR -->
+				<div id="description-editor-wrapper" style="display:none;">
+
+					<!-- Toolbar -->
+					<div id="editor-toolbar">
+						<span class="ql-formats">
+							<button class="ql-bold"></button>
+							<button class="ql-italic"></button>
+							<button class="ql-underline"></button>
+						</span>
+						<span class="ql-formats">
+							<button class="ql-list" value="ordered"></button>
+							<button class="ql-list" value="bullet"></button>
+						</span>
+						<span class="ql-formats">
+							<button class="ql-link"></button>
+							<button class="ql-image"></button>
+							<button class="ql-code-block"></button>
+						</span>
+					</div>
+
+					<div id="editorContainer">
+						Add Description.
+					</div>
+
+					<div class="action-buttons">
+						<button id="updateTask" class="primary-button" style="background-color:#00757D "><i class="bi bi-plus"></i>Save</button>
+					@* 	<button id="cancel-description" class="cancel-button">Cancel</button> *@
+					</div>
+				</div>
+
+				<!-- CHILD ITEMS -->
+				<div class="panel-section" id="childWorkPanel">
+					<details class="child-panel">
+						<summary class="panel-title d-flex align-items-center justify-content-between">
+
+							<!-- LEFT SIDE: Arrow + Title -->
+							<div class="d-flex align-items-center gap-2">
+								<span class="header-right-icon"> <i class="arrow-icon"></i></span>
+								<span>Child work items</span>
+							</div>
+
+							<!-- RIGHT SIDE: Icons -->
+							<div class="d-flex align-items-center gap-3">
+
+								<!-- Three dots -->
+								<span class="right-icon more-options">
+									<span class="header-right-icon"> <i class="bi bi-three-dots"></i></span>
+								</span>
+
+								<!-- Configuration -->
+@* 								<span class="right-icon config-icon">
+									<span class="header-right-icon"><i class="bi bi-gear"></i></span>
+								</span> *@
+
+								<!-- Plus -->
+								<span class="right-icon " id="btnAddChildWork">
+									<span class="header-right-icon"><i class="bi bi-plus-lg"></i></span>
+								</span>
+
+							</div>
+
+						</summary>
+
+						<div class="child-panel-content">
+							<table class="child-table" style="width:100%">
+								<thead>
+									<tr>
+										<th style="width:27%">Work</th>
+										<th style="width:10%">Priority</th>
+										<th style="width:25%">Story</th>
+										<th style="width:20%">Assignee</th>
+										<th style="width:13%">Status</th>
+									</tr>
+								</thead>
+								<tbody id="childWorkTableTbody">
+						@* 			<tr>
+										<td>
+											<i class="bi bi-check-square me-2" style="color:#4E8CE3"></i>
+											<span class="task-no">TASK-01</span>
+											<span class="child-task-title">Build UI Layout</span>
+										</td>
+										<td>
+											<i class="bi bi-filter " style="color:#E06C00"></i>
+											Medium
+										</td>
+										<td>Add Story Points</td>
+										<td>
+											<img src="https://i.pravatar.cc/24" class="profile-img">
+											Aman Ullah
+										</td>
+										<td>
+											<select class="status-select">
+												<option>To Do</option>
+												<option>In Progress</option>
+												<option>Review</option>
+												<option>Done</option>
+											</select>
+										</td>
+									</tr> *@
+								</tbody>
+							</table>
+						</div>
+					</details>
+
+				</div>
+
+				<!-- LINKED ITEMS -->
+				<div class="panel-section">
+					<div class="panel-title">Linked work items</div>
+					<a class="link-item">Add linked work item</a>
+				</div>
+
+
+
+				<div class="container mt-5">
+					<div class="d-flex justify-content-between align-items-center tab-container">
+						<h6 class="mb-0 fw-bold tab-container">Activity</h6>
+						<!-- Tab Navigation -->
+						<ul class="nav nav-tabs tab-buttons" role="tablist">
+							<li class="nav-item" role="presentation">
+								<a class="nav-link " id="allTab" data-bs-toggle="tab" href="#allTabContent" role="tab">
+									All
+								</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link active" id="commentsTab" data-bs-toggle="tab" href="#commentsTabContent" role="tab">
+									Comments
+								</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link" id="historyTab" data-bs-toggle="tab" href="#historyTabContent" role="tab">
+									History
+								</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link" id="workLogTab" data-bs-toggle="tab" href="#workLogTabContent" role="tab">
+									Work log
+								</a>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Tab Content -->
+					<div class="tab-content">
+						<div class="tab-pane fade " id="allTabContent" role="tabpanel">
+							<h4>All</h4>
+
+						</div>
+						<div class="tab-pane fade show active" id="commentsTabContent" role="tabpanel">
+							<!-- COMMENTS -->
+							<div class="panel-section">
+								<textarea class="comment-box">Add a Comment</textarea>
+							</div>
+
+						</div>
+						<div class="tab-pane fade" id="historyTabContent" role="tabpanel">
+							<h4>history</h4>
+						
+						</div>
+						<div class="tab-pane fade" id="workLogTabContent" role="tabpanel">
+							<h4>workLogTabContent</h4>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<!-- RIGHT PANEL -->
+			<div class="task-right">
+				<div class="status-row">
+					<!-- Task staus dropdown -->
+					<div class="dropdown">
+						<a class="text-decoration-none dropdown-toggle btn-task-status" data-bs-toggle="dropdown" style="color:#FFFFFF; cursor:pointer; font-size:13px;background-color:#00757D;padding:4px 12px;">
+							<span  id="taskStatusID"></span>
+						</a>
+						<ul class="dropdown-menu task-status-list select-status">
+							<!-- Dynamic items will load here -->
+						</ul>
+					</div>
+					<span class="header-right-icon">	<i class="bi bi-lightning-charge task-icon"></i></span>
+				</div>
+
+				<div class="right-scroll">
+					<div class="detail-block">
+						<div class="label">Assignee</div>
+						<div class="dropdown mt-2">
+							<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<div class="selected-assignee d-flex align-items-center" id="modalAssigneeID" style="cursor:pointer">
+									@* selected value here *@
+								</div>
+							</div>
+							<div class="dropdown-menu assign-dropdown">
+								<div class="assign-search">
+									<i class="bi bi-search"></i>
+									<input type="text" class="seach-user-dropdown" placeholder="Search users">
+								</div>
+								<ul class="assign-list asignee-user-list" >
+								@* 	dropdown list  here *@
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="detail-block">
+						<div class="label">Reviewer</div>
+						<div class="dropdown mt-2">
+							<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<div class="selected-reviewer d-flex align-items-center" id="modalReviewerID" style="cursor:pointer">
+									@* selected value here *@
+								</div>
+							</div>
+
+							<div class="dropdown-menu assign-dropdown">
+								<div class="assign-search">
+									<i class="bi bi-search"></i>
+									<input type="text" class="seach-user-dropdown" placeholder="Search users">
+								</div>
+
+								<ul class="assign-list reviewer-user-list">
+									@* 	dropdown list  here *@
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="detail-block">
+						<div class="label">Reporter</div>
+						<div class="dropdown mt-2">
+							<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<div class="selected-reporter d-flex align-items-center" id="modalReporterID" style="cursor:pointer">
+									@* selected value here *@
+								</div>
+							</div>
+							<div class="dropdown-menu assign-dropdown">
+								<div class="assign-search">
+									<i class="bi bi-search"></i>
+									<input type="text" class="seach-user-dropdown" placeholder="Search users">
+								</div>
+								<ul class="assign-list reporter-user-list">
+									@* 	dropdown list  here *@
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="detail-block">
+						<div class="label">Labels</div>
+						<a class="link-item">Add labels</a>
+					</div>
+
+					<div class="detail-block">
+						<div class="d-flex align-items-center">
+							<div class="label">Sprint </div>
+							<i class="bi bi-info-circle ms-2"></i>
+						</div>
+						<a class="link-item">Till - Dec-25</a>
+					</div>
+
+					<div class="detail-block">
+						<div class="label">Priority</div>
+
+						<div class="dropdown mt-2">
+							<span class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<i class="priority-icon bi bi-filter"
+								   style="color:#E06C00;"></i>
+								<span class="user-name ms-2 " id="selectedPriority">Medium</span>
+							</span>
+							<div class="dropdown-menu assign-dropdown">
+								<ul class="assign-list">
+
+									<li class="assign-item priority-option">
+										<i class="bi bi-chevron-double-up priority-icon-item"
+										   data-icon="bi bi-chevron-double-up"
+										   data-color="#4E8CE3" style="color:#4E8CE3"></i>
+										<span class="user-name">Highest</span>
+									</li>
+									<li class="assign-item priority-option">
+										<i class="bi bi-chevron-up priority-icon-item"
+										   data-icon="bi bi-chevron-up"
+										   data-color="#4E8CE3" style="color:#4E8CE3"></i>
+										<span class="user-name">High</span>
+									</li>
+									<li class="assign-item priority-option">
+										<i class="bi bi-filter priority-icon-item"
+										   data-icon="bi bi-filter"
+										   data-color="#E06C00" style="color:#E06C00"></i>
+										<span class="user-name">Medium</span>
+									</li>
+									<li class="assign-item priority-option">
+										<i class="bi bi-chevron-down priority-icon-item"
+										   data-icon="bi bi-chevron-down"
+										   data-color="#E06C00" style="color:#E06C00"></i>
+										<span class="user-name">Low</span>
+									</li>
+									<li class="assign-item priority-option">
+										<i class="bi bi-chevron-double-down priority-icon-item"
+										   data-icon="bi bi-chevron-double-down"
+										   data-color="#E06C00" style="color:#E06C00"></i>
+										<span class="user-name">Lowest</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>
+<script src="~/js/functionalityjs/project/board.js" asp-append-version="true"></script>
+
+
+
+

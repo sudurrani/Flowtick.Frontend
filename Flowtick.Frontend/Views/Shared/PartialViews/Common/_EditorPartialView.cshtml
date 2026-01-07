@@ -1,0 +1,153 @@
+﻿@model Flowtick.Frontend.Models.EditorPartialView.EditorPartialViewInputModel
+@{
+
+}
+
+
+<style>
+    .file-box {
+        position: relative;
+        display: inline-block;
+        padding: 8px 30px 8px 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #f8f9fa;
+    }
+
+    .file-remove {
+        position: absolute;
+        top: 2px;
+        right: 6px;
+        cursor: pointer;
+        color: #dc3545;
+        font-weight: bold;
+        font-size: 16px;
+        display: none;
+    }
+
+    .file-box:hover .file-remove {
+        display: block;
+    }
+
+
+    /* Image Box CSS */
+    .img-box {
+        position: relative;
+        display: inline-block;
+    }
+
+    .img-remove {
+        position: absolute;
+        top: 4px;
+        right: 6px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        color: #dc3545;
+        background: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        display: none;
+    }
+
+    .img-box:hover .img-remove {
+        display: block;
+    }
+</style>
+
+<textarea id="@Model.IdAttr" style="height:max-content;"></textarea>
+
+
+<script src="~/lib/tinymce/tinymce.min1.js"></script>
+<script>
+    $(function () {
+        $('#customFileUpload').on('click', function () {
+            var content = tinymce.get('editor').getContent();
+            console.log(content);
+            $.ajax({
+                url: '/Home/SaveContent',
+                type: 'POST',
+                data: {
+                    content: content
+                },
+                success: function (response) {
+                    alert('Saved successfully');
+                    console.log(response.data);
+                }
+            });
+
+        });
+        $('.tox-promotion').hide();
+    });
+
+
+
+    // Generic file upload function
+    function uploadFile(file, filename) {
+
+        return new Promise((resolve, reject) => {
+            let taskId = $("#modalTaskID").val();
+            const formData = new FormData();
+            formData.append('file', file, filename);
+            formData.append('taskId', taskId);
+            // Add CSRF token if needed (adjust based on your framework)
+            const accessToken = localStorage.getItem('accessToken');
+            const token = $('input[name="__RequestVerificationToken"]').val();
+            if (token) {
+                formData.append('__RequestVerificationToken', token);
+            }
+
+            $.ajax({
+                url: `${baseUrl}flowtick/task/${taskId}/ attachments`,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                success: function (response) {
+                    console.log('Upload response:', response);
+
+                    // Handle different response formats
+                    if (response && response.data.url) {
+                        resolve(response);
+                    } else if (response && response.data.location) {
+                        // If response has 'location' instead of 'url'
+                        response.data.url = response.data.location;
+                        resolve(response);
+                    } else if (typeof response === 'string' && response.startsWith('http')) {
+                        // If response is just a URL string
+                        //resolve({ url: response });
+                    } else {
+                        reject('Invalid server response format');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Upload error details:', xhr.responseText);
+                    reject('Upload failed: ' + (xhr.responseText || error));
+                }
+            });
+        });
+    }
+
+
+    function wrapImage(img) {
+        if (img.closest('.img-box')) return;
+
+        const wrapper = document.createElement('span');
+        wrapper.className = 'img-box';
+        wrapper.setAttribute('contenteditable', 'false');
+
+        const removeBtn = document.createElement('span');
+        removeBtn.className = 'img-remove';
+        removeBtn.innerHTML = '×';
+
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+    }
+
+</script>

@@ -1,0 +1,659 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    @{Layout = null;
+    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BK Task Manager</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00A896;
+            --secondary-color: #5B3A14;
+            --bg-light: #F5F5F5;
+            --border-color: #E0E0E0;
+            --text-muted: #757575;
+            --card-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: #212529;
+            overflow-x: hidden;
+        }
+
+        .top-navbar {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #424242;
+            padding: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #212529;
+            margin: 0;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            padding-left: 2.5rem;
+            width: 250px;
+            font-size: 0.9rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            background: white;
+            width: 260px;
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 100;
+        }
+
+        .sidebar.collapsed {
+            margin-left: -260px;
+        }
+
+        .sidebar-item {
+            padding: 0.75rem 1.5rem;
+            color: #616161;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+        }
+
+        .sidebar-item:hover {
+            background: #F5F5F5;
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+        }
+
+        .sidebar-item.active {
+            background: #E8F5E9;
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .sidebar-item i {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        .sidebar-divider {
+            margin: 1rem 1.5rem;
+            border: 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .filters-bar {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .filter-dropdown {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .filter-dropdown:hover {
+            border-color: var(--primary-color);
+        }
+
+        .btn-create-issue {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-create-issue:hover {
+            background: #008c7a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 168, 150, 0.3);
+        }
+
+        .board-columns {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .column {
+            background: #FAFAFA;
+            border-radius: 8px;
+            min-width: 320px;
+            max-width: 320px;
+            padding: 0;
+        }
+
+        .column-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .column-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .column-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #424242;
+        }
+
+        .column-count {
+            background: #E0E0E0;
+            padding: 0.15rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #616161;
+            font-weight: 600;
+        }
+
+        .add-column-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            font-size: 1.25rem;
+            transition: all 0.2s;
+        }
+
+        .add-column-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .column-content {
+            padding: 1rem;
+            min-height: 400px;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            box-shadow: var(--card-shadow);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .task-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+            border-color: var(--border-color);
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-icon {
+            font-size: 1rem;
+        }
+
+        .icon-epic { color: #9C27B0; }
+        .icon-story { color: #2196F3; }
+        .icon-task { color: #00BCD4; }
+        .icon-bug { color: #F44336; }
+        .icon-subtask { color: #4CAF50; }
+
+        .task-id {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .task-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #212529;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .task-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .task-tag {
+            background: #E3F2FD;
+            color: #1976D2;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.5rem;
+            border-top: 1px solid #F0F0F0;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .task-meta i {
+            margin-right: 0.25rem;
+        }
+
+        .task-assignee {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .add-task-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: transparent;
+            border: 2px dashed var(--border-color);
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .add-task-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(0, 168, 150, 0.05);
+        }
+
+        @@media (max-width: 768px) {
+            .sidebar {
+                position: absolute;
+                height: 100%;
+                z-index: 1000;
+            }
+            
+            .search-input {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <div class="top-navbar">
+        <div class="nav-left">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="page-title">App Clone / Board</h1>
+        </div>
+        <div class="nav-right">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search tasks..." id="searchInput">
+            </div>
+            <button class="icon-btn">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="icon-btn">
+                <i class="fas fa-cog"></i>
+            </button>
+            <div class="user-avatar">SU</div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-user"></i> All assignees
+            </a>
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-list"></i> Type: All
+            </a>
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-rocket"></i> Sprint
+            </a>
+            <hr class="sidebar-divider">
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-briefcase"></i> Fophex-ERP
+            </a>
+            <a href="#" class="sidebar-item active">
+                <i class="fas fa-clone"></i> App Clone
+            </a>
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-users"></i> Teams
+            </a>
+            <a href="#" class="sidebar-item">
+                <i class="fas fa-bullseye"></i> Goals
+            </a>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Filters Bar -->
+            <div class="filters-bar">
+                <div class="filter-dropdown">
+                    <i class="fas fa-users"></i>
+                    <span>All assignees</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="filter-dropdown">
+                    <span>Type: All</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="filter-dropdown">
+                    <span>Sprint</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <button class="btn-create-issue">
+                    <i class="fas fa-plus"></i>
+                    Create Issue
+                </button>
+            </div>
+
+            <!-- Board Columns -->
+            <div class="board-columns" id="boardColumns"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        // Static JSON Data
+        const boardData = {
+            columns: [
+                { id: 'todo', title: 'TO DO', count: 40 },
+                { id: 'inprogress', title: 'IN PROGRESS', count: 40 },
+                { id: 'review', title: 'REVIEW', count: 40 },
+                { id: 'done', title: 'DONE', count: 40 }
+            ],
+            tasks: [
+                // TO DO
+                { id: 'BHA-90', title: 'ToDo Task 1', type: 'epic', status: 'todo', tags: ['backend', 'tech-debt'], subtasks: '2/3', assignee: 'SU' },
+                { id: 'BHA-2', title: 'ToDo Task 2', type: 'epic', status: 'todo', tags: ['frontend', 'api'], assignee: 'SU' },
+                { id: 'BHA-98', title: 'ToDo Task 3', type: 'task', status: 'todo', tags: ['api', 'ui'], assignee: 'SU' },
+                
+                // IN PROGRESS
+                { id: 'BHA-16', title: 'ToDo Task 1', type: 'story', status: 'inprogress', tags: ['tech-debt', 'api'], assignee: 'SU' },
+                { id: 'BHA-39', title: 'ToDo Task 2', type: 'bug', status: 'inprogress', tags: ['tech-debt', 'api'], subtasks: '4/4', assignee: 'SU' },
+                { id: 'BHA-20', title: 'ToDo Task 3', type: 'bug', status: 'inprogress', tags: ['backend', 'api'], subtasks: '3/5', assignee: 'SU' },
+                
+                // REVIEW
+                { id: 'BHA-25', title: 'ToDo Task 1', type: 'bug', status: 'review', tags: ['tech-debt', 'frontend'], subtasks: '5/5', assignee: 'SU' },
+                { id: 'BHA-45', title: 'ToDo Task 2', type: 'epic', status: 'review', tags: ['backend', 'ui'], subtasks: '2/4', assignee: 'SU' },
+                { id: 'BHA-15', title: 'ToDo Task 3', type: 'bug', status: 'review', tags: ['api', 'tech-debt'], subtasks: '0/1', assignee: 'SU' },
+                
+                // DONE
+                { id: 'BHA-52', title: 'ToDo Task 1', type: 'bug', status: 'done', tags: ['backend', 'frontend'], subtasks: '3/4', assignee: 'SU' },
+                { id: 'BHA-87', title: 'ToDo Task 2', type: 'bug', status: 'done', tags: ['tech-debt', 'frontend'], assignee: 'SU' },
+                { id: 'BHA-78', title: 'ToDo Task 3', type: 'task', status: 'done', tags: ['ui', 'api'], subtasks: '1/2', assignee: 'SU' }
+            ]
+        };
+
+        // Get icon for task type
+        function getTaskIcon(type) {
+            const icons = {
+                epic: '<i class="fas fa-bolt icon-epic"></i>',
+                story: '<i class="far fa-circle icon-story"></i>',
+                task: '<i class="fas fa-check-circle icon-task"></i>',
+                bug: '<i class="fas fa-exclamation-triangle icon-bug"></i>',
+                subtask: '<i class="fas fa-chevron-right icon-subtask"></i>'
+            };
+            return icons[type] || icons.task;
+        }
+
+        // Create task card HTML
+        function createTaskCard(task) {
+            return `
+                <div class="task-card" data-task-id="${task.id}">
+                    <div class="task-header">
+                        ${getTaskIcon(task.type)}
+                        <span class="task-id">${task.id}</span>
+                    </div>
+                    <div class="task-title">${task.title}</div>
+                    <div class="task-tags">
+                        ${task.tags.map(tag => `<span class="task-tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="task-footer">
+                        <div class="task-meta">
+                            ${task.subtasks ? `<span><i class="far fa-check-square"></i>${task.subtasks}</span>` : ''}
+                            <span><i class="far fa-clock"></i></span>
+                        </div>
+                        <div class="task-assignee">${task.assignee}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render board
+        function renderBoard() {
+            const $boardColumns = $('#boardColumns');
+            $boardColumns.empty();
+
+            boardData.columns.forEach(column => {
+                const columnTasks = boardData.tasks.filter(task => task.status === column.id);
+                
+                const columnHTML = `
+                    <div class="column" data-column-id="${column.id}">
+                        <div class="column-header">
+                            <div class="column-title-wrapper">
+                                <span class="column-title">${column.title}</span>
+                                <span class="column-count">${column.count}</span>
+                            </div>
+                            <button class="add-column-btn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="column-content">
+                            ${columnTasks.map(task => createTaskCard(task)).join('')}
+                            <button class="add-task-btn">
+                                <i class="fas fa-plus"></i>
+                                <span>Create</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                $boardColumns.append(columnHTML);
+            });
+        }
+
+        // Initialize app
+        $(document).ready(function() {
+            renderBoard();
+
+            // Toggle sidebar
+            $('#menuToggle').on('click', function() {
+                $('#sidebar').toggleClass('collapsed');
+            });
+
+            // Search functionality
+            $('#searchInput').on('input', function() {
+                const searchTerm = $(this).val().toLowerCase();
+                
+                $('.task-card').each(function() {
+                    const taskId = $(this).data('task-id').toLowerCase();
+                    const taskTitle = $(this).find('.task-title').text().toLowerCase();
+                    const taskTags = $(this).find('.task-tag').map(function() {
+                        return $(this).text().toLowerCase();
+                    }).get().join(' ');
+                    
+                    if (taskId.includes(searchTerm) || taskTitle.includes(searchTerm) || taskTags.includes(searchTerm)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+
+            // Task card click
+            $(document).on('click', '.task-card', function() {
+                const taskId = $(this).data('task-id');
+                console.log('Task clicked:', taskId);
+                // Add modal or detail view here
+            });
+
+            // Create issue button
+            $('.btn-create-issue, .add-task-btn').on('click', function(e) {
+                e.stopPropagation();
+                alert('Create task modal would open here');
+            });
+        });
+    </script>
+</body>
+</html>

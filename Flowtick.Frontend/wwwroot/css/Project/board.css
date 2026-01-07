@@ -1,0 +1,675 @@
+﻿
+.column {
+    background: #F8F8F8;
+    border-radius: 8px;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    min-height: 780px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.10);
+}
+
+.column-title {
+    color: #6b7280;
+    font-size: 13px ;
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.create-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #374151;
+    margin-bottom: 12px;
+    background: none;
+    border: none;
+}
+
+    .create-btn span:first-child {
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 0;
+    }
+
+    .create-btn:hover {
+        background-color: #F0F1F2;
+    }
+
+.task-list {
+    flex: none;
+    overflow: visible;
+}
+
+.task-card {
+    background: #ffffff;
+    border: 1px solid #e3e6ea;
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-left-color: #1F845A;
+    border-radius: 6px;
+    padding: 5px 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+    .task-card:hover{
+        background-color:#E2E4E6;
+        cursor:pointer;
+    }
+        /* show icon on card hover */
+        .task-card:hover .task-card-icons {
+            display: inline-block !important;
+        }
+.task-card-icons {
+    padding: 0px 5px;
+    border-radius: 3px;
+    font-size:12px;
+}
+    .task-card-icons:hover {
+        background-color: white;
+        color: #00757D !important;
+    }
+
+
+.task-title {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #444549;
+}
+
+.task-tag {
+    display: inline-block;
+    background: #1F845A;
+    color: #fff;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 0.50rem;
+    margin-bottom: 2px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.task-icon {
+    color: #a259ff;
+    font-size: 1rem;
+}
+
+.task-code {
+    color: #444549;
+    font-size: 0.85rem;
+    margin-left: 4px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.task-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* 
+   Create Card css */
+.flowtick-create-card {
+    background: #ffffff;
+    border: 2px solid #4688EC;
+    border-radius: 5px;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    width: 100%;
+}
+
+.flowtick-textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    resize:vertical;
+    padding: 10px 10px 0px 10px;
+    /*font-size: 14px;
+    font-family: Arial, sans-serif;*/
+    min-height: 60px;
+}
+
+.flowtick-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 12px;
+    border-top: 1px solid #e8e8e8;
+}
+
+.left-icons .icon-btn,
+.right-icon .icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    /*       margin-right: 10px; */
+    color: #5f6368;
+}
+
+    .left-icons .icon-btn:last-child {
+        margin-right: 0;
+    }
+
+.icon-btn:hover {
+    color: #1a73e8;
+}
+
+.left-icons .dropdown {
+    display: inline-block;
+    /*         margin-right: 10px; */
+}
+
+
+.dropdown-menu .dropdown-item i {
+    font-size: 16px;
+}
+
+/* 	assigne dropdown css */
+
+.assign-dropdown {
+    width: 280px;
+    padding: 0;
+    border-radius: 10px;
+    border: 1px solid #E4E6EA;
+    overflow: hidden;
+}
+
+
+.assign-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #E7E9ED;
+}
+
+    .assign-search .assigne-avatar {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+    }
+
+    .assign-search input {
+        border: none;
+        outline: none;
+        font-size: 14px;
+        flex-grow: 1;
+    }
+
+/* User List */
+.assign-list {
+    max-height: 240px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    /* Scrollbar like Jira */
+    .assign-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .assign-list::-webkit-scrollbar-thumb {
+        background: #C6C9CE;
+        border-radius: 10px;
+    }
+
+.assign-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+    .assign-item:hover {
+        background-color: #e4f7fa !important;
+    }
+
+    .assign-item:hover {
+        background: #F4F5F7;
+    }
+
+.assigne-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.empty-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.user-name {
+    font-size: 13px;
+}
+/* Hide Bootstrap caret icon */
+.no-caret::after {
+    display: none !important;
+}
+
+
+/* ===== MODAL Design Start ===== */
+.task-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(140, 144, 152, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*    backdrop-filter: blur(3px);*/
+    z-index: 9999;
+    overflow: auto;
+    padding: 20px;
+}
+
+
+/* ===== MODAL BOX ===== */
+.task-modal-box {
+    width: 1265px;
+    max-width: 89%;
+    height: 610px;
+    max-height: 100%;
+    background: #FFFFFF;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+/*    box-shadow: 0 8px 30px rgba(0,0,0,0.15);*/
+}
+
+/* ===== HEADER ===== */
+.task-modal-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    gap: 12px;
+    width: 100%;
+    border-bottom: 1px solid #E3E6EA;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    justify-content: space-between;
+}
+
+/* HEADER ICONS LEFT & RIGHT */
+.header-left-icons,
+.header-right-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .header-left-icons .icon-btn,
+    .header-right-icons .icon-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px 6px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        transition: background 0.2s;
+    }
+
+        .header-left-icons .icon-btn:hover,
+        .header-right-icons .icon-btn:hover {
+            background: #F1F2F4;
+        }
+
+    .header-left-icons a.task-code {
+        font-weight: 600;
+        font-size: 14px;
+        color: #5e6c84;
+        text-decoration: none;
+    }
+
+        .header-left-icons a.task-code:hover {
+            text-decoration: underline;
+        }
+
+/* TASK ID */
+.task-id {
+    background-color: #E2C6FF;
+    color: #5D3FD3;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+/* TASK TITLE */
+.task-left .task-title {
+    margin-bottom: 12px;
+}
+
+.task-left .task-title-input {
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    outline: none;
+    padding: 10px 0px 10px 0px;
+    width: 100%;
+    background: transparent;
+}
+
+    .task-left .task-title-input:focus {
+        border: 1px solid #00757D;
+    }
+
+
+.header-right-icon {
+    background: transparent;
+    border: 1px solid #F1F2F4;
+    border-radius: 6px;
+    font-size: 20px;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #444;
+    padding: 0;
+    transition: background 0.2s;
+}
+
+    .header-right-icon:hover {
+        background: #F1F2F4;
+    }
+
+/* ===== BODY ===== */
+.task-modal-body {
+    flex: 1;
+    display: flex;
+    gap: 16px;
+    padding: 16px 16px;
+    background: #fff;
+    overflow: hidden;
+}
+
+/* ===== LEFT PANEL ===== */
+.task-left {
+    width: 70%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 16px;
+/*    padding-left: 12px;*/
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  
+}
+
+.description-text {
+    font-size: 14px;
+    color: #5e6c84;
+    cursor: pointer;
+    padding: 6px 0;
+}
+
+/* EDITOR */
+#editor-toolbar {
+    margin-bottom: 6px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px 6px 0 0;
+}
+
+#editorContainer {
+    height: 160px;
+    border: 1px solid #dcdcdc;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+/* ACTION BUTTONS */
+.action-buttons {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+}
+
+.primary-button {
+    background: #0052cc;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+.cancel-button {
+    border: 1px solid #dcdcdc;
+    background: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+/* PANELS */
+.panel-section {
+    margin-top: 32px;
+}
+
+.panel-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+/* COMMENTS */
+.comment-box {
+    width: 100%;
+    height: 90px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    padding: 8px;
+    resize: none;
+}
+
+/* ===== RIGHT PANEL ===== */
+.task-right {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+/* Right panel scroll content wrapper */
+.right-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.status-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.detail-block {
+    margin-bottom: 18px;
+}
+
+    .detail-block .label {
+        font-size: 16px;
+        font-weight: 700;
+        color: #555;
+    }
+
+    .detail-block .value {
+        font-size: 13px;
+        color: #333;
+    }
+
+.link-item {
+    font-size: 13px;
+    color: #0052cc;
+    cursor: pointer;
+}
+
+/* 
+	child work item table css */
+
+.child-panel {
+    /* 		margin-top: 20px; */
+}
+
+    /* Remove default triangle icon */
+    .child-panel summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 10px 0px;
+        display: flex;
+        align-items: center;
+    }
+
+
+
+/* Custom arrow icon */
+.arrow-icon {
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid #333;
+    border-bottom: 2px solid #333;
+    /* 		margin-right: 8px; */
+    justify-content: center;
+    transform: rotate(-42deg); /* v */
+    transition: transform .2s ease;
+}
+
+/* Rotate arrow when opened */
+.child-panel[open] .arrow-icon {
+    transform: rotate(45deg);
+}
+
+/* Panel content */
+.child-panel-content {
+    padding: 0 0px 12px;
+}
+
+/* Table */
+.child-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+
+}
+
+    .child-table th {
+        text-align: left;
+        padding: 8px 0;
+        border-bottom: 1px solid #e3e6ea;
+        font-weight: 600;
+        color: #505258;
+    }
+
+    .child-table td {
+        padding: 10px 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+/* Form UI */
+.task-no {
+    font-weight: 500;
+    margin-right: 6px;
+    color: #00757D;
+}
+
+/* 	.child-task-title{
+
+	} */
+
+.profile-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.status-select {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.dropdown-menu .dropdown-submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: -0px;
+}
+
+.dropdown-menu .dropdown-submenu-left {
+    right: 100%;
+    left: auto;
+}
+
+.dropdown-menu > li:hover > .dropdown-submenu {
+    display: block;
+}
+
+
+/*child work add row css*/
+.child-add-wrapper {
+  padding: 8px;
+}
+
+#subTaskForm {
+    display: contents;
+}
+
+.child-add-type {
+  width: 120px;
+}
+
+.child-add-action {
+  cursor: pointer;
+  color: #6c757d;
+}
+
+    .child-add-action span:hover,
+    .child-add-action span:focus {
+        color: #1868db;
+        outline: 2px solid #1868db;
+        outline-offset: 2px;
+        border-radius: 4px; /* nice rounded border */
+    }
+
+.child-add-row td {
+  background: #fafafa;
+  border-top: 1px solid #e0e0e0;
+}
+
+/*task editor css here*/
+.ql-editor:hover {
+    background-color: #f0f0f0; /* light gray */
+    transition: background-color 0.3s; /* smooth effect */
+}
+
+

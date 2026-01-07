@@ -1,0 +1,45 @@
+﻿<link href="~/css/Auth/SignUp/email-verification.css" rel="stylesheet" />
+<div class="top-wave"></div>
+
+<div class="signup-section">
+    <!-- Top Icon -->
+    <div class="top-logo-text">
+        <img src="~/img/logo/logo.png" />
+        <span>Flowtick </span>
+    </div>
+    <!-- Signup Card -->
+    <div class="signup-card">
+        <h2>Get <span>started</span> with Flowtick</h2>
+        <p class="subtext">It’s free for up to 10 users – no credit card needed.</p>
+
+        <form id="EmailForm">
+            <div class="email-group mb-2">
+                <div class="input-wrapper">
+                    <label class="form-label">Work email</label>
+                    <input type="email" id="email" placeholder="you@company.com" required>
+                    <i class="bi bi-check-circle" id="emailCheck"></i>                    
+                </div>
+                <button type="button" class="btn btn-signup" id="btnSignUp">Sign up</button>
+            </div>
+        </form>
+
+        <p class="note-text">Using a work email helps find teammates and boost collaboration.</p>
+
+        <div class="or-divider">Or continue with</div>
+
+        <div class="social-buttons">
+            <button class="social-btn"><img src="~/img/auth/signup/emailverificaton/google-logo.png" /> Google</button>
+            <button class="social-btn"><img src="~/img/auth/signup/emailverificaton/microsoft-50.png" /> Microsoft</button>
+            <button class="social-btn"><i class="bi bi-apple"></i> Apple</button>
+            <button class="social-btn"><img src="~/img/auth/signup/emailverificaton/slack.png" /> Slack</button>
+        </div>
+
+        <p class="footer-text">Already have Flowtick? <a href="@Url.Action("Login", "Auth")">Log in</a></p>
+    </div>
+
+    <!-- Bottom Atlassian Logo -->
+    <div class="bottomLogo">
+        <i class="bi bi-symmetry-vertical"></i>
+        <span>Fophex </span>
+    </div>
+</div>

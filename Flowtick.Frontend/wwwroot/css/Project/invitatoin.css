@@ -1,0 +1,108 @@
+﻿body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f7f9fb;
+    font-family: "Inter", sans-serif;
+}
+
+.top-wave {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 250px;
+    background: #eaf2fe;
+    border-bottom-left-radius: 150px 80px;
+    z-index: 0;
+}
+
+.main-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+/* Top icon */
+.top-logo-text {
+    margin-bottom: 30px;
+}
+
+    .top-logo-text img {
+        font-size: 42px;
+        height: 50px;
+        width: 50px;
+        margin-top: -12px;
+        /* 	margin-bottom: 15px; */
+    }
+
+    .top-logo-text span {
+        color: #000000;
+        font-size: 42px;
+        margin-bottom: 15px;
+    }
+
+.invite-card {
+    background-color: #FFFFFF;
+    border-radius: 7px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    max-width: 570px;
+    width: 100%;
+    padding: 70px 60px 100px 65px;
+    text-align: center;
+    z-index: 2;
+    border: 3px solid #EBEDEF;
+}
+
+.project-label {
+    font-size: 18px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.project-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 6px;
+    margin-bottom: 28px;
+}
+
+.btn-join {
+    width: 100%;
+    font-weight: 600;
+    padding: 14px;
+    background: #00777F;
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+}
+
+    .btn-join:hover {
+        background: #008b99;
+    }
+
+.bottomLogo {
+    margin-top: 25px;
+    width: 100px;
+}
+
+    .bottomLogo i {
+        color: #6F727A;
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .bottomLogo span {
+        color: #6F727A;
+        text-transform: uppercase;
+        font-size: 17px;
+        font-weight: bold;
+    }

@@ -1,0 +1,476 @@
+﻿@* Views/Shared/_Layout.cshtml - Add these in the appropriate sections *@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Flowtick Project Management | A brand of BK-InfoTech</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/logo/logo.png" type="image/x-icon">    
+
+    <!-- Bootstrap CSS -->     
+    <link href="~/layout/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->    
+    <link href="~/layout/css/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Bundle JS -->    
+    <script src="~/layout/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->    
+    <script src="~/layout/js/jquery-3.7.1.min.js"></script>
+    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
+
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    
+
+    <script src="~/scripts/crypto-js.min.js"></script>
+    <script src="~/lib/toastr/toastr.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+        
+    <link href="~/layout/css/select2.min.css" rel="stylesheet" />
+
+
+    <link href="~/layout/css/flowtick-layout.css" rel="stylesheet" />
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    @{
+        @await Html.PartialAsync("~/Views/Shared/PartialViews/Common/_AjaxRequestLoaderPartialView.cshtml")
+    }
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <i class="bi bi-app-indicator"></i>
+                <span class="sidebar-brand-text">Project Board</span>
+            </div>
+            <button class="toggle-btn" id="toggleSidebar">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-item">
+                <a href="#" class="nav-link active" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard"
+                onclick="redirectToAction('/Dashboard/Index?id=',0);">
+                    <i class="bi bi-house-door"></i>
+                    <span class="nav-link-text">Home</span>
+                </a>
+            </div>
+            <div class="nav-item p-2" >
+                <label style="border-bottom:1px solid var(--primary-color)" class="w-100 pb-1">
+                Project(s)
+                </label>
+            </div>
+            <div class="nav-item ps-3" id="ProjectContainer">
+                
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Tasks">
+                    <i class="bi bi-check-circle"></i>
+                    <span class="nav-link-text">Tasks</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Calendar">
+                    <i class="bi bi-calendar-event"></i>
+                    <span class="nav-link-text">Calendar</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Reports">
+                    <i class="bi bi-graph-up"></i>
+                    <span class="nav-link-text">Reports</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Team">
+                    <i class="bi bi-people"></i>
+                    <span class="nav-link-text">Team</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="/Timesheet/List" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Timesheet">
+                    <i class="bi bi-graph-up"></i>
+                    <span class="nav-link-text">Timesheet</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Settings">
+                    <i class="bi bi-gear"></i>
+                    <span class="nav-link-text">Settings</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Sidebar -->
+
+    <div class="main-content" id="mainContent">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1 class="page-title"><span id="ProjectName" class="green"></span> / Board</h1>
+            <div class="top-bar-right">
+                <div class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search tasks...">
+                </div>
+                <button class="btn-create ms-auto" id="btnCreateProject">
+                    <i class="bi bi-plus-lg"></i>
+                    Create 
+                </button>
+                <button class="icon-btn">
+                    <i class="bi bi-bell"></i>
+                </button>
+                <button class="icon-btn">
+                    <i class="bi bi-gear"></i>
+                </button>
+                <div class="user-avatar">SU</div>
+            </div>
+        </div>
+
+        @RenderBody()
+    </div>
+    @* add people modal  *@
+    <div class="modal fade flowtic-modal" id="addPeopleModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content flowtick-modal-box">
+                <form id="addPeopleForm">
+                    <div class="modal-header flowtick-modal-header">
+                        <h5 class="modal-title">
+                            <i class="bi bi-person-plus me-2"></i> Add People
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <label class="form-label">emails <span class="required">*</span> </label>
+                        <input type="text" class="form-control custom-input mb-3" id="email" placeholder="e.g.,aman@company.com, usman@company.com" required>
+
+                        <label class="form-label">Role <span class="required">*</span> </label>
+                        <select id="roleId" class="form-select custom-select" required>
+                        </select>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
+
+                        <button class="btn btn-green" id="addPeople"><i class="bi bi-plus-lg me-1"></i> Add </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade flowtic-modal" id="createProjectModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content flowtick-modal-box">
+                <form id="createProjectForm">
+                    <div class="modal-header flowtick-modal-header">
+                        <h5 class="modal-title">Create Project</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-label">Project Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Enter project name">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-green" id="saveProject">
+                            Create
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <script src="~/js/functionalityjs/common-script.js"></script>
+    <!-- Then Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        
+        // Sidebar Toggle
+        $(function () {
+
+           $('#roleId').select2({
+             dropdownParent: $('#addPeopleModal') ,
+            width: '100%'
+           });
+
+            var urlParameters = new URLSearchParams(window.location.search);
+            let project = urlParameters.get('project');
+            $('#ProjectName').text(project);
+            
+
+            getMyProjects();
+            $('#toggleSidebar').on('click', function () {
+                $('#sidebar').toggleClass('collapsed');
+                $('#mainContent').toggleClass('expanded');
+                $('.bi-three-dots').toggleClass('d-none');
+                $('.bi-kanban').toggleClass('ps-1');
+                // Reinitialize tooltips
+                setTimeout(() => {
+                    initTooltips();
+                }, 300);
+            });
+
+            $("#addPeople").click(function (e) {
+
+               e.preventDefault();
+               addPeopleToProject();
+            });
+
+           $("#btnCreateProject").click(function () {
+         
+               $('#createProjectModal').modal('show');
+           })
+
+        $("#saveProject").click(function () {
+            createProject()
+        })
+
+        });
+        function getMyProjects() {
+            ////debugger;
+            apiRequest({
+                url: 'flowtick/projects/me',
+                type: 'GET',
+                data: {},
+                callBack: getMyProjectsCallBack
+            });
+        }
+        var getMyProjectsCallBack = function (response) {
+            if (response.request.status === 201) {
+
+                var projects = response.data;
+
+                var $container = $("#projectContainer");
+                var $sidebar = $("#sidebarProjects");
+
+                $container.html("");
+                $sidebar.html("");
+
+                $.each(projects, function (index, project) {
+                    $('#ProjectContainer').append(
+                        `<a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="${project.name}"
+                                onclick="redirectToAction('/Board/Project?project=${project.name}&id=',${project.id})">
+                                    <i class="bi bi-kanban" ></i>
+                                    <span class="nav-link-text">${project.name}</span>
+                                    <span class="ms-auto three-dots" style="z-index:1000;" onclick="handleThreeDots(event, ${project.id})">
+                                <i class="bi bi-three-dots" style="margin-right:0;"></i>
+                            </span>
+                        </a>`
+                    );
+                    // Dashboard project cards
+                    $container.append(`
+                                            <div class="col-12 col-sm-6 col-md-4">
+                                                <div class="app-card active open-project-board" data-id="${project.id}" data-name=" ${project.name}" >
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="app-icon bg-light">
+                                                            <img src="/img/logo/logo.png" style="width:32px; height:32px;" />
+                                                        </div>
+                                                        <div class="ms-3">
+                                                            <h6 class="mb-0 fw-semibold">${project.name}</h6>
+                                                            <small class="text-muted">${project.description}</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                      `);
+                });
+
+                
+                //  define trigger when sidebar is loadded  add the active class to that menu item by using this trigger name  on the project view js
+                //$(document).trigger("sidebarProjectsLoaded");
+            }
+            else {
+                console.log(response);
+                errorExtractor(response);
+
+            }
+        };
+        // Initialize Tooltips
+        function initTooltips() {
+            const sidebar = $('#sidebar');
+            if (sidebar.hasClass('collapsed')) {
+                $('[data-bs-toggle="tooltip"]').tooltip('dispose');
+                $('[data-bs-toggle="tooltip"]').tooltip();
+            } else {
+                $('[data-bs-toggle="tooltip"]').tooltip('dispose');
+            }
+        }
+        
+        function handleThreeDots(event, projectId) {
+            event.stopPropagation();   // stops parent <a> click
+            event.preventDefault();    // prevents link navigation (important)
+
+            $(".project-dropdown").remove();
+
+            //let projectId = $(this).closest('.menu-item').data('id');// <-- project id
+
+        const $el = $(event.currentTarget); 
+
+        let offset = $el.offset();
+        let height = $el.outerHeight();
+
+            $("body").append(`
+                        <ul class="dropdown-menu project-dropdown"
+
+                         data-id="${projectId}"
+                            style="
+                                display:block;
+                                position:absolute;
+                                top:${offset.top + height}px;
+                                left:${offset.left - 10}px;
+
+                            ">
+                            <li><a class="dropdown-item"><i class="bi bi-star me-2"></i>Add to Starred</a></li>
+                            <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add People</a></li>
+                            <li><a class="dropdown-item"><i class="bi bi-clipboard me-2"></i>Save as template</a></li>
+                            <li><a class="dropdown-item" id="spaceSetting"><i class="bi bi-gear me-2"></i>Space setting</a></li>
+                            <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete Space</a></li>
+                        </ul>
+                    `);
+            // Your custom logic here
+            // alert("Three dots clicked for project:", projectId);
+        }
+        $(document).on('click', '#addPeopleBtn', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            let projectId = $('.project-dropdown').data('id');   // <-- get id
+
+            $('#addPeopleModal').data('project-id', projectId);
+
+            // clear form
+            $('#addPeopleForm')[0].reset();
+            $('#addPeopleModal').modal('show');
+               $('.project-dropdown').remove();
+
+            getRole();
+        });
+
+        function getRole() {
+            apiRequest({
+                url: 'flowtick/project/roles',
+                type: 'GET',
+                data: {},
+                callBack: getRoleCallBack
+            });
+        }
+
+        var getRoleCallBack = function (response) {
+            if (response.request.status === 200) {
+
+                var roles = response.data; //  array
+
+                var dropdown = $("#roleId");
+                dropdown.empty();
+                dropdown.append('<option selected disabled>Select Role</option>');
+
+                $.each(roles, function (index, role) {
+                    var option = `<option class="role-option"  value="${role.id}">${role.description}</option>`;
+                    dropdown.append(option);
+                });
+            }
+            else {
+                errorExtractor(response);
+            }
+        };
+
+        // Hide dropdown when clicking anywhere else
+        $(document).on('click', function () {
+            $('.project-dropdown').remove();
+        });
+
+        function addPeopleToProject() {
+            if (customValidateForm('addPeopleForm')) {
+
+                let emailText = $('#email').val().trim();
+
+                // split by comma
+                let email = emailText.split(',').map(e => e.trim()).filter(e => e.length);  
+
+                // add simple email validation because take the input type text instead of email
+                let valid = email.every(e => /\S+@@\S+\.\S+/.test(e));
+                if (!valid) {
+                    infoToastr('One or more emails are invalid', 'info');
+                    return;
+                }
+
+                let roleId = $('#roleId').val();
+
+                // get projectId stored in modal
+                let projectId = $('#addPeopleModal').data('project-id');
+
+                // Disable button & inputs
+                $("#addPeople").addClass("readonly").prop("disabled", true).text("Adding...");
+                $("#closeModal").addClass("readonly").prop("disabled", true);
+                $("#email, #roleId").prop("disabled", true);
+
+                apiRequest({
+                    url: 'flowtick/project/member/invite',
+                    type: 'POST',
+                    data: {
+
+                        "email": email,
+                        "projectId": projectId,
+                        "roleId": roleId,
+
+                    },
+                    callBack: addPeopleToProjectCallBack
+                });
+            }
+        }
+        var addPeopleToProjectCallBack = function (response) {
+            if (response.request.status === 201) {
+
+                successToastr("Invitation Send Successfully", 'success');
+                $('#addPeopleModal').modal('hide');
+
+            } else {
+
+                errorExtractor(response);
+                $('#addPeopleModal').modal('hide');
+
+            }
+            // enable button back
+            $("#addPeople").removeClass("readonly").prop("disabled", false).text("Add");
+            $("#closeModal").removeClass("readonly").prop("disabled", false);
+            $("#email, #roleId").prop("disabled", false);
+
+        }
+
+        function createProject() {
+          if (customValidateForm('createProjectForm')) {
+
+            const inputJSON = getFormDataAsJSONObject('createProjectForm');
+            apiRequest({
+                url: 'flowtick/projects',
+                type: 'POST',
+                data:  inputJSON ,
+                callBack: createProjectCallBack
+            });
+          };
+        }
+        var createProjectCallBack = function (response) {
+            if (response.request.status === 201) {
+                $('#createProjectModal').modal('hide');
+                location.reload();
+            }
+            else if (response.request.status === 422) {
+                infoToastr('The Name field is required', 'info');
+            }
+            else {
+                errorExtractor(response);
+            }
+        };
+    </script>
+</body>
+</html>

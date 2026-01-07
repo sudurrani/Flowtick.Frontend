@@ -1,0 +1,57 @@
+﻿<link href="~/css/auth/signup/account-details.css" rel="stylesheet" />
+<div class="top-wave"></div>
+
+<div class="signup-section">
+	<!-- Top Icon -->
+	<div class="top-logo-text">
+		<img src="~/img/logo/logo.png" />
+		<span>Flowtick </span>
+	</div>
+
+	<!-- Signup Card -->
+	<div class="signup-card">
+		<div class="verified-badge">
+			Email address verified  <i class="bi bi-check-circle-fill ms-2"></i>
+		</div>
+
+		<h2> </h2>
+		<h2>Add your account <span>details</span></h2>
+		<p class="subtext">You're signing up as <strong id="email"></strong></p>
+
+		<!-- Form -->
+		<form id="AccountDetailForm">
+			<div class="mb-3 text-start">
+				<label class="form-label fw-semibold">Full Name</label>
+				<input type="text" class="form-control" placeholder="Enter your full name" id="fullName" required />
+			</div>
+
+			<div class="mb-3 text-start position-relative">
+				<label class="form-label fw-semibold">Password</label>
+				<input type="password" class="form-control password-input" placeholder="Enter your password" id="password" required />
+				<i class="bi bi-eye toggle-password" id="togglePassword"></i>
+			</div>
+			<div class="border-line"></div>
+			<div class="terms">
+				By signing up, I accept the Atlassian
+				<a href="#">Cloud Terms of Service</a><i class="bi bi-box-arrow-up-right link-icon"></i> and acknowledge the
+				<a href="#">Privacy Policy</a><i class="bi bi-box-arrow-up-right link-icon"></i>.
+			</div>
+
+			<button type="button" class="btn btn-continue" id="btnAccountDetail">Continue</button>
+
+			<div class="recaptcha mt-3">
+				This site is protected by reCAPTCHA and the Google
+				<a href="#">Privacy Policy</a><i class="bi bi-box-arrow-up-right link-icon"></i> and
+				<a href="#">Terms of Service</a><i class="bi bi-box-arrow-up-right link-icon"></i> apply.
+			</div>
+		</form>
+	</div>
+
+	<!-- Bottom Logo -->
+	<div class="bottomLogo">
+		<i class="bi bi-symmetry-vertical"></i>
+		<span>Fophex</span>
+	</div>
+</div>
+
+

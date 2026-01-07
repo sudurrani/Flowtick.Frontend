@@ -1,0 +1,509 @@
+﻿<style>
+    /* Modal styling */
+    .modal-content {
+        background: white;
+        width: 500px;
+        margin: 100px auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Upload area hover effects */
+    #uploadArea:hover {
+        border-color: #4CAF50 !important;
+        background: #f8fff8 !important;
+    }
+
+    /* File list styling */
+    .file-item {
+        transition: background-color 0.2s;
+    }
+
+        .file-item:hover {
+            background-color: #f9f9f9;
+        }
+
+    /* Button styling */
+    .modal-button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #startUpload {
+        background: var(--primary-btn-bg);
+        color: white;
+    }
+
+        #startUpload:hover {
+            background: var(--primary-hover);
+        }
+
+        #startUpload:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+    #cancelUpload {
+        background: #f5f5f5;
+        color: #333;
+    }
+
+        #cancelUpload:hover {
+            background: #e5e5e5;
+        }
+
+    /* Progress bar */
+    #progressBar {
+        background: var(--primary-btn-bg));
+        height: 100%;
+        width: 0%;
+        transition: width 0.3s;
+        border-radius: 10px;
+    }
+
+    /* Responsive design */
+    @@media (max-width: 600px) {
+        .modal-content {
+            width: 90%;
+            margin: 50px auto;
+        }
+    }
+</style>
+<!-- Hidden file input -->
+<!-- Hidden file input -->
+<input type="file" id="fileUploadInput" style="display:none;" multiple>
+
+<div class="row">
+    <div class="col-2">
+        <button class="btn-create" id="btnUploadFiles">
+            <i class="bi bi-plus"></i>Attachment
+        </button>
+    </div>
+</div>
+<div class="row mt-1">
+    <div class="col-12">
+
+        <div class="child-panel-content">
+            <table class="child-table" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width:50%">Work</th>
+                        <th style="width:15%">Priority</th>
+                        @* <th style="width:25%">Story</th> *@
+                        <th style="width:20%">Assignee</th>
+                        <th style="width:15%">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="commentTableTbody">
+                    <tr>
+                        <td>
+                            <i class="bi bi-check-square me-2" style="color:#4E8CE3"></i>
+                            <span class="task-no">TASK-01</span>
+                            <span class="child-task-title">Build UI Layout</span>
+                        </td>
+                        <td>
+                            <i class="bi bi-filter " style="color:#E06C00"></i>
+                            Medium
+                        </td>
+                        <td>Add Story Points</td>
+                        <td>
+                            <img src="https://i.pravatar.cc/24" class="profile-img">
+                            Aman Ullah
+                        </td>
+                        <td>
+                            <select class="status-select">
+                                <option>To Do</option>
+                                <option>In Progress</option>
+                                <option>Review</option>
+                                <option>Done</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Single Modal for all uploads -->
+<div id="uploadModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10000;">
+    <div style="background:white; width:500px; margin:100px auto; padding:20px; border-radius:5px;">
+        <h3 id="modalTitle">Upload File(s)</h3>
+        <div id="uploadArea" style="border:2px dashed #ccc; padding:40px; text-align:center; margin:20px 0; cursor:pointer;">
+            <p>📁 Drag & drop files here or click to browse</p>
+            <p id="supportedTypes" style="font-size:12px; color:#666;" hidden>Supports: JPG, PNG, GIF, WEBP</p>
+        </div>
+
+        <div id="fileList" style="max-height:200px; overflow-y:auto; margin:20px 0;"></div>
+
+        <div id="uploadProgress" style="display:none;">
+            <div style="background:#eee; height:20px; border-radius:10px; overflow:hidden;">
+                <div id="progressBar" style="background:var(--primary-btn-bg); height:100%; width:0%; transition:width 0.3s;"></div>
+            </div>
+            <p id="progressText" style="text-align:center; margin:5px 0;">0%</p>
+        </div>
+
+        <div style="text-align:right;">
+            <button id="cancelUpload" style="padding:8px 16px; margin-right:10px;"><i class="bi bi-x"></i>Close</button>
+            <button id="startUpload" style="padding:8px 16px; background:var(--primary-btn-bg); color:white; border:none;">
+                <i class="bi bi-upload"></i>
+                Upload
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/lib/tinymce/tinymce.min1.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Store callback and metadata
+        let currentCallback = null;
+        let currentMeta = null;
+        let selectedFiles = [];
+
+        // Initialize modal events
+        initializeModal();
+
+        $('#btnUploadFiles').on('click', function () {
+            $('#uploadModal').show();
+        });
+        $('.tox-tbtn').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+        });
+
+
+        // Initialize modal functionality
+        function initializeModal() {
+            // Click upload area to trigger file input
+            $('#uploadArea').click(function () {
+                $('#fileUploadInput').click();
+            });
+
+            // Handle file selection
+            $('#fileUploadInput').change(function (e) {
+                handleFileSelection(e.target.files);
+            });
+
+            // Drag and drop functionality
+            $('#uploadArea').on('dragover', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).css('border-color', '#4CAF50');
+                $(this).css('background', '#f0f9f0');
+            });
+
+            $('#uploadArea').on('dragleave', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).css('border-color', '#ccc');
+                $(this).css('background', 'white');
+            });
+
+            $('#uploadArea').on('drop', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).css('border-color', '#ccc');
+                $(this).css('background', 'white');
+
+                if (e.originalEvent.dataTransfer.files.length) {
+                    handleFileSelection(e.originalEvent.dataTransfer.files);
+                }
+            });
+
+            // Start upload button
+            $('#startUpload').click(function () {
+                if (selectedFiles.length === 0) {
+                    alert('Please select files first');
+                    return;
+                }
+                uploadFiles();
+            });
+
+            // Cancel button
+            $('#cancelUpload').click(function () {
+                closeModal();
+            });
+
+            // Close modal when clicking outside
+            $('#uploadModal').click(function (e) {
+                if (e.target.id === 'uploadModal') {
+                    closeModal();
+                }
+            });
+        }
+
+        // Handle file selection (multiple files allowed)
+        function handleFileSelection(files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                // Check if file already selected
+                if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    selectedFiles.push(file);
+                    addFileToList(file);
+                }
+            }
+
+            updateUploadButton();
+        }
+
+        // Add file to display list
+        function addFileToList(file) {
+            const fileId = 'file-' + Date.now() + '-' + Math.random();
+            const fileSize = formatFileSize(file.size);
+            const fileIcon = getFileIcon(file.type);
+
+            const fileHtml = `
+                        <div id="${fileId}" class="file-item" style="padding:10px; border-bottom:1px solid #eee; display:flex; align-items:center;">
+                            <div style="font-size:24px; margin-right:10px;">${fileIcon}</div>
+                            <div style="flex-grow:1;">
+                                <div style="font-weight:bold;">${file.name}</div>
+                                <div style="font-size:12px; color:#666;">${fileSize} • ${file.type || 'Unknown type'}</div>
+                            </div>
+                            <button onclick="removeFile('${fileId}', '${file.name}')" style="background:none; border:none; color:#ff4444; cursor:pointer;">✕</button>
+                        </div>
+                    `;
+
+            $('#fileList').append(fileHtml);
+        }
+
+        // Remove file from selection
+        window.removeFile = function (fileId, fileName) {
+            $(`#${fileId}`).remove();
+            selectedFiles = selectedFiles.filter(f => f.name !== fileName);
+            updateUploadButton();
+        };
+
+        // Update upload button text
+        function updateUploadButton() {
+            const btn = $('#startUpload');
+            if (selectedFiles.length === 0) {
+                btn.text('Upload').prop('disabled', true);
+            } else {
+                btn.text(`Upload (${selectedFiles.length} files)`).prop('disabled', false);
+            }
+        }
+
+        // Upload all selected files
+        function uploadFiles() {
+            //if (!currentCallback || !currentMeta) {
+            //    alert('Error: No callback available');
+            //    return;
+            //}
+
+            $('#startUpload').prop('disabled', true);
+            $('#cancelUpload').prop('disabled', true);
+            $('#uploadProgress').show();
+
+            const totalFiles = selectedFiles.length;
+            let uploadedCount = 0;
+            const uploadResults = [];
+
+            // Function to update progress
+            function updateProgress() {
+                const percent = Math.round((uploadedCount / totalFiles) * 100);
+                $('#progressBar').css('width', percent + '%');
+                $('#progressText').text(`${percent}% (${uploadedCount}/${totalFiles} files)`);
+            }
+
+            // Upload files sequentially
+            uploadNextFile();
+
+            function uploadNextFile() {
+                if (uploadedCount >= totalFiles) {
+                    // All files uploaded
+                    finishUpload();
+                    return;
+                }
+
+                const file = selectedFiles[uploadedCount];
+                //const isImage = currentMeta.filetype === 'image' || file.type.startsWith('image/');
+                const isImage = file.filetype === 'image' || file.type.startsWith('image/');
+
+                uploadSingleFile(file, file.name)
+                    .then(url => {
+                        // uploadResults.push({
+                        //     url: url,
+                        //     file: fileName,
+                        //     isImage: isImage
+                        // });
+
+                        uploadedCount++;
+                        updateProgress();
+
+                        // Upload next file
+                        setTimeout(uploadNextFile, 100);
+                    })
+                    .catch(error => {
+                        console.error('Upload failed:', error);
+                        // Continue with next file even if one fails
+                        uploadedCount++;
+                        updateProgress();
+                        setTimeout(uploadNextFile, 100);
+                    });
+            }
+
+            function finishUpload() {
+                // Insert content into editor based on file type
+                if (uploadResults.length > 0) {
+                    // For images, insert all as images
+                    uploadResults.forEach(result => {
+                        if (result.isImage) {
+                            currentCallback(result.url, { alt: result.file.name });
+                        }
+                    });
+                } else {
+                    // For files, create links
+                    uploadResults.forEach(result => {
+                        currentCallback(result.url, {
+                            text: result.file.name,
+                            title: result.file.name
+                        });
+                    });
+                }
+
+                // Close modal after delay
+                setTimeout(() => {
+                    closeModal();
+                    successToastr(`${uploadedCount} file(s) uploaded successfully!`, 'Upload');
+                }, 500);
+            }
+        }
+
+        // Upload single file (used by both modal and automatic uploads)
+        function uploadSingleFile(fileBlob, fileName) {
+            return new Promise((resolve, reject) => {
+                let taskId = $("#modalTaskID").val();
+                const formData = new FormData();
+                formData.append('file', fileBlob, fileName);
+                formData.append('taskId', taskId);
+                // Add CSRF token for ASP.NET
+                const token = $('input[name="__RequestVerificationToken"]').val();
+                if (token) {
+                    formData.append('__RequestVerificationToken', token);
+                }
+                const accessToken = localStorage.getItem('accessToken');
+
+                $.ajax({
+                    url: `${baseUrl}flowtick/task/${taskId}/attachments`,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                    xhr: function () {
+                        const xhr = new XMLHttpRequest();
+                        xhr.upload.addEventListener('progress', function (e) {
+                            // Progress for individual files (not used in modal's overall progress)
+                            if (e.lengthComputable) {
+                                const percent = Math.round((e.loaded / e.total) * 100);
+                                console.log(`${fileName}: ${percent}%`);
+                            }
+                        });
+                        return xhr;
+                    },
+                    success: function (response) {
+                        let fileUrl = '';
+                        if (response && response.data.url) {
+                            fileUrl = response.data.url;
+                        } else if (response && response.data.location) {
+                            fileUrl = response.data.location;
+                        } else if (typeof response === 'string' && response.startsWith('http')) {
+                            fileUrl = response;
+                        }
+
+                        if (fileUrl) {
+                            resolve(fileUrl);
+                        } else {
+                            reject('Invalid server response');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        reject('Upload failed: ' + (xhr.responseText || error));
+                    }
+                });
+            });
+        }
+
+        // Close modal and reset
+        function closeModal() {
+            $('#uploadModal').hide();
+            $('#uploadProgress').hide();
+            $('#progressBar').css('width', '0%');
+            $('#startUpload').prop('disabled', false);
+            $('#cancelUpload').prop('disabled', false);
+
+            // Reset
+            selectedFiles = [];
+            currentCallback = null;
+            currentMeta = null;
+            $('#fileList').empty();
+            $('#fileUploadInput').val('');
+        }
+
+        // Helper functions
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function getFileIcon(fileType) {
+            if (fileType.startsWith('image/')) return '🖼️';
+            if (fileType.includes('pdf')) return '📄';
+            if (fileType.includes('document') || fileType.includes('word')) return '📝';
+            if (fileType.includes('sheet') || fileType.includes('excel')) return '📊';
+            if (fileType.startsWith('video/')) return '🎬';
+            if (fileType.startsWith('audio/')) return '🎵';
+            if (fileType.includes('zip') || fileType.includes('compressed')) return '📦';
+            return '📁';
+        }
+        $('.tox-tbtn').click(function () {
+            alert('here');
+        })
+
+    });
+
+    function openModal() {
+        alert('openModal');
+    }
+    function getTaskAttachments(taskId) {
+       // let taskId = $("#modalTaskID").val();
+
+
+
+        let url = `flowtick/task/${taskId}/attachments`;
+            apiRequest({
+                url: url,
+                type: 'GET',
+                data: {},
+            callBack: getTaskAttachmentsCallBack
+            });
+
+        
+      
+
+    }
+    var getTaskAttachmentsCallBack = function (response) {
+        if (response.request.status === 200) {
+            successToastr("Saved successfully", 'Task');            
+
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+</script>

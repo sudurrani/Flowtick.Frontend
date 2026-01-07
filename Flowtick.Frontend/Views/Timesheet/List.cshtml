@@ -1,0 +1,139 @@
+﻿@{
+    ViewData["Title"] = "Timesheet - Employee Self Service | Flowtick";
+    Layout = "~/Views/Shared/_FlowtickLayout.cshtml";
+}
+<style>
+    .table-timesheet {
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table-timesheet thead {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+            .table-timesheet thead th {
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.85rem;
+                border-bottom: none;
+                padding: 12px;
+            }
+
+        .table-timesheet tbody td {
+            padding: 12px;
+            border-color: var(--border-color);
+        }
+
+        .table-timesheet tbody tr:hover {
+            background-color: rgba(13, 148, 136, 0.08);
+        }
+
+        .table-timesheet td:last-child {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .table-timesheet td,
+        .table-timesheet th {
+            text-align: center;
+        }
+
+        .table-timesheet tbody td,
+        .table-timesheet tbody td input{
+            font-size: 0.85rem !important;
+        }
+
+</style>
+<div class="board-container">
+    <div class="row">
+        <div class="col-11">
+            <label class="ps-1 pe-1" style="background: var(--primary-btn-bg);color: var(--primary-btn-fore)">Time-Out must be entered in 24-hour format (hh:mm:ss). For example, 6:00 PM should be entered as 18:00:00</label>
+        </div>
+        <div class="col-1">
+            <button class="btn-create" id="btnSave">
+                <i class="bi bi-plus-lg"></i>
+                Save
+            </button>
+        </div>
+        
+    </div>
+    <div class="row mt-1">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-timesheet align-middle" id="TimesheetTable">
+                    <thead style="background: var(--primary-btn-bg);color: var(--primary-btn-fore)">
+                        <tr>
+                            <th hidden>ID</th>
+                            <th>Date</th>
+                            <th>Time-In</th>
+                            <th>Time-Out</th>
+                            <th>Hours</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="TimesheetTbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let timesheetSchema = {
+        id: { type: 'hidden' },
+        date: { type: 'td', maxlength: 50, isReadOnly: false },
+        timeIn: { type: 'td', maxlength: 50, isReadOnly: false },
+        timeOut: { type: 'text', maxlength: 50, isReadOnly: false },
+        hours: { type: 'td', maxlength: 50, isReadOnly: false },
+
+        Action: { type: 'action', addRowFunction: '', removeRowFunction: '' }
+    };
+    $(function () {
+        getTimesheet();
+
+        $('#btnSave').on('click', function () {
+            let timesheetsArray = getTableRowsBySchema(timesheetSchema, 'TimesheetTbody');
+
+            let url = `ess/timesheets`;
+            apiRequest({
+                url: url,
+                type: 'POST',
+                data: timesheetsArray,
+                callBack: function (response) {
+                    debugger;
+                    if (response.request.status === 201) {
+                        successToastr('Saved Successfully!', 'Timesheet');
+                        getTimesheet();
+                    }
+                    else {
+                        errorExtractor(response);
+                    }
+                }
+            });
+        });
+    });
+    function getTimesheet() {
+        $('#TimesheetTbody').html('');
+        let url = `ess/timesheets`;
+        apiRequest({
+            url: url,
+            type: 'GET',
+            data: {},
+            callBack: function (response) {
+                if (response.request.status === 200) {
+                    $.each(response.data, function (index, row) {
+                        addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
+                    });
+                }
+                else {
+                    errorExtractor(response);
+                }
+            }
+        });
+    }
+    function addBranchRow() {
+        addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', { id: 0 });
+    }
+</script>
