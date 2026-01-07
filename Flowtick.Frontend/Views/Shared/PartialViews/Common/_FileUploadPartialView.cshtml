@@ -499,7 +499,7 @@
     }
     var getTaskAttachmentsCallBack = function (response) {
         if (response.request.status === 200) {
-            successToastr("Saved successfully", 'Task');            
+            console.log(response.data);
 
         }
         else {
