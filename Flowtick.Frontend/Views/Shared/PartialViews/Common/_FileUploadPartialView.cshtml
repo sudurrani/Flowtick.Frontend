@@ -91,14 +91,15 @@
             <table class="child-table" style="width:100%">
                 <thead>
                     <tr>
-                        <th style="width:50%">Work</th>
-                        <th style="width:15%">Priority</th>
-                        @* <th style="width:25%">Story</th> *@
-                        <th style="width:20%">Assignee</th>
-                        <th style="width:15%">Status</th>
+                        <th hidden>Id</th>
+                        <th> Name</th>                        
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Time</th>                        
+                        <th></th>
                     </tr>
                 </thead>
-                <tbody id="commentTableTbody">
+                <tbody id="attachmentTableTbody">
                     <tr>
                         <td>
                             <i class="bi bi-check-square me-2" style="color:#4E8CE3"></i>
@@ -221,7 +222,7 @@
             // Start upload button
             $('#startUpload').click(function () {
                 if (selectedFiles.length === 0) {
-                    alert('Please select files first');
+                    infoToastr('Please select files first','Info');
                     return;
                 }
                 uploadFiles();
@@ -369,7 +370,7 @@
                         });
                     });
                 }
-
+                getTaskAttachments($("#modalTaskID").val());
                 // Close modal after delay
                 setTimeout(() => {
                     closeModal();
@@ -500,10 +501,45 @@
     var getTaskAttachmentsCallBack = function (response) {
         if (response.request.status === 200) {
             console.log(response.data);
+            var $attachmentTableTbody = $('#attachmentTableTbody');
+            $attachmentTableTbody.empty(); // Clear old items
 
+            $.each(response.data, function (index, item) {
+                var tr = `
+                           <tr data-id="${item.id}">
+                               <td hidden>${item.id}</td>
+                               <td>
+                                   <i class="bi bi-paperclip"></i>
+                                   <a class="task-no sub-task-detail" href="${item.url}" target="_blank">${item.fileName}</a>                                       
+                               </td>
+                               <td>                                   
+                                   ${item.fileType}
+                               </td>
+                               <td >${item.date}</td>
+                               <td >${item.time}</td>
+                               <td style="color:#dc3545;" class="text-end"><strong role="button" onclick="deleteAttachment('${encryptNumber(item.id)}');">Delete</strong></td>
+                               
+                           </tr>
+                          `;
+                $attachmentTableTbody.append(tr);
+            });
         }
         else {
             errorExtractor(response);
         }
     };
+    function deleteAttachment(id = null){
+        alert(id);
+        let url = `flowtick/task/attachments/${id}`;
+        apiRequest({
+            url: url,
+            type: 'DELETE',
+            data: {},
+            callBack: function (response) {
+                if (response.request.status === 204) {
+                    alert('deleted');
+                }
+            }
+        });
+    }
 </script>
