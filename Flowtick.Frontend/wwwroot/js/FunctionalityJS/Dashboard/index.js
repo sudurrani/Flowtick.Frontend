@@ -56,10 +56,7 @@ function getAllTask() {
 var getAllTaskCallBack = function (response) {
 
     if (response.request.status === 200) {
-
-        _getAllTasks = response.data
-        console.log(_getAllTasks);
-
+        _getAllTasks = response.data        
         populateWorkItems("workOnContainer", _getAllTasks);
         populateWorkItems("workViewedContainer", _getAllTasks);
         populateWorkItems("workRecommendedContainer", workRecommendedData);
