@@ -9,5 +9,9 @@ namespace Flowtick.Frontend.Controllers
         {
             return View();
         }
+        public IActionResult Main()
+        {
+            return View();
+        }
     }
 }

@@ -3331,6 +3331,7 @@ function renderTinyMCE(inputIdAttr = 'textArea',fkeyId = 0) {
         autoresize_bottom_margin: 10,
         resize: true,
         content_style: "body { font-size: 85%; }",
+
         plugins: [ //'image', 'media',
             'autoresize', 'advlist', 'autolink', 'lists', 'link',
             'charmap', 'preview', 'anchor', 'searchreplace',
@@ -3390,7 +3391,9 @@ function renderTinyMCE(inputIdAttr = 'textArea',fkeyId = 0) {
             });
         },
         setup: function (editor) {
-
+            editor.on('init', function () {
+                editor.getContainer().style.zIndex = '0';
+            });
             editor.on('drop', function (e) {
                 const file = e.dataTransfer.files[0];
                 if (!file) return;

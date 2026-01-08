@@ -28,7 +28,7 @@
         $("#gridDropdown").toggleClass("show");
     });
     $("#btnHome").click(function () {
-        window.location.href = "/Dashboard/Index";
+        window.location.href = "/Dashboard/Main";
     });
     $("#btnCreateProject").click(function () {
         $('#createProjectModal').modal('show');

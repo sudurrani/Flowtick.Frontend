@@ -522,6 +522,14 @@
                 border-color: transparent #dcfce7 transparent transparent;
             }
 
+    .task-modal-fade-effect {
+        opacity: 0;
+        transition: opacity 2s ease;
+    }
+
+        .task-modal-fade-effect.show {
+            opacity: 1;
+        }
 
 </style>
 <!-- Task Modal -->
@@ -596,6 +604,11 @@
                 <div id="description-view">
                     <div id="description-display" class="description-text">
                         Edit description
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <input type="color" class="form-control form-control-color" id="ColorPicker" value="#14b8a6" />
                     </div>
                 </div>
                 @await Html.PartialAsync(
@@ -858,6 +871,12 @@
                     <div class="detail-block">
                         <div class="label">Labels</div>
                         <a class="link-item">Add labels</a>
+                    </div>
+                    <div class="detail-block" id="SideBarParentContainer">
+                        <div class="label">Parent</div>
+                        <div class="link-item" id="SideBarParent"><span class="task-no">Test</span>-
+                            <span class="child-task-title">dasfas</span>
+                        </div>
                     </div>
 
                     <div class="detail-block">
@@ -1137,7 +1156,8 @@
         const reviewerId = $("#modalReviewerID .profile-image").data("user-id");
         const reporterId = $("#modalReporterID .profile-image").data("user-id");
         const statusId = $('.btn-task-status').data("id");
-
+        alert($('#ColorPicker').val());
+        return;
 
         let url = `flowtick/project/${projectId}/tasks/${id}`;
         apiRequest({
