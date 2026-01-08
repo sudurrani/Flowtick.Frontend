@@ -1310,9 +1310,9 @@
         $wrapper.empty();
 
         $.each(comments, function (index, comment) {
-        const isLoginUser = comment.userId === Number(loginUserID);
+        const isLoginUser = comment.user.id === Number(loginUserID);
             const sideClass = isLoginUser ? "right" : "left";
-            const userName = "Usman said"
+                const userName = comment.user.name
             const html = `
                 <div class="comment-item ${sideClass}" data-id="${comment.id}">
 
