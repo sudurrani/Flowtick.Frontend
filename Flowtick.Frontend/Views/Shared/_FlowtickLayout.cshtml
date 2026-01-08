@@ -8,26 +8,26 @@
     <title>@ViewData["Title"] - Flowtick Project Management | A brand of BK-InfoTech</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/img/logo/logo.png" type="image/x-icon">    
+    <link rel="icon" href="/img/logo/logo.png" type="image/x-icon">
 
-    <!-- Bootstrap CSS -->     
+    <!-- Bootstrap CSS -->
     <link href="~/layout/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Bootstrap Icons -->    
+    <!-- Bootstrap Icons -->
     <link href="~/layout/css/bootstrap-icons.min.css" rel="stylesheet" />
 
-    <!-- Bootstrap Bundle JS -->    
+    <!-- Bootstrap Bundle JS -->
     <script src="~/layout/js/bootstrap.bundle.min.js"></script>
-    <!-- jQuery -->    
+    <!-- jQuery -->
     <script src="~/layout/js/jquery-3.7.1.min.js"></script>
     <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
 
     <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
-    
+
 
     <script src="~/scripts/crypto-js.min.js"></script>
     <script src="~/lib/toastr/toastr.js"></script>
     <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
-        
+
     <link href="~/layout/css/select2.min.css" rel="stylesheet" />
 
 
@@ -53,22 +53,21 @@
 
         <div class="sidebar-nav">
             <div class="nav-item">
-                <a href="#" class="nav-link active" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard"
-                onclick="redirectToAction('/Dashboard/Index?id=',0);">
+                <a href="#" class="nav-link  @(ViewContext.RouteData.Values["action"]?.ToString() == "Main" ? "active" : "")" data-bs-toggle="tooltip" data-bs-placement="right" title="Dashboard"
+                   onclick="redirectToAction('/Dashboard/Main?id=',0);">
                     <i class="bi bi-house-door"></i>
                     <span class="nav-link-text">Home</span>
                 </a>
             </div>
-            <div class="nav-item p-2" >
+            <div class="nav-item p-2">
                 <label style="border-bottom:1px solid var(--primary-color)" class="w-100 pb-1">
-                Project(s)
+                    Project(s)
                 </label>
             </div>
             <div class="nav-item ps-3" id="ProjectContainer">
-                
             </div>
             <div class="nav-item">
-                <a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Tasks">
+                <a href="#" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Tasks" ? "active" : "")" data-bs-toggle="tooltip" data-bs-placement="right" title="Tasks">
                     <i class="bi bi-check-circle"></i>
                     <span class="nav-link-text">Tasks</span>
                 </a>
@@ -92,7 +91,7 @@
                 </a>
             </div>
             <div class="nav-item">
-                <a href="/Timesheet/List" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="Timesheet">
+                <a href="/Timesheet/List" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "List" ? "active" : "")" data-bs-toggle="tooltip" data-bs-placement="right" title="Timesheet">
                     <i class="bi bi-graph-up"></i>
                     <span class="nav-link-text">Timesheet</span>
                 </a>
@@ -118,7 +117,7 @@
                 </div>
                 <button class="btn-create ms-auto" id="btnCreateProject">
                     <i class="bi bi-plus-lg"></i>
-                    Create 
+                    Create
                 </button>
                 <button class="icon-btn">
                     <i class="bi bi-bell"></i>
@@ -187,26 +186,25 @@
             </div>
         </div>
     </div>
+    <script src="~/layout/js/select2.min.js"></script>
     <script src="~/js/functionalityjs/common-script.js"></script>
-    <!-- Then Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    
+
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
-        
+
         // Sidebar Toggle
         $(function () {
 
-           $('#roleId').select2({
-             dropdownParent: $('#addPeopleModal') ,
-            width: '100%'
-           });
+            $('#roleId').select2({
+                dropdownParent: $('#addPeopleModal'),
+                width: '100%'
+            });
 
             var urlParameters = new URLSearchParams(window.location.search);
             let project = urlParameters.get('project');
             $('#ProjectName').text(project);
-            
+
 
             getMyProjects();
             $('#toggleSidebar').on('click', function () {
@@ -222,22 +220,22 @@
 
             $("#addPeople").click(function (e) {
 
-               e.preventDefault();
-               addPeopleToProject();
+                e.preventDefault();
+                addPeopleToProject();
             });
 
-           $("#btnCreateProject").click(function () {
-         
-               $('#createProjectModal').modal('show');
-           })
+            $("#btnCreateProject").click(function () {
 
-        $("#saveProject").click(function () {
-            createProject()
-        })
+                $('#createProjectModal').modal('show');
+            })
+
+            $("#saveProject").click(function () {
+                createProject()
+            });
+            
 
         });
         function getMyProjects() {
-            ////debugger;
             apiRequest({
                 url: 'flowtick/projects/me',
                 type: 'GET',
@@ -259,33 +257,39 @@
                 $.each(projects, function (index, project) {
                     $('#ProjectContainer').append(
                         `<a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="${project.name}"
-                                onclick="redirectToAction('/Board/Project?project=${project.name}&id=',${project.id})">
-                                    <i class="bi bi-kanban" ></i>
-                                    <span class="nav-link-text">${project.name}</span>
-                                    <span class="ms-auto three-dots" style="z-index:1000;" onclick="handleThreeDots(event, ${project.id})">
-                                <i class="bi bi-three-dots" style="margin-right:0;"></i>
-                            </span>
-                        </a>`
+                                                onclick="redirectToAction('/Board/Project?project=${project.name}&id=',${project.id})">
+                                                    <i class="bi bi-kanban" ></i>
+                                                    <span class="nav-link-text">${project.name}</span>
+                                                    <span class="ms-auto three-dots" style="z-index:1000;" onclick="handleThreeDots(event, ${project.id})">
+                                                <i class="bi bi-three-dots" style="margin-right:0;"></i>
+                                            </span>
+                                        </a>`
                     );
                     // Dashboard project cards
                     $container.append(`
-                                            <div class="col-12 col-sm-6 col-md-4">
-                                                <div class="app-card active open-project-board" data-id="${project.id}" data-name=" ${project.name}" >
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="app-icon bg-light">
-                                                            <img src="/img/logo/logo.png" style="width:32px; height:32px;" />
-                                                        </div>
-                                                        <div class="ms-3">
-                                                            <h6 class="mb-0 fw-semibold">${project.name}</h6>
-                                                            <small class="text-muted">${project.description}</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                      `);
+                                                            <div class="col-12 col-sm-6 col-md-4">
+                                                                <div class="app-card active open-project-board" data-id="${project.id}" data-name=" ${project.name}" >
+                                                                    <div class="d-flex align-items-center">
+                                                                        <div class="app-icon bg-light">
+                                                                            <img src="/img/logo/logo.png" style="width:32px; height:32px;" />
+                                                                        </div>
+                                                                        <div class="ms-3">
+                                                                            <h6 class="mb-0 fw-semibold">${project.name}</h6>
+                                                                            <small class="text-muted">${project.description}</small>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                      `);
                 });
 
-                
+                $("#ProjectContainer a.nav-link").each(function () {
+                    const title = $(this).attr("title");                    
+                    if (title === $('#ProjectName').text()) {
+                        $("#ProjectContainer a.nav-link").removeClass("active");
+                        $(this).addClass("active");
+                    }
+                });
                 //  define trigger when sidebar is loadded  add the active class to that menu item by using this trigger name  on the project view js
                 //$(document).trigger("sidebarProjectsLoaded");
             }
@@ -305,7 +309,7 @@
                 $('[data-bs-toggle="tooltip"]').tooltip('dispose');
             }
         }
-        
+
         function handleThreeDots(event, projectId) {
             event.stopPropagation();   // stops parent <a> click
             event.preventDefault();    // prevents link navigation (important)
@@ -314,29 +318,29 @@
 
             //let projectId = $(this).closest('.menu-item').data('id');// <-- project id
 
-        const $el = $(event.currentTarget); 
+            const $el = $(event.currentTarget);
 
-        let offset = $el.offset();
-        let height = $el.outerHeight();
+            let offset = $el.offset();
+            let height = $el.outerHeight();
 
             $("body").append(`
-                        <ul class="dropdown-menu project-dropdown"
+                                        <ul class="dropdown-menu project-dropdown"
 
-                         data-id="${projectId}"
-                            style="
-                                display:block;
-                                position:absolute;
-                                top:${offset.top + height}px;
-                                left:${offset.left - 10}px;
+                                         data-id="${projectId}"
+                                            style="
+                                                display:block;
+                                                position:absolute;
+                                                top:${offset.top + height}px;
+                                                left:${offset.left - 10}px;
 
-                            ">
-                            <li><a class="dropdown-item"><i class="bi bi-star me-2"></i>Add to Starred</a></li>
-                            <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add People</a></li>
-                            <li><a class="dropdown-item"><i class="bi bi-clipboard me-2"></i>Save as template</a></li>
-                            <li><a class="dropdown-item" id="spaceSetting"><i class="bi bi-gear me-2"></i>Space setting</a></li>
-                            <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete Space</a></li>
-                        </ul>
-                    `);
+                                            ">
+                                            <li><a class="dropdown-item"><i class="bi bi-star me-2"></i>Add to Starred</a></li>
+                                            <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add People</a></li>
+                                            <li><a class="dropdown-item"><i class="bi bi-clipboard me-2"></i>Save as template</a></li>
+                                            <li><a class="dropdown-item" id="spaceSetting"><i class="bi bi-gear me-2"></i>Space setting</a></li>
+                                            <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete Space</a></li>
+                                        </ul>
+                                    `);
             // Your custom logic here
             // alert("Three dots clicked for project:", projectId);
         }
@@ -351,7 +355,7 @@
             // clear form
             $('#addPeopleForm')[0].reset();
             $('#addPeopleModal').modal('show');
-               $('.project-dropdown').remove();
+            $('.project-dropdown').remove();
 
             getRole();
         });
@@ -395,7 +399,7 @@
                 let emailText = $('#email').val().trim();
 
                 // split by comma
-                let email = emailText.split(',').map(e => e.trim()).filter(e => e.length);  
+                let email = emailText.split(',').map(e => e.trim()).filter(e => e.length);
 
                 // add simple email validation because take the input type text instead of email
                 let valid = email.every(e => /\S+@@\S+\.\S+/.test(e));
@@ -448,16 +452,16 @@
         }
 
         function createProject() {
-          if (customValidateForm('createProjectForm')) {
+            if (customValidateForm('createProjectForm')) {
 
-            const inputJSON = getFormDataAsJSONObject('createProjectForm');
-            apiRequest({
-                url: 'flowtick/projects',
-                type: 'POST',
-                data:  inputJSON ,
-                callBack: createProjectCallBack
-            });
-          };
+                const inputJSON = getFormDataAsJSONObject('createProjectForm');
+                apiRequest({
+                    url: 'flowtick/projects',
+                    type: 'POST',
+                    data: inputJSON,
+                    callBack: createProjectCallBack
+                });
+            };
         }
         var createProjectCallBack = function (response) {
             if (response.request.status === 201) {

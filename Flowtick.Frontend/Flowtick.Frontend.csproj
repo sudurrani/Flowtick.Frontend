@@ -21,6 +21,10 @@
     <Compile Remove="Controllers\UserController.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="Views\Dashboard\Index.cshtml" />
+  </ItemGroup>
+
 	
   <ItemGroup>
     <None Include="wwwroot\layout\css\fonts\bootstrap-icons.woff2" />

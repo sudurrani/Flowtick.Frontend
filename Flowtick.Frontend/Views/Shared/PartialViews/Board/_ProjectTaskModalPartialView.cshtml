@@ -598,6 +598,11 @@
                         Edit description
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-2">
+                        <input type="color" class="form-control form-control-color" id="ColorPicker" value="#14b8a6" />
+                    </div>
+                </div>
                 @await Html.PartialAsync(
                          "~/Views/Shared/PartialViews/Common/_EditorPartialView.cshtml",
                          new Flowtick.Frontend.Models.EditorPartialView.EditorPartialViewInputModel
@@ -1137,7 +1142,8 @@
         const reviewerId = $("#modalReviewerID .profile-image").data("user-id");
         const reporterId = $("#modalReporterID .profile-image").data("user-id");
         const statusId = $('.btn-task-status').data("id");
-
+        alert($('#ColorPicker').val());
+        return;
 
         let url = `flowtick/project/${projectId}/tasks/${id}`;
         apiRequest({
