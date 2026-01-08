@@ -65,7 +65,7 @@ var createUserCallBack = function (response) {
            
          /*   window.location.href = `/Project/Invitation?flowtick=${code}&email=${email}`;*/
             window.location.href = `/Project/Invitation?flowtick=${code}&email=${email}&project=${projectName}`;
-          /*  window.location.href = `/Dashboard/Index?flowtick=${code}&email=${email}`;*/
+          /*  window.location.href = `/Dashboard/Main?flowtick=${code}&email=${email}`;*/
         }
 
     

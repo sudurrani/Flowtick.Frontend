@@ -397,6 +397,16 @@
             $('.task-footer').toggleClass('d-none');
         });
 
+
+        $('#SideBarParent').on('click', function () {
+            $(".task-modal").addClass("task-modal-fade-effect");            
+            $(".task-modal").removeClass("show");
+            getTaskDetail($(this).data("id"));
+            setTimeout(function () {
+                $(".task-modal").addClass("show");
+            }, 300);
+            
+        });
     });
 
     // Handle for assigne user in create task selection
@@ -1081,8 +1091,23 @@
             /*   selected epic code and id */
             $('.selected-epic-code span').text(getTaskData.parent ? getTaskData.parent.code : 'no parent');
             $('.selected-epic-code').attr('data-id', getTaskData.parent ? getTaskData.parent.id : '');
+            
+            /// RIGHT SIDE PANEL - PARENT LINKING/SHOWING
+            if (getTaskData.parent) {                
+                $('#SideBarParentContainer').show();
+                $('#SideBarParent .task-no').text(getTaskData.parent.code );
+                $('#SideBarParent .child-task-title').text(getTaskData.parent.title);
+                $('#SideBarParent .task-no').css('font-weight', 'bold');
+                $('#SideBarParent .child-task-title').css('font-weight', 'bold');            
+                $('#SideBarParent').attr('data-id', getTaskData.parent.id);
+            }
+            else{
+                $('#SideBarParentContainer').hide();
+            }
+            /// RIGHT SIDE PANEL - PARENT LINKING/SHOWING
+            
             ///Epic / Parent Linking Code Logic Goes here
-
+            $('[data-bs-toggle="tooltip"]').tooltip();
             if (getTaskData.linking != null) {
                 $('#epicParentLinkDropdown').addClass('d-flex').show();
                 $('#epicParentLinkIcon').removeClass();

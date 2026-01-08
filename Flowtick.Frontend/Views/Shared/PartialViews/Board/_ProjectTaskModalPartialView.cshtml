@@ -522,6 +522,14 @@
                 border-color: transparent #dcfce7 transparent transparent;
             }
 
+    .task-modal-fade-effect {
+        opacity: 0;
+        transition: opacity 2s ease;
+    }
+
+        .task-modal-fade-effect.show {
+            opacity: 1;
+        }
 
 </style>
 <!-- Task Modal -->
@@ -863,6 +871,12 @@
                     <div class="detail-block">
                         <div class="label">Labels</div>
                         <a class="link-item">Add labels</a>
+                    </div>
+                    <div class="detail-block" id="SideBarParentContainer">
+                        <div class="label">Parent</div>
+                        <div class="link-item" id="SideBarParent"><span class="task-no">Test</span>-
+                            <span class="child-task-title">dasfas</span>
+                        </div>
                     </div>
 
                     <div class="detail-block">

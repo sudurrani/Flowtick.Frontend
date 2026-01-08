@@ -21,7 +21,7 @@ var loginProjectCallBack = function (response) {
         let accessToken = response.request.responseJSON.access_token;        
         localStorage.setItem('accessToken', accessToken);
 
-        redirectToAction('/Dashboard/Index?ID=', 0);
+        redirectToAction('/Dashboard/Main?ID=', 0);
     }
     else if (response.request.status === 401) {
         infoToastr('Invalid email or password', 'info');

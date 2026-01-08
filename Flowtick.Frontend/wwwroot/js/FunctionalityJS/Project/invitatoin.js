@@ -76,7 +76,7 @@ var joinProjectCallBack = function (response) {
 		localStorage.setItem('accessToken', accessToken);
 
 		// redirect to Dashboard View
-		window.location.href = '/Dashboard/Index';
+		window.location.href = '/Dashboard/Main';
 	}
 	else {
 		errorExtractor(response);
