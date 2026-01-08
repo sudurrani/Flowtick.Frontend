@@ -10,10 +10,24 @@ $(function () {
        // alert('not null');
         $('#email').val(_invitationEmail);
         $('#email').attr('readonly', true);
-
+       
         $("#email").addClass("readonly").prop("disabled", true);
 
     }
+    // Cursor Change
+    $(document).on('keydown', '#fullName', function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            $('#password').focus();
+        }
+    });
+
+    $(document).on('keydown', '#password', function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            $('#btnAccountDetail').click();
+        }
+    });
 });
 $(document).on('click', '#btnAccountDetail', function () {
     //debugger;

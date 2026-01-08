@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_FlowtickLayout.cshtml";
+}
+<div class="container mt-5">
+
+    <form>
+        
+        <div class="form-group row">
+            <label class="col-form-label">
+                Name
+            </label>
+            <div>
+                <input type="text" class="form-control" name="name" id="name" style="width: 350px;" readonly />
+            </div>
+        </div>
+
+        <div class="col-md-6 pt-4">
+            <div class="form-group row">
+                <label class="control-label col-md-1">
+                    Description
+                </label>
+                <div class="input-group col-md-11">
+                    <textarea type="text" id="description" tabindex="0" rows="3" class="form-control" name="Description" autocomplete="off"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row pt-4">
+            <label class="col-md-3 col-form-label">
+                Email Notification
+            </label>
+            <div class="row">
+                <div class="form-check col-3">
+                    <input type="checkbox" class="fs-5 me-1 task-type-checkbox" />
+                    <label for="onTaskAssignment" class="mb-0 cursor-pointer">
+                        On Task Assignment
+                    </label>
+                </div>
+
+                <div class="form-check col-3">
+                    <input type="checkbox" class="fs-5 me-1 task-type-checkbox" />
+                    <label for="onTaskStatusToReview" class="mb-0 cursor-pointer">
+                        On Task Status To Review
+                    </label>
+                </div>
+
+                <div class="form-check col-3">
+                    <input type="checkbox" class="fs-5 me-1 task-type-checkbox" />
+                    <label for="onTaskStatustoDone" class="mb-0 cursor-pointer">
+                        On Task Status to Done
+                    </label>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="pt-4">
+            <button type="button" class="btn btn-green" id="saveSetting">
+                Save
+            </button>
+        </div>
+    </form>
+
+</div>
+
+
+

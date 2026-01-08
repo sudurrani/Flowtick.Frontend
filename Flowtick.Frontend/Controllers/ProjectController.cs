@@ -11,7 +11,7 @@ namespace Flowtick.Frontend.Controllers
         }
 
         [HttpGet]
-        public IActionResult SpaceSetting()
+        public IActionResult Settings()
         {
             return View();
         }

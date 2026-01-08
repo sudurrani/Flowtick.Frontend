@@ -189,7 +189,7 @@ $(document).on("click", ".three-dots", function (e) {
             <li><a class="dropdown-item"><i class="bi bi-star me-2"></i>Add to Starred</a></li>
             <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add People</a></li>
             <li><a class="dropdown-item"><i class="bi bi-clipboard me-2"></i>Save as template</a></li>
-            <li><a class="dropdown-item" id="spaceSetting"><i class="bi bi-gear me-2"></i>Space setting</a></li>
+            <li><a class="dropdown-item" id="projectSetting"><i class="bi bi-gear me-2"></i>Space setting</a></li>
             <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete Space</a></li>
         </ul>
     `);
@@ -256,8 +256,8 @@ var getRoleCallBack = function (response) {
     }
 };
 
-$(document).on('click', '#spaceSetting', function () {
-    window.location.href = `/Project/SpaceSetting`;
+$(document).on('click', '#projectSetting', function () {
+    window.location.href = `/Project/projectSetting`;
  
 });
 // Handle click for all sidebar items, including dynamically loaded ones
