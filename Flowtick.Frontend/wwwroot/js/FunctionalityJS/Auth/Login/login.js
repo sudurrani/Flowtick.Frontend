@@ -1,4 +1,31 @@
-﻿$(document).on('click', '#btnLogin', function () {
+﻿$(function () {
+    $(document).on('keydown', function (e) {
+        if (e.key === "Enter") {
+
+            const activeId = document.activeElement.id;
+
+            // Agar email pe focus hai → password pe le jao
+            if (activeId === 'email') {
+                e.preventDefault();
+                $('#password').focus();
+                return;
+            }
+
+            // Agar password pe focus hai → login
+            if (activeId === 'password') {
+                e.preventDefault();
+                loginProject();
+                return;
+            }
+
+            // Agar kahin aur focus hai → direct login
+            e.preventDefault();
+            loginProject();
+        }
+    });
+
+});
+$(document).on('click', '#btnLogin', function () {
     loginProject();
 });
 

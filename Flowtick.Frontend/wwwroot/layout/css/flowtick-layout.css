@@ -949,3 +949,15 @@ input[type="checkbox"] {
     accent-color: var(--primary-color);
     transform: scale(1.15);
 }
+
+
+.user-profile-dropdown .dropdown-item {
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+    .user-profile-dropdown .dropdown-item:hover {
+        background-color: #e4f7fa !important;
+        text-decoration: none;
+    }
