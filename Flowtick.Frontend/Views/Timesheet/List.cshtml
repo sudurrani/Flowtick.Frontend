@@ -101,8 +101,7 @@
                 url: url,
                 type: 'POST',
                 data: timesheetsArray,
-                callBack: function (response) {
-                    debugger;
+                callBack: function (response) {                    
                     if (response.request.status === 201) {
                         successToastr('Saved Successfully!', 'Timesheet');
                         getTimesheet();

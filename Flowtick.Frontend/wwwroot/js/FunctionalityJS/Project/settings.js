@@ -10,8 +10,7 @@
     });
 });
 function saveRecord() {
-    let inputJSON = getFormDataAsJSONObject('projectForm');
-    console.log(inputJSON);
+    let inputJSON = getFormDataAsJSONObject('projectForm');    
     let url = `flowtick/projects/${inputJSON.id}`;
     apiRequest({
         url: url,

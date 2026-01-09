@@ -73,8 +73,7 @@ var createUserWorkTypeCallBack = function (response) {
     }
 }
 
-function createUserWorkTypeRole() {
-    //debugger;
+function createUserWorkTypeRole() {    
     apiRequest({
         url: 'flowtick/auth/register',
         type: 'POST',

@@ -152,8 +152,7 @@ $(document).on("click", "#btnAddChildWork", function (e) {
 });
 
 // Open modal on .task-code click
-$(document).on("click", ".task-card ", function () {
-    /*    debugger;*/
+$(document).on("click", ".task-card ", function () {    
     const taskID = $(this).data("task-id");
     const parentID = $(this).data("parent-id");
     const isSubTask = $(this).data("issubtask");
@@ -282,8 +281,7 @@ $(document).on("click", ".card-user-list .assign-item", function (e) {
 });
 
 //handle click of task user in  task subtask table 
-$(document).on("click", ".subtask-user-list .assign-item", function () {
-    //debugger;
+$(document).on("click", ".subtask-user-list .assign-item", function () {    
     let name = $(this).data("name");
     let selectedUserId = $(this).data("id");
 
@@ -352,8 +350,7 @@ $(document).on("click", ".select-task-subTask-status .dropdown-item", function (
 
 });
 // hnadle click Epic  dropdown in modal 
-$(document).on('click', '.selecte-epic', function () {
-    //debugger;
+$(document).on('click', '.selecte-epic', function () {    
     let code = $(this).data("code");
     let epicId = $(this).data("id");
 
@@ -482,8 +479,7 @@ function getProjectTasks() {
     });
 }
 var getProjectTasksCallBack = function (response) {
-    if (response.request.status === 200) {
-      /*  console.log(response)*/
+    if (response.request.status === 200) {      
 
         // Filter into 4 arrays based on status.name
        
@@ -679,8 +675,7 @@ function getProjectMembers() {
 var getProjectMembersCallBack = function (response) {
     if (response.request.status === 200) {
 
-        _projectMember = response.data
-        //console.log(_projectMember);
+        _projectMember = response.data        
         setTimeout(function () {
             loadProjectUserDropdown("card-user-list", "selected-card-assignee");
             loadProjectUserDropdown("create-task-user-list", "create-task-user", loginUserID);
@@ -732,9 +727,7 @@ var getProjectEpicsCallBack = function (response) {
 
     if (response.request.status === 200) {
 
-        _getProjectEpics = response.data; // your array
-
-       /* console.log(_getProjectEpics);*/
+        _getProjectEpics = response.data; // your array       
 
         var $projectEpics = $(".project-epics-list");  // jQuery object
         $projectEpics.empty();
@@ -852,10 +845,7 @@ function toggleCreateCard() {
     $("#createCardBox").show();
     $("#createBtn").hide();
 }
-function createTask(taskType= null) {
-    //debugger;
-
- 
+function createTask(taskType= null) {     
         var inputJSON = {
             "title": null,
             "assigneeId": loginUserID,
@@ -920,8 +910,7 @@ var createTaskCallBack = function (response) {
     }
 };
 
-function getTaskDetail(taskID) {
-    //debugger;
+function getTaskDetail(taskID) {    
     let url = `flowtick/tasks/${taskID}`;
     apiRequest({
         url: url,
@@ -930,10 +919,8 @@ function getTaskDetail(taskID) {
         callBack: getTaskDetailCallBack
     });
 }
-var getTaskDetailCallBack = function (response) {
-    //debugger;
-    if (response.request.status === 200) {
-        //debugger;
+var getTaskDetailCallBack = function (response) {    
+    if (response.request.status === 200) {        
         const getTaskData = response.data
         assigneeID = getTaskData.assignee.id;
         reviewerID = getTaskData.reviewerId;
@@ -1022,14 +1009,12 @@ var getTaskDetailCallBack = function (response) {
         getTaskStatus();
 
     }
-    else {
-        //debugger;
+    else {        
         errorExtractor(response);
     }
 };
 
-function updateTask() {
-    //debugger;
+function updateTask() {    
     const id = $("#modalTaskID").val();
     const taskTitle = $("#modalTaskTitle").val().trim();
     const taskDescription = quill.root.innerHTML;

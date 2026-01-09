@@ -629,8 +629,7 @@
     // Render Board
     function renderBoard() {
         const container = $('#boardColumns');
-        container.empty();
-        // console.log(_taskStatusesArray);
+        container.empty();        
         _taskStatusesArray.forEach(column => {
             const tasks = [];//boardData.tasks.filter(task => task.status === column.id);
 
@@ -666,12 +665,10 @@
         });
     }
     var getProjectTasksCallBack = function (response) {
-        if (response.request.status === 200) {
-            // debugger;
+        if (response.request.status === 200) {            
             _projectTasksArray = response.data;
             const container = $('#boardColumns');
-            container.empty();
-            // console.log(_taskStatusesArray);
+            container.empty();            
             _taskStatusesArray.forEach(column => {
                 const tasks = (response.data || []).filter(item => item.status?.id === column.id);;//boardData.tasks.filter(task => task.status === column.id);
 
@@ -755,8 +752,7 @@
         }
     };
     // Render Task Card
-    function renderTaskCard(task) {
-        // console.log(task);
+    function renderTaskCard(task) {       
         const typeIcons = {
             epic: '<i class="bi bi-lightning-charge task-type-icon epic"></i>',
             story: '<i class="bi bi-check-circle task-type-icon story"></i>',
@@ -781,11 +777,9 @@
                                                               <span>${0}/${task.child.length}</span>
                                                         </div>`
             : '';
-
-        console.log(`task.id - ${task.id}`);
+        
         if (task.parent != null) {
-
-            console.log(`task.parent.id - ${task.parent.id}`);
+           
         }
         return `<div class="task-card cursor-pointer" onclick="filterTaskById(event,'${encryptNumber(task.id)}','${0}')" data-task-id="${task.id}">
                                   <div class="task-card-header">
@@ -878,14 +872,12 @@
         getProjectEpics();
         */
     }
-    function loadProjectUserDropdown(dropdownList, targetSelectedUser, selectedUserId = null) {
-        // debugger;
+    function loadProjectUserDropdown(dropdownList, targetSelectedUser, selectedUserId = null) {        
         let html = "";
         let users = _projectMember;
 
         // If a selected user is passed, use that one
-        let selectedUser = selectedUserId ? users.find(x => x.userId == selectedUserId) : null;
-        console.log(selectedUser);
+        let selectedUser = selectedUserId ? users.find(x => x.userId == selectedUserId) : null;        
         let hideName = (targetSelectedUser === "create-task-user" || targetSelectedUser === "selected-card-assignee") ? "d-none" : "";
 
 
@@ -955,10 +947,7 @@
 
         if (response.request.status === 200) {
 
-            _getProjectEpics = response.data; // your array
-
-            /* console.log(_getProjectEpics);*/
-
+            _getProjectEpics = response.data;
             var $projectEpics = $(".project-epics-list");  // jQuery object
             $projectEpics.empty();
 
@@ -979,10 +968,7 @@
         }
     };
 
-    function createTask(taskType = null) {
-        debugger;
-
-
+    function createTask(taskType = null) {        
         var inputJSON = {
             "title": null,
             "assigneeId": loginUserID,
@@ -1051,8 +1037,7 @@
         }
     };
 
-    function getTaskDetail(taskID) {
-        //debugger;
+    function getTaskDetail(taskID) {        
         let url = `flowtick/tasks/${taskID}`;
         apiRequest({
             url: url,
@@ -1063,7 +1048,7 @@
     }
     var getTaskDetailCallBack = function (response) {
         if (response.request.status === 200) {
-            debugger;
+            
             const getTaskData = response.data
             assigneeID = getTaskData.assignee.id;
             reviewerID = getTaskData.reviewerId;
@@ -1164,14 +1149,12 @@
             getTaskAttachments(getTaskData.id);
             /// GET TASK ATTACHMENTS
         }
-        else {
-            //debugger;
+        else {            
             errorExtractor(response);
         }
     };
 
-    function loadChildTasksTable(parentTask = {}, tasksArray = []) {
-        debugger;
+    function loadChildTasksTable(parentTask = {}, tasksArray = []) {        
         var $subtasktbody = $('#childWorkTableTbody');
         $subtasktbody.empty(); // Clear old items
 
@@ -1229,9 +1212,7 @@
         $("#createBtn").hide();
     }
 
-    function updateTaskAssignee(taskId, selectedAssigneeId) {
-
-        debugger;
+    function updateTaskAssignee(taskId, selectedAssigneeId) {        
         let url = `flowtick/tasks/${taskId}/assignee`;
         apiRequest({
             url: url,

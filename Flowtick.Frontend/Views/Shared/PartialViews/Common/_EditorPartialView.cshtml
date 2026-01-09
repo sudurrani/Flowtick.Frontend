@@ -63,8 +63,7 @@
 <script>
     $(function () {
         $('#customFileUpload').on('click', function () {
-            var content = tinymce.get('editor').getContent();
-            console.log(content);
+            var content = tinymce.get('editor').getContent();            
             $.ajax({
                 url: '/Home/SaveContent',
                 type: 'POST',
@@ -72,8 +71,7 @@
                     content: content
                 },
                 success: function (response) {
-                    alert('Saved successfully');
-                    console.log(response.data);
+                    successToastr('Saved successfully');                    
                 }
             });
 
@@ -109,8 +107,7 @@
                     'Authorization': `Bearer ${accessToken}`,
                 },
                 success: function (response) {
-                    console.log('Upload response:', response);
-
+                    
                     // Handle different response formats
                     if (response && response.data.url) {
                         resolve(response);

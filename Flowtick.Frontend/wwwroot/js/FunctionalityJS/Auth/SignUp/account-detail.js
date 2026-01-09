@@ -29,8 +29,7 @@ $(function () {
         }
     });
 });
-$(document).on('click', '#btnAccountDetail', function () {
-    //debugger;
+$(document).on('click', '#btnAccountDetail', function () {    
     createUser();
 });
 function createUser() {
@@ -56,9 +55,7 @@ function createUser() {
     
 }
 var createUserCallBack = function (response) {
-    if (response.request.status === 201) {
-    /*    debugger;*/
-
+    if (response.request.status === 201) {   
         $('#FlowtickContainer').fadeOut(300, function () {
             $(this).html('');
         });

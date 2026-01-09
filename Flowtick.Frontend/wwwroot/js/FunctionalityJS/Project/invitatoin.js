@@ -1,13 +1,10 @@
 ﻿var _flowtick, _email;
 $(function () {
-/*	debugger;*/
 	var urlParams = new URLSearchParams(window.location.search);
 	_flowtick = urlParams.get('flowtick');
 	_email = urlParams.get('email');
 	_projectName = urlParams.get('project');
-	console.log(_flowtick);
-	console.log(_email);
-	console.log(_projectName);
+	
 	$(".p-name").text(_projectName);
 	
 	cheackForEmailExsist(_email);
@@ -70,9 +67,7 @@ function joinProject() {
 }
 var joinProjectCallBack = function (response) {
 	if (response.request.status === 201) {
-
-		let accessToken = response.request.responseJSON.token.accessToken;
-		console.log(accessToken);
+		let accessToken = response.request.responseJSON.token.accessToken;		
 		localStorage.setItem('accessToken', accessToken);
 
 		// redirect to Dashboard View

@@ -117,8 +117,7 @@ var apiRequest = function (options, dataType = 'JSON', isBockUI = true, isAsync 
         },
         error: function (xhr, status, error) {
             console.log("❌ Error", status, error);
-            console.log("Response:", xhr.responseText);
-            //debugger;
+            console.log("Response:", xhr.responseText);            
             if (xhr.status == 401)
                 response = { data: null, request: xhr, error: xhr };
             else if (xhr.status == 409)
@@ -3350,10 +3349,8 @@ function renderTinyMCE(inputIdAttr = 'textArea',fkeyId = 0) {
         automatic_uploads: false,
         images_upload_url: `${baseUrl}flowtick/task/${fkeyId}/attachments`,  //' / Home / Upload',
         /*
-        images_upload_handler: function (blobInfo) {
-            debugger;
-            return new Promise((resolve, reject) => {
-                debugger;
+        images_upload_handler: function (blobInfo) {            
+            return new Promise((resolve, reject) => {                
                 uploadFile(blobInfo.blob(), blobInfo.filename())
                     .then(response => {
                         if (response && response.url) {

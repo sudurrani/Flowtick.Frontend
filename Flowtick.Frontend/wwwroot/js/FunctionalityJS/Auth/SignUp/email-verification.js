@@ -1,8 +1,7 @@
 ﻿$(document).on('click', '#btnSignUp', function () {
     sendEmailVerificationCode();
 });
-function sendEmailVerificationCode() {
-    //debugger;
+function sendEmailVerificationCode() {    
     if (customValidateForm('EmailForm')) {
         const inputJSON = getFormDataAsJSONObject('EmailForm');
         if (!isEmailValid(inputJSON.email)) {
@@ -24,8 +23,7 @@ function sendEmailVerificationCode() {
 }
 
 function sendEmailVerificationCodeCallBack(response) {    
-    if (response.request.status === 200) {
-        //debugger;
+    if (response.request.status === 200) {        
         $('#FlowtickContainer').fadeOut(300, function () {
             $(this).html('');
         });
@@ -39,8 +37,7 @@ function sendEmailVerificationCodeCallBack(response) {
         $("#btnSignUp, #email").removeClass("readonly").prop("disabled", false).text("Sign up");
     }
 }
-function getCodeVerificationPartialView() {
-    //debugger;
+function getCodeVerificationPartialView() {   
     ajaxRequest({
         url: '/Auth/GetPartialView',
         type: 'POST',
@@ -48,8 +45,7 @@ function getCodeVerificationPartialView() {
         callBack: getCodeVerificationPartialViewCallBack
     }, 'html');
 }
-var getCodeVerificationPartialViewCallBack = function (responseHTML) {
-    //debugger;
+var getCodeVerificationPartialViewCallBack = function (responseHTML) {    
     setTimeout(function () {
         $('#FlowtickContainer').append(responseHTML).fadeIn(500);
         initializeCodeVerificationElements(userEmail);

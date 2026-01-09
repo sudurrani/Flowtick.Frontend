@@ -1022,8 +1022,7 @@
 
     });
     //handle click of task user in  task subtask table
-    $(document).on("click", ".subtask-user-list .dropdown-item", function () {
-        //debugger;
+    $(document).on("click", ".subtask-user-list .dropdown-item", function () {        
         let name = $(this).data("name");
         let selectedUserId = $(this).data("id");
         let backgrounColor = $(this).find(".assignee-avatar-sm").attr("style");
@@ -1089,7 +1088,7 @@
     });
     // hnadle click Epic  dropdown in modal
     $(document).on('click', '.selecte-epic', function () {
-        //debugger;
+        
         let code = $(this).data("code");
         let epicId = $(this).data("id");
 
@@ -1146,8 +1145,7 @@
     });
 
 
-    function updateTask() {
-        // debugger;
+    function updateTask() {        
         const id = $("#modalTaskID").val();
         const taskTitle = $("#modalTaskTitle").val().trim();
         const taskDescription = tinymce.get('DescriptionEditor').getContent() //quill.root.innerHTML;
@@ -1281,8 +1279,7 @@
             url: url,
             type: 'GET',
             data: {},
-            callBack: function (response) {
-                debugger;
+            callBack: function (response) {                
                 if (response.request.status === 200) {
                     loadChildTasksTable(response.data.parent, response.data);
                 } else {

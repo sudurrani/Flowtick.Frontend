@@ -201,8 +201,7 @@
 
             const tokenData = parseJwt(token);
               var loginUserID = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-            const userName = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-            // console.log("username:", userName);
+            const userName = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];            
             $('#userAvatar').text(getInitials(userName));
 
             //end
@@ -214,8 +213,7 @@
             });
 
             var urlParameters = new URLSearchParams(window.location.search);
-            let project = urlParameters.get('project');
-                  // console.log("Projects:", project);
+            let project = urlParameters.get('project');                  
             $('#ProjectName').text(project);
 
 
@@ -347,8 +345,7 @@
                 //  define trigger when sidebar is loadded  add the active class to that menu item by using this trigger name  on the project view js
                 //$(document).trigger("sidebarProjectsLoaded");
             }
-            else {
-                console.log(response);
+            else {                
                 errorExtractor(response);
 
             }

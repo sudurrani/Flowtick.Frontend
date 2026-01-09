@@ -20,8 +20,7 @@ function createProject() {
 var createProjectCallBack = function (response) {
     if (response.request.status === 201) {
 
-        let accessToken = response.request.responseJSON.token.accessToken;
-        console.log(accessToken);
+        let accessToken = response.request.responseJSON.token.accessToken;        
         localStorage.setItem('accessToken', accessToken);
 
         // redirect to Dashboard View

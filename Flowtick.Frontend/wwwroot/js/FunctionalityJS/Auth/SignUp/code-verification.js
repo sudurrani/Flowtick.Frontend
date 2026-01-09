@@ -22,8 +22,7 @@ function emailCodeVerification() {
 
     }
 }
-var emailCodeVerificationCallBack = function (response) {
-    //debugger;
+var emailCodeVerificationCallBack = function (response) {    
     if (response.request.status === 200) {        
         $('#FlowtickContainer').fadeOut(300, function () {
             $(this).html('');

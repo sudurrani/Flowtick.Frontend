@@ -384,8 +384,7 @@
                         xhr.upload.addEventListener('progress', function (e) {
                             // Progress for individual files (not used in modal's overall progress)
                             if (e.lengthComputable) {
-                                const percent = Math.round((e.loaded / e.total) * 100);
-                                console.log(`${fileName}: ${percent}%`);
+                                const percent = Math.round((e.loaded / e.total) * 100);                                
                             }
                         });
                         return xhr;

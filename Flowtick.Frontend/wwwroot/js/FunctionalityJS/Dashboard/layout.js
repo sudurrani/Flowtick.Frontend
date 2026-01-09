@@ -11,7 +11,7 @@
 
     const tokenData = parseJwt(token);
     var loginUserID = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-    console.log("loginUserID:", loginUserID);
+    
 
 
     $("#loginProfileImg").html(` <img src="https://i.pravatar.cc/32?img=${loginUserID}" class="rounded-circle ms-0" width="32"  height="32" alt="User" />`);
@@ -41,10 +41,7 @@
         e.preventDefault();
         addPeopleToProject();
     });
-   
-
-    console.log(localStorage);
-    /* loadSidebarProjects();*/
+           
     getMyProjects();
 });
 
@@ -105,8 +102,7 @@ var addPeopleToProjectCallBack = function (response) {
     $("#email, #roleId").prop("disabled", false);
 
 }
-function getMyProjects() {
-    ////debugger;
+function getMyProjects() {    
     apiRequest({
         url: 'flowtick/projects/me',
         type: 'GET',
@@ -159,8 +155,7 @@ var getMyProjectsCallBack = function (response) {
         //  define trigger when sidebar is loadded  add the active class to that menu item by using this trigger name  on the project view js
         $(document).trigger("sidebarProjectsLoaded");
     }
-    else {
-        console.log(response);
+    else {        
         errorExtractor(response);
       
     }
