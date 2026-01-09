@@ -1,4 +1,18 @@
-﻿$(document).on('click', '#btnLogin', function () {
+﻿$(function () {
+    $(document).on('keydown', '#email', function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            $('#password').focus();
+        }
+    });
+    $(document).on('keydown', '#password', function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            loginProject();
+        }
+    });
+});
+$(document).on('click', '#btnLogin', function () {
     loginProject();
 });
 
