@@ -117,7 +117,7 @@
                 </div>
                 <button class="btn-create ms-auto" id="btnCreateProject">
                     <i class="bi bi-plus-lg"></i>
-                    Create
+                    Create Project
                 </button>
                 <button class="icon-btn">
                     <i class="bi bi-bell"></i>
@@ -177,8 +177,8 @@
                         <input type="text" class="form-control" id="name" placeholder="Enter project name">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-green" id="saveProject">
-                            Create
+                        <button type="button" class="btn-create" id="saveProject">
+                            <i class="bi bi-plus-lg"></i> Create
                         </button>
                     </div>
                 </form>
@@ -312,7 +312,7 @@
                     $('#ProjectContainer').append(
                         `<a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="${project.name}"
                                                         onclick="redirectToAction('/Board/Project?project=${project.name}&id=',${project.id})">
-                                                            <i class="bi bi-kanban" ></i>
+                                                                    <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
                                                             <span class="nav-link-text">${project.name}</span>
                                                             ${isOwner ? `<span class="ms-auto three-dots" style="z-index:1000;" onclick="handleThreeDots(event, ${project.id})">
                                                                             <i class="bi bi-three-dots" style="margin-right:0;"></i>

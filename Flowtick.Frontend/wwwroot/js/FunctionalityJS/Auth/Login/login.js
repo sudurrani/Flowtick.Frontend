@@ -1,16 +1,29 @@
 ﻿$(function () {
-    $(document).on('keydown', '#email', function (e) {
+    $(document).on('keydown', function (e) {
         if (e.key === "Enter") {
-            e.preventDefault();
-            $('#password').focus();
-        }
-    });
-    $(document).on('keydown', '#password', function (e) {
-        if (e.key === "Enter") {
+
+            const activeId = document.activeElement.id;
+
+            // Agar email pe focus hai → password pe le jao
+            if (activeId === 'email') {
+                e.preventDefault();
+                $('#password').focus();
+                return;
+            }
+
+            // Agar password pe focus hai → login
+            if (activeId === 'password') {
+                e.preventDefault();
+                loginProject();
+                return;
+            }
+
+            // Agar kahin aur focus hai → direct login
             e.preventDefault();
             loginProject();
         }
     });
+
 });
 $(document).on('click', '#btnLogin', function () {
     loginProject();
