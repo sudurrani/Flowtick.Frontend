@@ -23,8 +23,10 @@ var swalConfirmCancelButtonText = "Cancel";
 var updating = false;
 var originalValue = '';
 //var baseUrl = 'http://127.0.0.1:55501/api/';
+
+//var baseUrl = 'http://localhost:55501/api/';
 var baseUrl = 'http://192.168.100.10:55501/api/';
-//var baseUrl = 'http://localhost:55500/api/';
+//var baseUrl = 'https://flowtick.fophex.com/api/';
 
 // Set the options that I want
 toastr.options = {
