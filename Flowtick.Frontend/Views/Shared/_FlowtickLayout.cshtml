@@ -125,7 +125,7 @@
                 <button class="icon-btn">
                     <i class="bi bi-gear"></i>
                 </button>
-                <div class="user-avatar">SU</div>
+                <div class="user-avatar" id="userAvatar">SU</div>
             </div>
         </div>
 
@@ -233,7 +233,29 @@
                 createProject()
             });
 
+            $("#userAvatar").on('click', function () {
 
+               
+                let offset = $(this).offset();
+                let height = $(this).outerHeight();
+
+                $("body").append(`
+                <ul class="dropdown-menu user-profile-dropdown"
+
+                 data-id="${1}"
+                    style="
+                        display:block;
+                        position:absolute;
+                        top:${offset.top + height}px;
+                        right:0px;
+
+                    ">
+                            <li><a class="dropdown-item" role="button" onclick="redirectToAction('/User/Profile?id=',1);"><i class="bi bi-person-add me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" id="addPeopleBtn" role="button" onclick="redirectToAction('/Auth/Login?key=',10);"><i class="bi bi-person-add me-2"></i>Logout</a></li>
+                    
+                </ul>
+            `);
+            });
         });
         function getMyProjects() {
             apiRequest({
