@@ -606,11 +606,6 @@
                         Edit description
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-2">
-                        <input type="color" class="form-control form-control-color" id="ColorPicker" value="#0d9488" />
-                    </div>
-                </div>
                 @await Html.PartialAsync(
                          "~/Views/Shared/PartialViews/Common/_EditorPartialView.cshtml",
                          new Flowtick.Frontend.Models.EditorPartialView.EditorPartialViewInputModel
@@ -988,7 +983,8 @@
 
         let name = $(this).data("name");
         let userId = $(this).data("id");
-        let avatar = `<div class="assignee-avatar-sm profile-image" data-user-id="${userId}">${getInitials(name)}</div>`;
+         let backgrounColor = $(this).find(".profile-image").attr("style");
+         let avatar = `<div class="assignee-avatar-sm profile-image"  data-user-id="${userId}" style="${backgrounColor}">${getInitials(name)}</div>`;
         $(".selected-assignee").html(`${avatar} <span class="user-name ms-2">${name}</span> `);
 
         const taskId = $("#modalTaskID").val().trim();
@@ -999,8 +995,9 @@
 
         let name = $(this).data("name");
         let reporterId = $(this).data("id");
+         let backgrounColor = $(this).find(".profile-image").attr("style");
 
-        let avatar = `<div class="assignee-avatar-sm profile-image" data-user-id="${reporterId}">${getInitials(name)}</div> `;
+        let avatar = `<div class="assignee-avatar-sm profile-image" data-user-id="${reporterId}" style="${backgrounColor}">${getInitials(name)}</div> `;
 
         $(".selected-reporter").html(` ${avatar} <span class="user-name ms-2">${name}</span>`);
 
@@ -1014,8 +1011,9 @@
 
         let name = $(this).data("name");
         let reviewerId = $(this).data("id");
+          let backgrounColor = $(this).find(".profile-image").attr("style");
 
-        let avatar = `<div class="assignee-avatar-sm profile-image" data-user-id="${reviewerId}">${getInitials(name)}</div> `;
+        let avatar = `<div class="assignee-avatar-sm profile-image" data-user-id="${reviewerId}" style="${backgrounColor}">${getInitials(name)}</div> `;
 
         $(".selected-reviewer").html(`  ${avatar}  <span class="user-name ms-2">${name}</span>`);
 
@@ -1028,8 +1026,9 @@
         //debugger;
         let name = $(this).data("name");
         let selectedUserId = $(this).data("id");
+        let backgrounColor = $(this).find(".assignee-avatar-sm").attr("style");
 
-        let avatar = `<div class="assignee-avatar-sm" data-id="${selectedUserId}">${getInitials(name)}</div> `;
+        let avatar = `<div class="assignee-avatar-sm" data-id="${selectedUserId}" style="${backgrounColor}">${getInitials(name)}</div> `;
 
         $(this).closest(".dropdown").find(".subtask-selected-assignee").html(` ${avatar} <span class="user-name ms-2">${name}</span> `);
 
@@ -1156,9 +1155,7 @@
         const reviewerId = $("#modalReviewerID .profile-image").data("user-id");
         const reporterId = $("#modalReporterID .profile-image").data("user-id");
         const statusId = $('.btn-task-status').data("id");
-        alert($('#ColorPicker').val());
-        return;
-
+   
         let url = `flowtick/project/${projectId}/tasks/${id}`;
         apiRequest({
             url: url,

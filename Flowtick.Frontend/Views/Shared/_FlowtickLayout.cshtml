@@ -200,6 +200,7 @@
             const token = localStorage.getItem("accessToken");
 
             const tokenData = parseJwt(token);
+              var loginUserID = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
             const userName = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
             // console.log("username:", userName);
             $('#userAvatar').text(getInitials(userName));
@@ -305,14 +306,17 @@
                 $sidebar.html("");
 
                 $.each(projects, function (index, project) {
+
+                   let isOwner = project.role && project.role.name === "Owner";
+
                     $('#ProjectContainer').append(
                         `<a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="${project.name}"
                                                         onclick="redirectToAction('/Board/Project?project=${project.name}&id=',${project.id})">
                                                             <i class="bi bi-kanban" ></i>
                                                             <span class="nav-link-text">${project.name}</span>
-                                                            <span class="ms-auto three-dots" style="z-index:1000;" onclick="handleThreeDots(event, ${project.id})">
-                                                        <i class="bi bi-three-dots" style="margin-right:0;"></i>
-                                                    </span>
+                                                            ${isOwner ? `<span class="ms-auto three-dots" style="z-index:1000;" onclick="handleThreeDots(event, ${project.id})">
+                                                                            <i class="bi bi-three-dots" style="margin-right:0;"></i>
+                                                             </span>` : ''}
                                                 </a>`
                     );
                     // Dashboard project cards
@@ -406,6 +410,7 @@
             $('#addPeopleForm')[0].reset();
             $('#addPeopleModal').modal('show');
             $('.project-dropdown').remove();
+
 
             getRole();
         });

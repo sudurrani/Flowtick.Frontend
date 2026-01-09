@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_FlowtickLayout.cshtml";
+}
+<div class="container mt-2">
+    <form id="prfileForm">
+        <input type="hidden" id="id" />
+        <div class="form-group col-8 offset-2 pt-4">
+            <label>Email</label>
+            <input type="text" class="form-control" id="email" placeholder="Email" readonly>
+        </div>
+        <div class="form-group col-8 offset-2 pt-4">
+            <label >Full Name</label>
+            <input type="text" class="form-control" id="fullName" placeholder="Full Name">
+        </div>
+        <div class="form-group col-8 offset-2 pt-4 d-flex align-items-center">
+            <label class="me-3 mb-0">Avatar Color:</label>
+            <input type="color" class="form-control form-control-color p-1" id="colorCode" value="#0D9488">
+        </div>
+        
+        <div class="form-group col-2 offset-8 text-end pt-4">
+            <button type="button" class="btn-create" id="btnSave">
+                <i class="bi bi-floppy pe-1"></i>
+                Save
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+  var userId ;
+    $(document).ready(function () {
+         //take data from access token
+        const token = localStorage.getItem("accessToken");
+        const tokenData = parseJwt(token);
+        userId = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+    
+        //end
+
+
+
+         GetProfile();
+
+       $("#btnSave").click(function () {
+            updateProfile();
+        });
+
+    });
+    function GetProfile(){
+          let url = `flowtick/user/profile`;
+         apiRequest({
+            url: url,
+            type: 'GET',
+            data: {  },
+            callBack: GetProfileCallBack
+        });
+    }
+
+     var GetProfileCallBack = function (response) {
+        if (response.request.status === 200) {
+            console.log(response);
+
+            setResponseToFormInputs(response.data);
+            // $("#Email").val(response.data.email);
+            // $("#FullName").val(response.data.fullName);
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+    function updateProfile(){
+         const fullName = $('#fullName').val();
+        const colorCode = $('#colorCode').val()
+
+            let url = `flowtick/user/profile/${userId}`;
+        apiRequest({
+            url: url,
+            type: 'PUT',
+              data: {
+                      "fullName":fullName ,
+                      "colorCode": colorCode
+                } ,
+            callBack: updateProfileCallBack
+        });
+    }
+    var updateProfileCallBack = function (response) {
+        if (response.request.status === 204) {
+          successToastr("saved successfully", 'success');
+      
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+</script>

@@ -414,25 +414,28 @@
 
         let userId = $(this).data("id");
         let username = $(this).data("name");
-        let avatar = `<div class="assignee-avatar-sm profile-image" data-user-id="${userId}">${getInitials(username)}</div>`;
+         let backgrounColor = $(this).find(".profile-image").attr("style");
+        let avatar = `<div class="assignee-avatar-sm profile-image" data-user-id="${userId}" style="${backgrounColor}">${getInitials(username)}</div>`;
 
         $(this).closest(".dropdown").find('.create-task-user').html(avatar);
     });
 
     // Handle for assignee in  task card
     $(document).on("click", ".card-user-list .dropdown-item", function (e) {
-        e.stopPropagation();
+       e.preventDefault();
+            e.stopPropagation();
 
         let userId = $(this).data("id");
         let username = $(this).data("name");
+        let backgrounColor = $(this).find(".profile-image").attr("style");
 
-        let avatar = `<div class="assignee-avatar-sm" data-id="${userId}">${getInitials(username)}</div>`;
+        let avatar = `<div class="assignee-avatar-sm" data-id="${userId}" style="${backgrounColor}">${getInitials(username)}</div>`;
 
         $(this).closest(".dropdown").find(".selected-card-assignee").html(avatar);
 
         const selectedTasId = $(this).closest(".task-card").data("task-id");
         updateTaskAssignee(selectedTasId, userId);
-
+       
     });
 
 
@@ -806,7 +809,7 @@
                                        <div class="dropdown">
                                           <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
                                                <div class="selected-card-assignee d-flex align-items-center"onclick="event.stopPropagation();">
-                                                   <div class="assignee-avatar-sm" data-assignee-id="${task.assignee.id}">${getInitials(task.assignee.name)} </div>
+                                                   <div class="assignee-avatar-sm" data-assignee-id="${task.assignee.id}" style="background:${task.assignee.colorCode}">${getInitials(task.assignee.name)} </div>
                                               </div>
                                           </div>
 
@@ -826,6 +829,7 @@
     }
 
     function filterTaskById(event, id = null, parentId = null) {
+
         if (event.target.closest(".task-label")) {
             id = decryptToNumber(parentId);
         }
@@ -881,6 +885,7 @@
 
         // If a selected user is passed, use that one
         let selectedUser = selectedUserId ? users.find(x => x.userId == selectedUserId) : null;
+        console.log(selectedUser);
         let hideName = (targetSelectedUser === "create-task-user" || targetSelectedUser === "selected-card-assignee") ? "d-none" : "";
 
 
@@ -888,7 +893,7 @@
             let userProfile = "";
             userProfile = `
 
-                                          <div class="assignee-avatar-sm profile-image" data-user-id="${selectedUser.userId}" >${getInitials(selectedUser.user)} </div>
+                                          <div class="assignee-avatar-sm profile-image" data-user-id="${selectedUser.userId}" style="background:${selectedUser.colorCode}" >${getInitials(selectedUser.user)} </div>
                                          <span class="user-name ms-2  ${hideName}">${selectedUser.user}</span>
                                      `;
 
@@ -909,7 +914,7 @@
         users.forEach(user => {
             html += `
                                          <li class="dropdown-item" data-name="${user.user}" data-id="${user.userId}">
-                                             <div class="assignee-avatar-sm profile-image">${getInitials(user.user)} </div>
+                                             <div class="assignee-avatar-sm profile-image" style="background:${user.colorCode}">${getInitials(user.user)} </div>
                                              <span class="user-name ms-2">${user.user}</span>
                                          </li>
                                      `;
@@ -1058,7 +1063,7 @@
     }
     var getTaskDetailCallBack = function (response) {
         if (response.request.status === 200) {
-            //debugger;
+            debugger;
             const getTaskData = response.data
             assigneeID = getTaskData.assignee.id;
             reviewerID = getTaskData.reviewerId;
@@ -1166,6 +1171,7 @@
     };
 
     function loadChildTasksTable(parentTask = {}, tasksArray = []) {
+        debugger;
         var $subtasktbody = $('#childWorkTableTbody');
         $subtasktbody.empty(); // Clear old items
 
@@ -1186,7 +1192,7 @@
                                                          <div class="dropdown">
                                                              <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
                                                                  <div class="subtask-selected-assignee d-flex align-items-center">
-                                                                           <div class="assignee-avatar-sm">${getInitials(item.assignee.name)} </div>
+                                                                           <div class="assignee-avatar-sm" style="background:${item.assignee.colorCode}" >${getInitials(item.assignee.name)} </div>
                                                                      <span class="user-name ms-2">${item.assignee ? item.assignee.name : ''}</span>
                                                                  </div>
                                                              </div>

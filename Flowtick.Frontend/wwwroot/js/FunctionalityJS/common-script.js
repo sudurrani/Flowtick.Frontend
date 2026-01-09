@@ -3313,6 +3313,7 @@ function parseJwt(token) {
     }
 }
 function getInitials(name) {
+    if (name == null) return "";
     return name
         .trim()
         .split(/\s+/)          // split by spaces
