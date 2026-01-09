@@ -196,6 +196,17 @@
         // Sidebar Toggle
         $(function () {
 
+             //take data from access token
+            const token = localStorage.getItem("accessToken");
+
+            const tokenData = parseJwt(token);
+            const userName = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+            // console.log("username:", userName);
+            $('#userAvatar').text(getInitials(userName));
+
+            //end
+
+
             $('#roleId').select2({
                 dropdownParent: $('#addPeopleModal'),
                 width: '100%'
@@ -203,6 +214,7 @@
 
             var urlParameters = new URLSearchParams(window.location.search);
             let project = urlParameters.get('project');
+                  // console.log("Projects:", project);
             $('#ProjectName').text(project);
 
 
@@ -233,29 +245,45 @@
                 createProject()
             });
 
-            $("#userAvatar").on('click', function () {
+         $("#userAvatar").on("click", function (e) {
+            e.stopPropagation();
 
-               
-                let offset = $(this).offset();
-                let height = $(this).outerHeight();
+            $(".user-profile-dropdown").remove(); // prevent duplicate
 
-                $("body").append(`
-                <ul class="dropdown-menu user-profile-dropdown"
+            let offset = $(this).offset();
+            let height = $(this).outerHeight();
 
-                 data-id="${1}"
-                    style="
-                        display:block;
+            $("body").append(`
+                <div class="user-profile-dropdown"
+                     style="
                         position:absolute;
-                        top:${offset.top + height}px;
-                        right:0px;
+                        top:${offset.top + height + 8}px;
+                        right:23px;
+                        width:140px;
+                        background:#fff;
+                        border-radius:10px;
+                        box-shadow:0 10px 25px rgba(0,0,0,.12);
+                        padding:8px 0;
+                        z-index:9999;
+                     ">
 
-                    ">
-                            <li><a class="dropdown-item" role="button" onclick="redirectToAction('/User/Profile?id=',1);"><i class="bi bi-person-add me-2"></i>Profile</a></li>
-                            <li><a class="dropdown-item" id="addPeopleBtn" role="button" onclick="redirectToAction('/Auth/Login?key=',10);"><i class="bi bi-person-add me-2"></i>Logout</a></li>
-                    
-                </ul>
+                    <a class="dropdown-item d-flex align-items-center px-2 py-1"
+                       role="button"
+                       onclick="redirectToAction('/User/Profile?id=',1)">
+                        <i class="bi bi-person-circle me-1 text-primary"></i>
+                        <span>Profile</span>
+                    </a>
+
+                    <a class="dropdown-item d-flex align-items-center px-2 py-1 text-danger"
+                       role="button"
+                       onclick="redirectToAction('/Auth/Login?key=',10)">
+                        <i class="bi bi-box-arrow-right me-1"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
             `);
-            });
+          });
+
         });
         function getMyProjects() {
             apiRequest({
