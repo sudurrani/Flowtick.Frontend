@@ -1,0 +1,44 @@
+﻿<link href="~/css/Auth/SignUp/code-verification.css" rel="stylesheet" />
+<div class="top-wave"></div>
+<div class="signup-section">
+    <!-- Top Icon -->
+    <div class="top-logo-text">
+        <img src="~/img/logo/logo.png" />
+        <span>Flowtick </span>
+    </div>
+    <!-- Signup Card -->
+    <div class="signup-card">        
+        <h2>We have emailed you a code</h2>
+        <p class="subtext">To complete your account setup, enter the code we sent to:</p>
+        <p class="fw-semibold text-dark mb-3 email-text">Test</p>
+        <form id="CodeVerificationForm">
+            <div class="otp-inputs">
+                <input type="text" maxlength="1" class="otp" required />
+                <input type="text" maxlength="1" class="otp" required />
+                <input type="text" maxlength="1" class="otp" required />
+                <input type="text" maxlength="1" class="otp" required />
+                <input type="text" maxlength="1" class="otp" required />
+                <input type="text" maxlength="1" class="otp" required />
+                <input type="email"  value="" id="email" hidden/>
+            </div>
+
+            <button type="button" class="btn btn-verify" id="btnCodeVerification">Verify</button>
+        </form>
+        <div class="gmail-link">
+            <a href="https://mail.google.com" target="_blank">
+                <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" width="18" class="me-1">
+                Open Gmail
+            </a>
+        </div>
+
+        <div class="resend">
+            Didn’t receive an email? <a href="#">Resend email →</a>
+        </div>
+    </div>
+
+    <!-- Bottom Atlassian Logo -->
+    <div class="bottomLogo">
+        <i class="bi bi-symmetry-vertical"></i>
+        <span>Fophex </span>
+    </div>
+</div>

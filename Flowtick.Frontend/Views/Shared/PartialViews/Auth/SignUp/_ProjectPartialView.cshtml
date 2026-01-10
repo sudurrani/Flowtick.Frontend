@@ -1,34 +1,636 @@
-﻿<link href="~/css/Auth/SignUp/email-verification.css" rel="stylesheet" />
-<div class="top-wave"></div>
+﻿
+    <style>
+        :root {
+            --primary-color: #0d9488;
+            --primary-btn-bg: #0d9488;
+            --primary-btn-fore: #fff;
+            --primary-hover: #0f766e;
+            --border-color: #e5e7eb;
+        }
 
-<div class="signup-section">
-    <!-- Top Icon -->
-    <div class="top-logo-text">
-        <img src="~/img/logo/logo.png" />
-        <span>Flowtick</span>
-    </div>
-    <!-- Signup Card -->
-    <div class="signup-card">
-        <h2>Get <span>started</span> with Flowtick</h2>
-        <p class="subtext">It’s free for up to 10 users – no credit card needed.</p>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* Left Side - Form */
+        .form-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            overflow-y: auto;
+        }
+
+        .form-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .logo-section {
+            margin-bottom: 48px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+        }
+
+        .logo-icon::before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 2px;
+            transform: rotate(-45deg);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
+        .step {
+            flex: 1;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step.active {
+            background: var(--primary-color);
+        }
+
+        .step.completed {
+            background: var(--primary-color);
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 8px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .label-optional {
+            color: #9ca3af;
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.2s;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .hint-text {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 6px;
+        }
+
+        .template-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .template-card {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .template-card:hover {
+            border-color: var(--primary-color);
+            background: #f0fdf4;
+        }
+
+        .template-card.selected {
+            border-color: var(--primary-color);
+            background: #ecfdf5;
+        }
+
+        .template-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 8px;
+            color: var(--primary-color);
+        }
+
+        .template-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-btn-bg);
+            color: var(--primary-btn-fore);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+        }
+
+        .skip-link {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .skip-link a {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .skip-link a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Right Side - Info */
+        .info-section {
+            flex: 1;
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-section::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+        }
+
+        .info-section::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            bottom: -150px;
+            left: -150px;
+        }
+
+        .info-content {
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+        }
+
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .badge-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .info-title {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .info-description {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 48px;
+            opacity: 0.95;
+        }
+
+        .info-features {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: start;
+            gap: 16px;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .feature-content {
+            flex: 1;
+            padding-top: 4px;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .testimonial {
+            margin-top: 48px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .testimonial-text {
+            font-size: 15px;
+            font-style: italic;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .testimonial-role {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @@media (max-width: 968px) {
+            body {
+                flex-direction: column;
+            }
+
+            .info-section {
+                display: none;
+            }
+
+            .form-container {
+                padding: 40px 24px;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .page-title {
+                font-size: 26px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .template-options {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+
+    <!-- Left Side - Form -->
+    <div class="form-section">
+        <div class="form-container">
+            <div class="logo-section">
+                <div class="logo">
+                <img src="/img/logo/logo.png" width="40" height="40" />
+                    <span class="logo-text">Flowtick</span>
+                </div>
+            </div>
+
+            <div class="progress-steps">
+                <div class="step completed"></div>
+                <div class="step completed"></div>
+                <div class="step active"></div>
+            </div>
+
+        <h1 class="page-title">Get <span>started</span> with Flowtick</h1>
+            <p class="page-subtitle">
+                Projects help you organize your work. You can create boards, add tasks, and collaborate with your team.
+            </p>
 
         <form id="ProjectForm">
-            <div class="email-group mb-2">
-                <div class="input-wrapper">
-                    <label class="form-label">Project Name</label>
-                    <input type="text" id="project" placeholder="Enter Project name" required>
-                    <i class="bi bi-check-circle" id="emailCheck"></i>
+                <div class="form-group">
+                <label for="project">
+                        Project Name
+                    </label>
+                    <input 
+                        type="text"
+                       id="project"
+                       placeholder="e.g., Website Redesign, Mobile App, Q1 Marketing" 
+                        required
+                    />
+                    <p class="hint-text">Choose a name that describes what your team will work on</p>
                 </div>
-                <button type="button" class="btn btn-signup" id="btnProjectContinue">Continue</button>
+
+                <div class="form-group" hidden>
+                    <label for="projectKey">
+                        Project key <span class="label-optional">(optional)</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="projectKey" 
+                        placeholder="e.g., WEB, APP, MKT" 
+                        maxlength="10"
+                    />
+                    <p class="hint-text">A short identifier for your project (2-10 characters)</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Choose a template</label>
+                    <div class="template-options">
+                        <div class="template-card " data-template="kanban">
+                            <svg class="template-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                            <div class="template-name">Kanban</div>
+                        </div>
+                    <div class="template-card selected" data-template="scrum">
+                            <svg class="template-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                            <div class="template-name">Scrum</div>
+                        </div>
+                        <div class="template-card" data-template="basic">
+                            <svg class="template-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                            </svg>
+                            <div class="template-name">Basic</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" hidden>
+                    <label for="projectDesc">
+                        Description <span class="label-optional">(optional)</span>
+                    </label>
+                    <textarea 
+                        id="projectDesc" 
+                        placeholder="What is this project about?"
+                    ></textarea>
+                </div>
+
+                <div class="action-buttons">
+                     <button type="button" class="btn btn-secondary" onclick="history.back()" hidden>
+                        Back
+                    </button> 
+                <button class="btn btn-primary" id="btnProjectContinue">
+                        Create project
+                    </button>
+                </div>
+
+                <div class="skip-link" hidden>
+                    <a href="#">I'll do this later</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Side - Info -->
+    <div class="info-section">
+        <div class="info-content">
+            <div class="info-badge">
+                <svg class="badge-icon" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                Step 3 of 3
             </div>
-        </form>
 
-        <p class="note-text">Enter Project Name and click on continue.</p>
+            <h2 class="info-title">Create your project and get started</h2>
+            <p class="info-description">
+                Join thousands of teams using Flowtick to organize work, track progress, and ship faster. Set up your first project in seconds.
+            </p>
+
+            <div class="info-features">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-title">Visual task boards</div>
+                        <div class="feature-desc">Organize your work with customizable Kanban boards, just like Jira and Asana</div>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-title">Real-time collaboration</div>
+                        <div class="feature-desc">Work together seamlessly with your team members in real-time</div>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <div class="feature-title">Track progress instantly</div>
+                        <div class="feature-desc">Monitor your team's progress with powerful analytics and reports</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    "Switching to Flowtick was the best decision for our team. We're more organized and productive than ever before."
+                </p>
+                <div class="testimonial-author">Shahid Ullah</div>
+                <div class="testimonial-role">Product Manager at BHA Accountancy Services</div>
+            </div>
+        </div>
     </div>
 
-    <!-- Bottom Atlassian Logo -->
-    <div class="bottomLogo">
-        <i class="bi bi-symmetry-vertical"></i>
-        <span>Fophex</span>
-    </div>
-</div>
+    <script>
+        // Template selection
+        const templateCards = document.querySelectorAll('.template-card');
+        let selectedTemplate = 'kanban';
+
+        templateCards.forEach(card => {
+            card.addEventListener('click', () => {
+                templateCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedTemplate = card.dataset.template;
+            });
+        });
+/*
+        // Auto-generate project key from project name
+    const projectNameInput = document.getElementById('project');
+        const projectKeyInput = document.getElementById('projectKey');
+
+        projectNameInput.addEventListener('input', (e) => {
+            if (!projectKeyInput.value || projectKeyInput.dataset.autoGenerated === 'true') {
+                const name = e.target.value.trim();
+                const key = name
+                    .split(' ')
+                    .map(word => word.charAt(0))
+                    .join('')
+                    .toUpperCase()
+                    .substring(0, 5);
+                
+                projectKeyInput.value = key;
+                projectKeyInput.dataset.autoGenerated = 'true';
+            }
+        });
+
+        projectKeyInput.addEventListener('input', () => {
+            projectKeyInput.dataset.autoGenerated = 'false';
+            projectKeyInput.value = projectKeyInput.value.toUpperCase();
+        });
+
+        // Form submission
+  */      
+    </script>

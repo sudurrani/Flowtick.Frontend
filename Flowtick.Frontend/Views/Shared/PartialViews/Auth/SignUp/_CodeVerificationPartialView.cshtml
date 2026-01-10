@@ -1,44 +1,428 @@
-﻿<link href="~/css/Auth/SignUp/code-verification.css" rel="stylesheet" />
-<div class="top-wave"></div>
-<div class="signup-section">
-    <!-- Top Icon -->
-    <div class="top-logo-text">
-        <img src="~/img/logo/logo.png" />
-        <span>Flowtick </span>
+﻿
+    <style>
+        :root {
+            --primary-color: #0d9488;
+            --primary-btn-bg: #0d9488;
+            --primary-btn-fore: #fff;
+            --primary-hover: #0f766e;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #e5e9f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logo-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+        }
+
+        .logo-icon::before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 2px;
+            transform: rotate(-45deg);
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .verification-card {
+            background: white;
+            border-radius: 12px;
+            padding: 48px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .icon-container {
+            width: 80px;
+            height: 80px;
+            background: #ecfdf5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .email-icon {
+            width: 40px;
+            height: 40px;
+            color: var(--primary-color);
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #6b7280;
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .email-display {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .code-input-container {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .code-input {
+            width: 56px;
+            height: 56px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .code-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-btn-bg);
+            color: var(--primary-btn-fore);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .verify-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .verify-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        .resend-section {
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .resend-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .resend-link:hover {
+            color: var(--primary-hover);
+        }
+
+        .resend-link.disabled {
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .timer {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .info-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--primary-color);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #166534;
+            line-height: 1.5;
+        }
+
+        .footer-text {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 13px;
+            margin-top: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .footer-logo {
+            width: 16px;
+            height: 16px;
+            color: #6b7280;
+        }
+
+        @@media (max-width: 480px) {
+            .verification-card {
+                padding: 32px 24px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .code-input {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+
+            .code-input-container {
+                gap: 8px;
+            }
+        }
+    </style>
+
+
+    <div class="logo-header">
+    <img src="/img/logo/logo.png" width="40" height="40" />
+        <span class="logo-text">Flowtick</span>
     </div>
-    <!-- Signup Card -->
-    <div class="signup-card">        
-        <h2>We have emailed you a code</h2>
-        <p class="subtext">To complete your account setup, enter the code we sent to:</p>
-        <p class="fw-semibold text-dark mb-3 email-text">Test</p>
-        <form id="CodeVerificationForm">
-            <div class="otp-inputs">
-                <input type="text" maxlength="1" class="otp" required />
-                <input type="text" maxlength="1" class="otp" required />
-                <input type="text" maxlength="1" class="otp" required />
-                <input type="text" maxlength="1" class="otp" required />
-                <input type="text" maxlength="1" class="otp" required />
-                <input type="text" maxlength="1" class="otp" required />
-                <input type="email"  value="" id="email" hidden/>
+
+    <div class="verification-card">
+        <div class="icon-container">
+            <svg class="email-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+        </div>
+
+        <h1 class="title">Verify your email</h1>
+        <p class="subtitle">
+            We've sent a verification code to<br>
+        <span class="email-display email-text" id="userEmail">your@email.com</span>
+        </p>
+
+        <div class="info-box">
+            <svg class="info-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <p class="info-text">
+                Please enter the 6-digit code we sent to your email. The code will expire in 10 minutes.
+            </p>
+        </div>
+
+    <form id="CodeVerificationForm">
+            <label>Verification code</label>
+        <div class="code-input-container otp-inputs">
+                <input type="text" class="code-input otp" maxlength="1" data-index="0" />
+                <input type="text" class="code-input otp" maxlength="1" data-index="1" />
+                <input type="text" class="code-input otp" maxlength="1" data-index="2" />
+                <input type="text" class="code-input otp" maxlength="1" data-index="3" />
+                <input type="text" class="code-input otp" maxlength="1" data-index="4" />
+                <input type="text" class="code-input otp" maxlength="1" data-index="5" />
+
+            <input type="email" value="" id="email" hidden />
             </div>
 
-            <button type="button" class="btn btn-verify" id="btnCodeVerification">Verify</button>
+        <button class="verify-btn" id="btnCodeVerification">Verify email</button>
         </form>
-        <div class="gmail-link">
-            <a href="https://mail.google.com" target="_blank">
-                <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" width="18" class="me-1">
-                Open Gmail
-            </a>
-        </div>
 
-        <div class="resend">
-            Didn’t receive an email? <a href="#">Resend email →</a>
+        <div class="resend-section">
+            Didn't receive the code? 
+            <a href="#" class="resend-link" id="resendLink">Resend code</a>
+            <span id="timerText" style="display: none;"> in <span class="timer" id="timer">60</span>s</span>
         </div>
     </div>
 
-    <!-- Bottom Atlassian Logo -->
-    <div class="bottomLogo">
-        <i class="bi bi-symmetry-vertical"></i>
-        <span>Fophex </span>
-    </div>
-</div>
+    @* <div class="footer-text">
+        <svg class="footer-logo" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+        </svg>
+        FOPHEX
+    </div> *@
+
+    <script>
+        const codeInputs = document.querySelectorAll('.code-input');
+        const verifyBtn = document.getElementById('btnCodeVerification');
+        const resendLink = document.getElementById('resendLink');
+        const timerText = document.getElementById('timerText');
+        const timerElement = document.getElementById('timer');
+        const form = document.getElementById('verificationForm');
+
+        // Auto-focus first input
+        codeInputs[0].focus();
+
+        // Handle input navigation
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                
+                // Only allow numbers
+                if (!/^\d*$/.test(value)) {
+                    e.target.value = '';
+                    return;
+                }
+
+                // Move to next input if filled
+                if (value.length === 1 && index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+
+                // Check if all inputs are filled
+                checkIfComplete();
+            });
+
+            input.addEventListener('keydown', (e) => {
+                // Move to previous input on backspace
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+
+                // Move to next input on arrow right
+                if (e.key === 'ArrowRight' && index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+
+                // Move to previous input on arrow left
+                if (e.key === 'ArrowLeft' && index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+            });
+
+            // Handle paste
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').trim();
+                
+                if (/^\d{6}$/.test(pastedData)) {
+                    pastedData.split('').forEach((char, i) => {
+                        if (codeInputs[i]) {
+                            codeInputs[i].value = char;
+                        }
+                    });
+                    codeInputs[5].focus();
+                    checkIfComplete();
+                }
+            });
+        });
+
+        function checkIfComplete() {
+            const allFilled = Array.from(codeInputs).every(input => input.value.length === 1);
+            verifyBtn.disabled = !allFilled;
+        }
+
+        
+
+        // Resend functionality with timer
+        let countdown;
+        function startResendTimer() {
+            let timeLeft = 60;
+            resendLink.classList.add('disabled');
+            resendLink.style.pointerEvents = 'none';
+            timerText.style.display = 'inline';
+            
+            countdown = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    resendLink.classList.remove('disabled');
+                    resendLink.style.pointerEvents = 'auto';
+                    timerText.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        resendLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            if (!resendLink.classList.contains('disabled')) {
+                console.log('Resending code...');
+                alert('A new verification code has been sent to your email!');
+                
+                // Clear all inputs
+                codeInputs.forEach(input => input.value = '');
+                codeInputs[0].focus();
+                
+                startResendTimer();
+                
+                // Add your resend logic here
+            }
+        });
+
+        // Optional: Start timer on page load
+        // startResendTimer();
+    </script>

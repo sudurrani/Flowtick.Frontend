@@ -446,7 +446,7 @@ var bindJQueryHierarchicalDropdownListParking = function (inputJSON, $combo, def
 
 var customValidateForm = function ($form) {
     var valid = true;
-    var thisFieldIsRequired = 'This field is required';
+    var thisFieldIsRequired = 'Required';
     var minimumValueShouldBe = 'Minimum value should be ';
     $('#' + $form + " input[required],#" + $form + " textarea[required],#" + $form + " select[required]").each(function () {
         if ($(this).parent().hasClass('k-dropdown')) {

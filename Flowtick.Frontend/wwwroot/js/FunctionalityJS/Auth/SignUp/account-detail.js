@@ -29,7 +29,8 @@ $(function () {
         }
     });
 });
-$(document).on('click', '#btnAccountDetail', function () {    
+$(document).on('click', '#btnAccountDetail', function (e) {    
+    e.preventDefault();
     createUser();
 });
 function createUser() {

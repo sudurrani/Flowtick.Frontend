@@ -1,7 +1,9 @@
-﻿$(document).on('click', '#btnProjectContinue', function () {
+﻿$(document).on('click', '#btnProjectContinue', function (e) {
+    e.preventDefault();
     createProject();
 });
 function createProject() {
+    debugger;
     if (customValidateForm('ProjectForm')) {
         const inputJSON = getFormDataAsJSONObject('ProjectForm');
         project = inputJSON.project;
@@ -18,6 +20,7 @@ function createProject() {
     }
 }
 var createProjectCallBack = function (response) {
+    debugger
     if (response.request.status === 201) {
 
         let accessToken = response.request.responseJSON.token.accessToken;        
