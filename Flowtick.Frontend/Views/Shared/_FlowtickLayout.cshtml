@@ -134,13 +134,13 @@
     @* add people modal  *@
     <div class="modal fade flowtic-modal" id="addPeopleModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered ">
-            <div class="modal-content flowtick-modal-box">
+            <div class="modal-content flowtick-modal-box p-0">
                 <form id="addPeopleForm">
-                    <div class="modal-header flowtick-modal-header">
+                    <div class="modal-header flowtick-modal-header  py-1">
                         <h5 class="modal-title">
                             <i class="bi bi-person-plus me-2"></i> Add People
                         </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn border-0 p-0" data-bs-dismiss="modal"><i class="bi bi-x-lg modal-btn-close"></i></button>
                     </div>
 
                     <div class="modal-body">
@@ -166,11 +166,11 @@
 
     <div class="modal fade flowtic-modal" id="createProjectModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered ">
-            <div class="modal-content flowtick-modal-box">
+            <div class="modal-content flowtick-modal-box p-0">
                 <form id="createProjectForm">
-                    <div class="modal-header flowtick-modal-header">
+                    <div class="modal-header flowtick-modal-header py-1 ">
                         <h5 class="modal-title">Create Project</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn border-0 p-0" data-bs-dismiss="modal"><i class="bi bi-x-lg modal-btn-close"></i></button>
                     </div>
                     <div class="modal-body">
                         <label class="form-label">Project Name</label>
@@ -269,7 +269,7 @@
                     <a class="dropdown-item d-flex align-items-center px-2 py-1"
                        role="button"
                        onclick="redirectToAction('/User/Profile?id=',1)">
-                        <i class="bi bi-person-circle me-1 text-primary"></i>
+                        <i class="bi bi-person-circle me-1 green"></i>
                         <span>Profile</span>
                     </a>
 
@@ -443,6 +443,7 @@
         // Hide dropdown when clicking anywhere else
         $(document).on('click', function () {
             $('.project-dropdown').remove();
+            $('.user-profile-dropdown').remove();
         });
 
         function addPeopleToProject() {

@@ -949,7 +949,10 @@ input[type="checkbox"] {
     accent-color: var(--primary-color);
     transform: scale(1.15);
 }
-
+.modal-btn-close {
+   color: var(--primary-color);
+   font-size:20px;
+}
 
 .user-profile-dropdown .dropdown-item {
     font-size: 14px;
