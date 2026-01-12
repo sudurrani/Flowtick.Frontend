@@ -1,4 +1,7 @@
 ﻿$(function () {
+    
+        $('#email').trigger('focus');
+    
     $(document).on('keydown', function (e) {
         if (e.key === "Enter") {
 
@@ -6,21 +9,22 @@
 
             // Agar email pe focus hai → password pe le jao
             if (activeId === 'email') {
-                e.preventDefault();
-                $('#password').focus();
+                e.preventDefault();                
+                $('#password').trigger('focus');
                 return;
             }
 
             // Agar password pe focus hai → login
-            if (activeId === 'password') {
+            else if (activeId === 'password') {
                 e.preventDefault();
                 loginProject();
-                return;
-            }
 
-            // Agar kahin aur focus hai → direct login
-            e.preventDefault();
-            loginProject();
+            }
+            else {
+                // Agar kahin aur focus hai → direct login
+                e.preventDefault();
+                loginProject();
+            }
         }
     });
 
@@ -32,7 +36,7 @@ $(document).on('click', '#btnLogin', function () {
 function loginProject() {
     if (customValidateForm('LoginForm')) {
 
-        $("#btnLogin, #email, #password").addClass("readonly").prop("disabled", true).text("Log in...");
+        $("#btnLogin, #email, #password").addClass("readonly").prop("disabled", true).text("Sign in...");
 
         const inputJSON = getFormDataAsJSONObject('LoginForm');        
         apiRequest({
@@ -52,10 +56,10 @@ var loginProjectCallBack = function (response) {
     }
     else if (response.request.status === 401) {
         infoToastr('Invalid email or password', 'info');
-        $("#btnLogin, #email, #password").removeClass("readonly").prop("disabled", false).text("Log in");
+        $("#btnLogin, #email, #password").removeClass("readonly").prop("disabled", false).text("Sign in");
     }
     else {
         errorExtractor(response);
-        $("#btnLogin, #email, #password").removeClass("readonly").prop("disabled", false).text("Log in");
+        $("#btnLogin, #email, #password").removeClass("readonly").prop("disabled", false).text("Sign in");
     }
 }
