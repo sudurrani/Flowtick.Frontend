@@ -138,26 +138,32 @@
                 <form id="addPeopleForm">
                     <div class="modal-header flowtick-modal-header  py-1">
                         <h5 class="modal-title">
-                            <i class="bi bi-person-plus me-2"></i> Add People
+                            <i class="bi bi-person-plus me-2 green"></i> Add Member
                         </h5>
                         <button type="button" class="btn border-0 p-0" data-bs-dismiss="modal"><i class="bi bi-x-lg modal-btn-close"></i></button>
                     </div>
 
                     <div class="modal-body">
 
-                        <label class="form-label">emails <span class="required">*</span> </label>
-                        <input type="text" class="form-control custom-input mb-3" id="email" placeholder="e.g.,aman@company.com, usman@company.com" required>
-
-                        <label class="form-label">Role <span class="required">*</span> </label>
-                        <select id="roleId" class="form-select custom-select" required>
-                        </select>
-
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="form-label">Emails <span class="required">*</span> </label>
+                                <input type="text" class="form-control custom-input mb-3" id="email" placeholder="e.g.,aman@company.com, usman@company.com" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="form-label">Role <span class="required">*</span> </label>
+                                <select id="roleId" class="form-select selector_2" required>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-create " id="closeModal" data-bs-dismiss="modal" style="background:#6c757d;">Close</button>
 
-                        <button class="btn btn-green" id="addPeople"><i class="bi bi-plus-lg me-1"></i> Add </button>
+                        <button type="button" class="btn btn-create ms-0" id="addPeople"><i class="bi bi-plus-lg me-1"></i> Add </button>
                     </div>
                 </form>
             </div>
@@ -206,11 +212,11 @@
 
             //end
 
-
-            $('#roleId').select2({
+             $('#roleId').select2({
                 dropdownParent: $('#addPeopleModal'),
-                width: '100%'
+                     width: "100%",
             });
+
 
             var urlParameters = new URLSearchParams(window.location.search);
             let project = urlParameters.get('project');                  
@@ -242,7 +248,7 @@
 
             $("#saveProject").click(function () {
                 createProject()
-            });
+            }); 
 
          $("#userAvatar").on("click", function (e) {
             e.stopPropagation();
@@ -386,7 +392,7 @@
 
                             ">
                             <li><a class="dropdown-item"><i class="bi bi-star me-2"></i>Add to Starred</a></li>
-                            <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add People</a></li>
+                            <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add Member</a></li>
                             <li><a class="dropdown-item"><i class="bi bi-clipboard me-2"></i>Save as template</a></li>
                             <li><a class="dropdown-item" id="projectSetting" onclick="redirectToAction('/Project/Settings?id=',${projectId});"><i class="bi bi-gear me-2"></i>Settings</a></li>
                             <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete</a></li>
@@ -404,9 +410,12 @@
             $('#addPeopleModal').data('project-id', projectId);
 
             // clear form
-            $('#addPeopleForm')[0].reset();
+            // $('#addPeopleForm')[0].reset();
+            $('#email').val('');
             $('#addPeopleModal').modal('show');
             $('.project-dropdown').remove();
+
+               $("#roleId").prop("disabled", false);
 
 
             getRole();
@@ -447,6 +456,9 @@
         });
 
         function addPeopleToProject() {
+
+
+
             if (customValidateForm('addPeopleForm')) {
 
                 let emailText = $('#email').val().trim();
@@ -489,7 +501,7 @@
             if (response.request.status === 201) {
 
                 successToastr("Invitation Send Successfully", 'success');
-                $('#addPeopleModal').modal('hide');
+                // $('#addPeopleModal').modal('hide');
 
             } else {
 
@@ -500,8 +512,7 @@
             // enable button back
             $("#addPeople").removeClass("readonly").prop("disabled", false).text("Add");
             $("#closeModal").removeClass("readonly").prop("disabled", false);
-            $("#email, #roleId").prop("disabled", false);
-
+            $("#email").prop("disabled", false);
         }
 
         function createProject() {
