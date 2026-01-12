@@ -75,7 +75,7 @@ function loadFilterTaskAssigneeDropdown() {
                            <li>
                                <a class="dropdown-item" href="#" data-id="${user.userId}" onclick="filterTaskAssigneeSelection(event,${user.userId},'${user.user}');">
                                     <input type="checkbox" class="fs-5 task-assignee-checkbox" />
-									 <div class="assignee-avatar-sm profile-image">${getInitials(user.user)}</div>
+									 <div class="assignee-avatar-sm profile-image"style="background:${user.colorCode}">${getInitials(user.user)}</div>
 									 <span class="user-name me-2">${user.user}</span>
                                </a>
 							</li>
