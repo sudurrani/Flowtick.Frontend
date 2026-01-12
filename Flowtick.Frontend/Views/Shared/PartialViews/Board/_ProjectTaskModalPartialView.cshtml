@@ -1290,8 +1290,14 @@
         });
     }
     function addComment(taskId){
+        debugger;
         // alert(taskId);
-          const commentDescription = tinymce.get('Comment').getContent()
+          const commentDescription = tinymce.get('Comment').getContent();
+
+         if (!commentDescription) {
+           infoToastr("Please Write Comment First", 'info');
+           return;
+         }
         
            let url = `flowtick/task/${taskId}/comments`;
              apiRequest({
@@ -1312,7 +1318,33 @@
 
         // Move cursor to editor
         tinymce.get('Comment').focus();
-            getProjectTasks();
+
+           getComments();
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+
+    function getComments(){
+        const taskId = $("#modalTaskID").val().trim();
+        
+        let url = `flowtick/task/${taskId}/comments`;
+        apiRequest({
+            url: url,
+            type: 'GET',
+            data: {},
+            callBack: getCommentsCallBack
+        });
+    }
+
+    var getCommentsCallBack = function (response) {
+        if (response.request.status === 200) {
+            // debugger;
+            console.log(response.data);
+            const getComments = response.data;
+            renderComments(getComments);
+
         }
         else {
             errorExtractor(response);
