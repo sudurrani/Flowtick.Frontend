@@ -1,0 +1,180 @@
+﻿/* dropdown css */
+
+.flowtick-dropdown {
+    width: 280px;
+    padding: 0;
+    border-radius: 10px;
+    border: 1px solid #E4E6EA;
+    overflow: hidden;
+    z-index: 99999;
+    transform: translateY(2px);
+}
+
+
+.flowtick-dropdown-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #E7E9ED;
+}
+
+    .flowtick-dropdown-search .dropdown-avatar {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+    }
+
+    .flowtick-dropdown-search input {
+        border: none;
+        outline: none;
+        font-size: 14px;
+        flex-grow: 1;
+    }
+
+/* User List */
+.dropdown-list {
+    max-height: 240px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    /* Scrollbar like Jira */
+    .dropdown-list ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .dropdown-list ::-webkit-scrollbar-thumb {
+        background: #C6C9CE;
+        border-radius: 10px;
+    }
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+    .dropdown-item:hover {
+        background-color: #e4f7fa !important;
+    }
+
+    .dropdown-item:hover {
+        background: #F4F5F7;
+    }
+
+.dropdown-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.user-name {
+    font-size: 13px;
+}
+/* Hide Bootstrap caret icon */
+.no-caret::after {
+    display: none !important;
+}
+
+/* Form UI */
+.task-no {
+    font-weight: 500;
+    margin-right: 6px;
+    color: var(--primary-color);
+}
+
+
+.create-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #374151;
+    margin-bottom: 12px;
+    background: none;
+    border: none;
+}
+
+    .create-btn span:first-child {
+        font-size: 22px;
+        font-weight: bold;
+        line-height: 0;
+    }
+
+    .create-btn:hover {
+        background-color: #F0F1F2;
+    }
+/*
+                   Create Card css */
+.flowtick-create-card {
+    background: #ffffff;
+    border: 2px solid #4688EC;
+    border-radius: 5px;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    width: 100%;
+}
+
+.flowtick-textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: vertical;
+    padding: 10px 10px 0px 10px;
+    min-height: 60px;
+}
+
+.flowtick-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 12px;
+    border-top: 1px solid #e8e8e8;
+}
+
+.left-icons .icon-btn,
+.right-icon .icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #5f6368;
+}
+
+    .left-icons .icon-btn:last-child {
+        margin-right: 0;
+    }
+
+.icon-btn:hover {
+    color: #1a73e8;
+}
+
+.left-icons .dropdown {
+    display: inline-block;
+}
+
+
+.dropdown-menu .dropdown-item i {
+    font-size: 16px;
+}
+
+#childTaskTypeID {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+#btnClearFilter:hover {
+    text-decoration: underline;
+    color: var(--primary-color);
+}
