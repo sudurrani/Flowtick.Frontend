@@ -500,7 +500,7 @@
         var addPeopleToProjectCallBack = function (response) {
             if (response.request.status === 201) {
 
-                successToastr("Invitation Send Successfully", 'success');
+                successToastr("Send Successfully", 'Invitation');
                 // $('#addPeopleModal').modal('hide');
 
             } else {
@@ -510,9 +510,9 @@
 
             }
             // enable button back
-            $("#addPeople").removeClass("readonly").prop("disabled", false).text("Add");
+            $("#addPeople") .removeClass("readonly") .prop("disabled", false).html('<i class="bi bi-plus-lg me-1"></i>Add');
             $("#closeModal").removeClass("readonly").prop("disabled", false);
-            $("#email").prop("disabled", false);
+            $("#email,#roleId").prop("disabled", false);
         }
 
         function createProject() {
