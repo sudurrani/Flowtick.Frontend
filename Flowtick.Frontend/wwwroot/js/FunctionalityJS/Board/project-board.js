@@ -581,14 +581,14 @@ function renderBoard() {
     });
 }
 
-function getProjectTasks() {
+function getProjectTasks(isBlockUI = true) {
     let url = `flowtick/project/${projectId}/tasks`;
     apiRequest({
         url: url,
         type: 'GET',
         data: {},
         callBack: getProjectTasksCallBack
-    });
+    },null,isBlockUI);
 }
 var getProjectTasksCallBack = function (response) {
     if (response.request.status === 200) {
