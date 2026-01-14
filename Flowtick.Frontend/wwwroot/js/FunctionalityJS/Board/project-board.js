@@ -595,12 +595,13 @@ var getProjectTasksCallBack = function (response) {
         _projectTasksArray = response.data;
         const container = $('#boardColumns');
         container.empty();
+        var columnHtml = ''
         _taskStatusesArray.forEach(column => {
             const tasks = (response.data || []).filter(item => item.status?.id === column.id);;//boardData.tasks.filter(task => task.status === column.id);
 
             const isTodoColumn = column.id === 1;
 
-            const columnHtml = `
+            columnHtml += `
                                                          <div class="board-column">
                                                              <div class="column-header">
                                                                  <div class="column-title-wrapper">
@@ -660,10 +661,11 @@ var getProjectTasksCallBack = function (response) {
                                                          </div>
                                                      `;
 
-            container.append(columnHtml);
+            
 
 
         });
+        container.html(columnHtml);
         filterTasks();
         loadTaskTypeDropdown();
 
