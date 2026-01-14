@@ -931,7 +931,7 @@ body {
     position: fixed;
     inset: 0;
     background: rgba(140, 144, 152, 0.75);
-    z-index: 2;
+    /*z-index: 4;*/
     overflow: auto;
     padding: 20px;
 }
