@@ -893,7 +893,7 @@ function createTask(taskType = null) {
 }
 var createTaskCallBack = function (response, options) {
     if (response.request.status === 201) {
-        successToastr($("#taskTitle").val(), 'success');
+        successToastr($("#taskTitle").val(), 'Task');
         getProjectTasks();
         if (options.taskType == 'subTask') {
             loadChildTasks(options.parentId);
@@ -964,6 +964,7 @@ function loadChildTasksTable(parentTask = {}, tasksArray = []) {
 function toggleCreateCard() {
     $("#createCardBox").show();
     $("#createBtn").hide();
+    $("#taskTitle").focus();
 }
 
 function updateTaskAssignee(taskId, selectedAssigneeId) {
