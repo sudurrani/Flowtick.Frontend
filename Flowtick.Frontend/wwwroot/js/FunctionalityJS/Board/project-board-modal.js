@@ -382,7 +382,7 @@ function updateTask() {
 var updateTaskCallBack = function (response) {
     if (response.request.status === 204) {
         successToastr("Saved successfully", 'Task');
-        getProjectTasks();
+        getProjectTasks(false);
 
     }
     else {
