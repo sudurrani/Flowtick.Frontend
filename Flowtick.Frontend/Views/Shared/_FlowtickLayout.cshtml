@@ -500,7 +500,9 @@
         var addPeopleToProjectCallBack = function (response) {
             if (response.request.status === 201) {
 
-                successToastr("Send Successfully", 'Invitation');
+                    $('#email').val('');         
+                   $('#roleId').val('Select Role').trigger('change');
+                    successToastr("Send successfully", 'Invitation');
                 // $('#addPeopleModal').modal('hide');
 
             } else {
