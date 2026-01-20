@@ -122,7 +122,8 @@
             data: {},
             callBack: function (response) {
                 if (response.request.status === 200) {
-                    $.each(response.data, function (index, row) {
+                    $.each(response.data, function (index, row) {                        
+                        row.timeIn = new Date(row.timeIn).toLocaleTimeString();
                         addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
                     });
                 }
