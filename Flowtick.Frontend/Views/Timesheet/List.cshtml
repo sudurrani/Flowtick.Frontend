@@ -89,13 +89,12 @@
         hours: { type: 'td', maxlength: 50, isReadOnly: false },
 
         Action: { type: 'action', addRowFunction: '', removeRowFunction: '' }
-    };
+    };   
     $(function () {
         getTimesheet();
-
         $('#btnSave').on('click', function () {
             let timesheetsArray = getTableRowsBySchema(timesheetSchema, 'TimesheetTbody');
-
+            
             let url = `ess/timesheets`;
             apiRequest({
                 url: url,
@@ -122,8 +121,9 @@
             data: {},
             callBack: function (response) {
                 if (response.request.status === 200) {
-                    $.each(response.data, function (index, row) {                        
-                        row.timeIn = new Date(row.timeIn).toLocaleTimeString();
+                    $.each(response.data, function (index, row) {                                                
+                        row.timeIn = new Date(row.timeIn).toLocaleTimeString('en-GB');
+                       
                         addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
                     });
                 }
