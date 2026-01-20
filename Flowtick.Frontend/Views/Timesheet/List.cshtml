@@ -71,7 +71,8 @@
                             <th>Time-In</th>
                             <th>Time-Out</th>
                             <th>Hours</th>
-
+                            <th>Short HR</th>
+                            <th>Extra HR</th>
                         </tr>
                     </thead>
                     <tbody id="TimesheetTbody"></tbody>
@@ -87,6 +88,8 @@
         timeIn: { type: 'td', maxlength: 50, isReadOnly: false },
         timeOut: { type: 'text', maxlength: 50, isReadOnly: false },
         hours: { type: 'td', maxlength: 50, isReadOnly: false },
+        shortHr: { type: 'td', maxlength: 50, isReadOnly: false },
+        extraHr: { type: 'td', maxlength: 50, isReadOnly: false },
 
         Action: { type: 'action', addRowFunction: '', removeRowFunction: '' }
     };   
@@ -94,7 +97,14 @@
         getTimesheet();
         $('#btnSave').on('click', function () {
             let timesheetsArray = getTableRowsBySchema(timesheetSchema, 'TimesheetTbody');
-            
+            $.each(timesheetsArray, function (index, row) {
+                if (row.timeOut != null) {                    
+                    const localDateTime = new Date(`${row.date}T${row.timeOut}`);
+                    let utcDateTime = localDateTime.toISOString();
+                    row.timeOut = utcDateTime.split("T")[1].split(".")[0];
+                }
+
+            });
             let url = `ess/timesheets`;
             apiRequest({
                 url: url,
@@ -123,8 +133,24 @@
                 if (response.request.status === 200) {
                     $.each(response.data, function (index, row) {                                                
                         row.timeIn = new Date(row.timeIn).toLocaleTimeString('en-GB');
-                       
+                        if (row.timeOut != null) {
+                            row.timeOut = new Date(row.timeOut).toLocaleTimeString('en-GB');
+                        }
                         addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
+                        setTimeout(function(){
+                            $('#TimesheetTbody tr').each(function (index) {
+                                
+                                if ($(this).find('td.tdshortHr').text() != null && $(this).find('td.tdshortHr').text() != '') {                                    
+                                    let shorHours = $(this).find('td.tdshortHr').text();
+                                    $(this).find('td.tdshortHr').html(`<strong style="color:#dc3545">${shorHours}</strong>`);                                    
+                                }
+                                if ($(this).find('td.tdextraHr').text() != null && $(this).find('td.tdextraHr').text() != '') {
+                                    let extraHours = $(this).find('td.tdextraHr').text();
+                                    $(this).find('td.tdextraHr').html(`<strong style="color:#28a745!important">${extraHours}</strong>`);
+                                }
+                            });
+                        },500)
+                        
                     });
                 }
                 else {
