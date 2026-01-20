@@ -20,5 +20,10 @@ namespace Flowtick.Frontend.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public IActionResult Backlog()
+        {
+            return View();
+        }
     }
 }

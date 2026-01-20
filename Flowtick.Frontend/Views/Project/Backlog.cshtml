@@ -1,0 +1,722 @@
+﻿@{
+	ViewBag.Title = "Backlog";
+	Layout = "~/Views/Shared/_FlowtickLayout.cshtml";
+}
+<!-- Bootstrap Datepicker CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.0/dist/css/bootstrap-datepicker.min.css">
+<style>
+
+	.collaps-panel {
+		padding: 12px;
+	}
+		/* Remove default triangle icon */
+		.collaps-panel summary {
+			list-style: none;
+			cursor: pointer;
+			padding: 10px 0px;
+			display: flex;
+			align-items: center;
+		}
+
+	.backlog-header-icon {
+		background: transparent;
+		border: 1px solid #F1F2F4;
+		border-radius: 6px;
+		font-size: 16px;
+		cursor: pointer;
+		width: 30px;
+		height: 30px;
+		margin-right: 5px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #444;
+		padding: 0;
+		transition: background 0.2s;
+	}
+
+		.backlog-header-icon:hover {
+			background: var(--primary-color);
+			color: #fff;
+		}
+
+	/* Custom arrow icon */
+	.arrow-icon {
+		width: 12px;
+		height: 12px;
+		border-right: 2px solid #333;
+		border-bottom: 2px solid #333;
+		justify-content: center;
+		transform: rotate(-42deg);
+		transition: transform .2s ease;
+	}
+
+	/* Rotate arrow when opened */
+	.collaps-panel[open] .arrow-icon {
+		transform: rotate(45deg);
+	}
+
+	/* Panel content */
+	.collaps-panel-content {
+		padding: 0 0px 12px;
+		border: 1px solid var(--border-color);
+		border-radius: 0.5rem;
+	}
+
+	/* Table */
+
+	.child-table {
+		width: 100%;
+		border-collapse: collapse;
+	}
+
+		.child-table tr td, th {
+			padding-top: 0.2rem !important;
+			padding-bottom: 0.2rem !important;
+			padding-left: 0.3rem !important;
+			padding-right: 0.3rem !important;
+		}
+
+
+		.child-table th {
+			text-align: left;
+			padding: 8px 0;
+			border-bottom: 1px solid #e3e6ea;
+			font-weight: 600;
+			color: #505258;
+		}
+
+		.child-table td {
+			padding: 10px 0;
+			border-bottom: 1px solid #f3f4f6;
+		}
+
+	.child-add-wrapper {
+		padding: 8px;
+	}
+
+	#backlogTaskForm {
+		display: contents;
+	}
+
+	.child-add-action {
+		cursor: pointer;
+		color: #6c757d;
+	}
+
+		.child-add-action span:hover,
+		.child-add-action span:focus {
+			color: #1868db;
+			outline: 2px solid #1868db;
+			outline-offset: 2px;
+			border-radius: 4px;
+		}
+
+	.child-add-row td {
+		background: #fafafa;
+		border-top: 1px solid #e0e0e0;
+	}
+
+	.task-type-btn {
+		border: 1px solid #dee2e6;
+		border-radius: 6px;
+		padding: .375rem .75rem;
+		font-size: 1rem;
+		font-weight: 400;
+		line-height: 1.5;
+	}
+
+	.panel-title {
+		font-size: 16px;
+		font-weight: 700;
+	}
+
+	/* dropdown css */
+
+	.flowtick-dropdown {
+		width: 280px;
+		padding: 0;
+		border-radius: 10px;
+		border: 1px solid #E4E6EA;
+		overflow: hidden;
+		z-index: 99999;
+		transform: translateY(2px);
+	}
+
+
+	.flowtick-dropdown-search {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 12px;
+		border-bottom: 1px solid #E7E9ED;
+	}
+
+		.flowtick-dropdown-search .dropdown-avatar {
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+		}
+
+		.flowtick-dropdown-search input {
+			border: none;
+			outline: none;
+			font-size: 14px;
+			flex-grow: 1;
+		}
+
+	/* User List */
+	.dropdown-list {
+		max-height: 240px;
+		overflow-y: auto;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+		/* Scrollbar like Jira */
+		.dropdown-list ::-webkit-scrollbar {
+			width: 6px;
+		}
+
+		.dropdown-list ::-webkit-scrollbar-thumb {
+			background: #C6C9CE;
+			border-radius: 10px;
+		}
+
+	.dropdown-item {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 8px 12px;
+		cursor: pointer;
+	}
+
+		.dropdown-item:hover {
+			background-color: #e4f7fa !important;
+		}
+
+		.dropdown-item:hover {
+			background: #F4F5F7;
+		}
+
+	.dropdown-avatar {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+	}
+
+	.user-name {
+		font-size: 13px;
+	}
+	/* Hide Bootstrap caret icon */
+	.no-caret::after {
+		display: none !important;
+	}
+
+	.task-no {
+		font-weight: 500;
+		margin-right: 6px;
+		color: var(--primary-color);
+	}
+
+
+</style>
+<!-- Filter Bar -->
+<div class="filter-bar">
+
+
+	<button class="btn-create ms-auto" data-bs-toggle="modal" data-bs-target="#createSprintModal">
+		<i class="bi bi-plus-lg"></i>
+		Create Sprint
+	</button>
+</div>
+
+<div class="container">
+
+	<div class="sprint-container"></div>
+
+	<div class="row mt-4">
+		<div class="col-12">
+			<details class="collaps-panel">
+				<summary class=" d-flex align-items-center justify-content-between">
+
+					<!-- LEFT SIDE: Arrow + Title -->
+					<div class="d-flex align-items-center gap-2" style="color:var(--primary-color)">
+						<span class="backlog-header-icon"> <i class="arrow-icon"></i></span>
+						<span class="panel-title"> Backlog </span>
+					</div>
+
+					<!-- RIGHT SIDE: Icons -->
+					<div class="d-flex align-items-center gap-3">
+
+						<!-- Three dots -->
+						<span class="right-icon more-options">
+							<span class="backlog-header-icon"> <i class="bi bi-three-dots"></i></span>
+						</span>
+
+						<!-- Plus -->
+						<span class="right-icon " id="btnAddChildWork">
+							<span class="backlog-header-icon"><i class="bi bi-plus-lg"></i></span>
+						</span>
+
+					</div>
+
+				</summary>
+
+				<div class="collaps-panel-content">
+					<table class="child-table" style="width:100%">
+						<thead>
+							<tr>
+								<th style="width:50%">Work</th>
+								<th style="width:15%">Priority</th>
+								<th style="width:20%">Assignee</th>
+								<th style="width:15%">Status</th>
+							</tr>
+						</thead>
+						<tbody id="backlogTableTbody">
+						</tbody>
+					</table>
+				</div>
+			</details>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade flowtic-modal" id="createSprintModal" tabindex="-1">
+	<div class="modal-dialog modal-dialog-centered ">
+		<div class="modal-content flowtick-modal-box p-0">
+			<form id="createSprintForm">
+				<div class="modal-header flowtick-modal-header py-1 ">
+					<h5 class="modal-title">Create Sprint</h5>
+					<button type="button" class="btn border-0 p-0" data-bs-dismiss="modal"><i class="bi bi-x-lg modal-btn-close"></i></button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-12">
+							<label class="form-label">Name</label>
+							<input type="text" class="form-control" id="name" placeholder="Enter  Name">
+						</div>
+					</div>
+
+					<div class="row mt-2">
+						<div class="col-6 pe-0">
+							<label class="form-label">Start Date</label>
+							<input type="text" class="form-control datepicker" id="startDate" placeholder="Select start date">
+						</div>
+						<div class="col-6">
+							<label class="form-label">End Date</label>
+							<input type="text" class="form-control datepicker" id="endDate" placeholder="Select end date">
+
+						</div>
+					</div>
+
+
+					<div class="row mt-2">
+						<div class="col-12">
+							<label class="form-label">Description</label>
+							<textarea class="form-control" id="description" rows="3" placeholder="Enter sprint description"></textarea>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn-create" id="saveSprint">
+						<i class="bi bi-plus-lg"></i> Save
+					</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+<!-- Bootstrap Datepicker JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.0/dist/js/bootstrap-datepicker.min.js"></script>
+<script>
+	var _taskTypes = [];
+	var loginUserID,
+	 projectId;
+	
+	const sprints = [
+	  {
+		sprintName: "Sprint 1",
+		startDate: "2026-01-01",
+		endDate: "2026-01-14",
+		tasks: [
+		  {
+			id: 1,
+			code: "TSK-101",
+			title: "Setup project structure",
+			type: {
+			  icon: "bi bi-check-circle-fill",
+			  iconCSS: 'style="color:#28a745"'
+			},
+			priority: "Medium",
+			assignee: {
+			  name: "Ali Khan",
+			  colorCode: "#6f42c1"
+			},
+			status: {
+			  id: 1,
+			  name: "Done"
+			}
+		  },
+		  {
+			id: 2,
+			code: "TSK-102",
+			title: "Create login page UI",
+			type: {
+			  icon: "bi bi-brush-fill",
+			  iconCSS: 'style="color:#0d6efd"'
+			},
+			priority: "Medium",
+			assignee: {
+			  name: "Sara Ahmed",
+			  colorCode: "#198754"
+			},
+			status: {
+			  id: 2,
+			  name: "In Progress"
+			}
+		  }
+		]
+	  },
+
+	  {
+		sprintName: "Sprint 2",
+		startDate: "2026-01-15",
+		endDate: "2026-01-28",
+		tasks: [
+		  {
+			id: 3,
+			code: "TSK-201",
+			title: "Implement authentication",
+			type: {
+			  icon: "bi bi-shield-lock-fill",
+			  iconCSS: 'style="color:#dc3545"'
+			},
+			priority: "Medium",
+			assignee: {
+			  name: "Ahmed Raza",
+			  colorCode: "#fd7e14"
+			},
+			status: {
+			  id: 3,
+			  name: "Review"
+			}
+		  },
+		  {
+			id: 4,
+			code: "TSK-202",
+			title: "Dashboard layout",
+			type: {
+			  icon: "bi bi-layout-text-window-reverse",
+			  iconCSS: 'style="color:#20c997"'
+			},
+			priority: "Medium",
+			assignee: {
+			  name: "Ayesha Noor",
+			  colorCode: "#0dcaf0"
+			},
+			status: {
+			  id: 2,
+			  name: "In Progress"
+			}
+		  }
+		]
+	  }
+	];
+
+
+	$(function () {
+
+		//take data from access token
+		const token = localStorage.getItem("accessToken");
+		const tokenData = parseJwt(token);
+		var userId = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+		loginUserID = userId;
+		//end
+
+		var urlParams = new URLSearchParams(window.location.search);
+		let id = urlParams.get('id');
+		projectId = getAndDecryptID(id);
+
+
+	  $('.datepicker').datepicker({
+		format: 'dd-mm-yyyy',
+		autoclose: true,
+		todayHighlight: true
+	  });
+		getTaskTypes();
+	   renderSprints();
+
+	});
+		//handle click of task type
+	$(document).on("click", ".task-type-menu .dropdown-item", function (e) {
+		e.preventDefault();
+
+		// Get values from clicked element
+		var id = $(this).data("id");
+		var icon = $(this).find("i").attr("class");
+		var style = $(this).find("i").attr("style");
+		var text = $(this).text().trim();
+
+		// Find the specific dropdown button for this menu
+		var $btn = $(this).closest(".dropdown").find(".task-type-btn");
+
+		// Update only this button
+		$btn.attr("data-id", id);
+		$btn.find("i").attr("class", icon).attr("style", style);
+		$(".task-type-btn span").text(text);
+	});
+
+
+		//add subtask row to create subtask inside task
+	$(document).on("click", "#btnAddChildWork", function (e) {
+		// Stop click from propagating to parent elements
+		e.preventDefault();
+		e.stopPropagation();
+		e.stopImmediatePropagation();
+
+		const $tbody = $("#backlogTableTbody");
+
+		// Prevent multiple add rows
+		if ($tbody.find(".child-add-row").length) return;
+
+		const rowHtml = `
+								<tr class="child-add-row">
+								  <td colspan="5">
+									<div class="d-flex align-items-center gap-2 child-add-wrapper">
+									<form id="backlogTaskForm">
+									  <input tabindex="0" type="text" class="form-control child-add-input" placeholder="What needs to be done?" id="childWorkTitle" required/>
+									 </form>
+										
+									  <!-- Epic/Task/Bug dropdown -->
+											  <div class="dropdown">
+													<a class="text-decoration-none  dropdown-toggle  task-type-btn default-selected-value" data-bs-toggle="dropdown" id="childTaskTypeID"tabindex="0" >
+														  <i class=""></i><span class="ms-2 text-black"></span>
+												  </a>
+													  <div class="dropdown-menu task-type-menu">
+														  <!-- Dynamic items will load here -->
+													</div>
+											  </div>
+									  <span class="child-add-action">
+									   <span  tabindex="0"  onclick="createTask();"  onkeypress="if(event.key==='Enter') createTask()"> <i class="bi bi-arrow-return-left"></i>  </span>
+									  </span>
+									</div>
+								  </td>
+								</tr>
+							  `;
+
+		$tbody.append(rowHtml);
+		 loadTaskTypeDropdown();
+		// Auto focus
+		$tbody.find(".child-add-input").focus();
+	});
+
+	function getTaskTypes() {
+		apiRequest({
+			url: 'flowtick/task/types',
+			type: 'GET',
+			data: {},
+			callBack: getTaskTypesCallBack
+		});
+	}
+	var getTaskTypesCallBack = function (response) {
+		if (response.request.status === 200) {
+
+			_taskTypes = response.data; // your array
+			// loadTaskTypeDropdown();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+	function loadTaskTypeDropdown() {
+		// default selected type in create Subtask  id = 3
+		var defaultItemForSubTask = _taskTypes.find(x => x.id == 3);
+		if (defaultItemForSubTask) {
+			$(".default-selected-value").attr("data-id", defaultItemForSubTask.id);
+			$(".default-selected-value i").attr("class", defaultItemForSubTask.icon).attr("style", defaultItemForSubTask.iconCSS.replace('style="', '').replace('"', ''));
+
+			$(".default-selected-value span").text(defaultItemForSubTask.description);
+			$(".default-selected-value").attr("readonly");
+		}
+
+		var $taskTypeMenu = $('.task-type-menu');
+
+		$taskTypeMenu.empty(); // Clear old items
+
+		$.each(_taskTypes, function (index, item) {
+			var li = `
+										  <li>
+											  <a class="dropdown-item" href="#" data-id="${item.id}">
+												  <i class="${item.icon} " ${item.iconCSS}></i>
+												  ${item.description}
+											  </a>
+										  </li>
+									  `;
+
+			$taskTypeMenu.append(li);
+		});
+	}
+
+	function renderSprints() {
+
+	  var $container = $('.sprint-container');
+	  $container.empty();
+
+
+	  $.each(sprints, function (sIndex, sprint) {
+
+		// Sprint HTML (tbody is EMPTY here)
+		var sprintHtml = `
+		  <div class="row">
+			<div class="col-12">
+			  <details class="collaps-panel">
+				<summary class="d-flex align-items-center justify-content-between">
+
+				  <div class="d-flex align-items-center gap-2" style="color:var(--primary-color)">
+					<span class="backlog-header-icon">
+					  <i class="arrow-icon"></i>
+					</span>
+					<span class="panel-title">
+					  ${sprint.sprintName} ${sprint.startDate} - ${sprint.endDate}
+					</span>
+				  </div>
+
+				</summary>
+
+				<div class="collaps-panel-content">
+				  <table class="child-table" style="width:100%">
+					<thead>
+					  <tr>
+						<th style="width:50%">Work</th>
+						<th style="width:15%">Priority</th>
+						<th style="width:20%">Assignee</th>
+						<th style="width:15%">Status</th>
+					  </tr>
+					</thead>
+					<tbody class="sprint-task-tbody"></tbody>
+				  </table>
+				</div>
+			  </details>
+			</div>
+		  </div>
+		`;
+
+		// Convert string → jQuery element
+		var $sprintElement = $(sprintHtml);
+
+		// Get tbody INSIDE this sprint
+		var $tbody = $sprintElement.find('.sprint-task-tbody');
+
+		//  LOOP 2: TASK LOOP (INSIDE TBODY)
+		$.each(sprint.tasks, function (tIndex, item) {
+
+		  var tr = `
+			<tr data-id="${item.id}">
+			  <td>
+				<i class="${item.type ? item.type.icon : ''} task-icon"
+				   ${item.type ? item.type.iconCSS : ''}></i>
+
+				<span class="task-no sub-task-detail"
+					  onclick="getSubTaskById(${item.id});"
+					  role="button">
+				  ${item.code}
+				</span>
+
+				<span class="child-task-title">${item.title}</span>
+			  </td>
+
+			  <td>
+				<i class="bi bi-filter" style="color:#E06C00"></i> Medium
+			  </td>
+
+			  <td>
+				<div class="dropdown">
+				  <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+					<div class="subtask-selected-assignee d-flex align-items-center">
+					  <div class="assignee-avatar-sm"
+						   style="background:${item.assignee.colorCode}">
+						${getInitials(item.assignee.name)}
+					  </div>
+					  <span class="user-name ms-2">
+						${item.assignee.name}
+					  </span>
+					</div>
+				  </div>
+
+				</div>
+			  </td>
+
+			  <td>
+				<div class="dropdown">
+				  <a class="text-decoration-none dropdown-toggle no-caret btn-task-subtask-status btn-create"
+					 data-bs-toggle="dropdown"
+					 data-id="${item.status.id}">
+					<span>${item.status.name}</span>
+				  </a>
+				</div>
+			  </td>
+			</tr>
+		  `;
+
+		  //  Append TR directly into THIS sprint tbody
+		  $tbody.append(tr);
+		});
+
+		// Append whole sprint block into container
+		$container.append($sprintElement);
+	  });
+	
+	}
+
+
+	function createTask(taskType = null) {
+
+			if (!customValidateForm('backlogTaskForm')) {
+				return; // stop execution
+			}
+		var inputJSON = {
+			"title": null,
+			"assigneeId": loginUserID,
+			"reporterId": loginUserID,
+			"reviewerId": loginUserID,
+			"statusId": 1,
+			"typeId": null,
+			"parentId": null
+
+		};
+
+		inputJSON.title = $("#childWorkTitle").val().trim();
+		inputJSON.typeId = $("#childTaskTypeID").data("id");
+
+
+
+		let url = `flowtick/project/${projectId}/tasks`;
+
+
+		apiRequest({
+			url: url,
+			type: 'POST',
+			data: inputJSON,
+			callBack: createTaskCallBack,
+			//| Below are used to pass to the callback for condition purposes
+			taskType: taskType,
+			parentId: inputJSON.parentId
+		});
+
+
+	}
+	var createTaskCallBack = function (response, options) {
+		if (response.request.status === 201) {
+			successToastr($("#taskTitle").val(), 'Task');
+	
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+</script>

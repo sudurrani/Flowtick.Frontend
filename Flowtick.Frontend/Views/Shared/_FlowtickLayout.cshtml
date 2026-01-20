@@ -391,7 +391,7 @@
                                                         left:${offset.left - 10}px;
 
                             ">
-                            <li><a class="dropdown-item"><i class="bi bi-star me-2"></i>Add to Starred</a></li>
+                            <li><a class="dropdown-item" onclick="redirectToAction('/Project/Backlog?id=',${projectId});"><i class="bi bi-list-task me-2"></i>Backlog </a></li>
                             <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add Member</a></li>
                             <li><a class="dropdown-item"><i class="bi bi-clipboard me-2"></i>Save as template</a></li>
                             <li><a class="dropdown-item" id="projectSetting" onclick="redirectToAction('/Project/Settings?id=',${projectId});"><i class="bi bi-gear me-2"></i>Settings</a></li>
@@ -500,7 +500,9 @@
         var addPeopleToProjectCallBack = function (response) {
             if (response.request.status === 201) {
 
-                successToastr("Send Successfully", 'Invitation');
+                    $('#email').val('');         
+                   $('#roleId').val('Select Role').trigger('change');
+                    successToastr("Send successfully", 'Invitation');
                 // $('#addPeopleModal').modal('hide');
 
             } else {

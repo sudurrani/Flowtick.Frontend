@@ -908,58 +908,6 @@ var createTaskCallBack = function (response, options) {
     }
 };
 
-function loadChildTasksTable(parentTask = {}, tasksArray = []) {
-    var $subtasktbody = $('#childWorkTableTbody');
-    $subtasktbody.empty(); // Clear old items
-
-    $.each(tasksArray, function (index, item) {
-        var tr = `
-                                                     <tr data-id="${item.id}">
-                                                         <td>
-                                                         <i class="${item.type ? item.type.icon : ''} task-icon" ${item.type ? item.type.iconCSS : ''}></i>
-                                                             <span class="task-no sub-task-detail" onclick="getSubTaskById(${item.id});" role="button">${item.code}</span>
-                                                             <span class="child-task-title">${item.title}</span>
-                                                         </td>
-                                                         <td>
-                                                             <i class="bi bi-filter " style="color:#E06C00"></i>
-                                                                 Medium
-                                                         </td>
-                                                             <td hidden>${parentTask.title}</td>
-                                                         <td>
-                                                         <div class="dropdown">
-                                                             <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
-                                                                 <div class="subtask-selected-assignee d-flex align-items-center">
-                                                                           <div class="assignee-avatar-sm" style="background:${item.assignee.colorCode}" >${getInitials(item.assignee.name)} </div>
-                                                                     <span class="user-name ms-2">${item.assignee ? item.assignee.name : ''}</span>
-                                                                 </div>
-                                                             </div>
-
-                                                             <div class="dropdown-menu flowtick-dropdown">
-                                                                 <div class="flowtick-dropdown-search">
-                                                                     <i class="bi bi-search"></i>
-                                                                     <input type="text" class="seach-user-dropdown" placeholder="Search users">
-                                                                 </div>
-
-                                                                 <ul class="dropdown-list  subtask-user-list" ></ul>
-                                                             </div>
-                                                         </div>
-                                                         </td>
-                                                         <td>
-                                                            <div class="dropdown" >
-                                                              <a class="text-decoration-none dropdown-toggle btn-task-subtask-status btn-create" data-bs-toggle="dropdown"data-id="${item.status.id}">
-                                                                   <span>${item.status.name}</span>
-                                                              </a>
-
-                                                             <ul class="dropdown-menu task-status-list select-task-subTask-status">
-                                                                  <!-- Dynamic items will load here -->
-                                                             </ul>
-                                                           </div>
-                                                         </td>
-                                                     </tr>
-                                                  `;
-        $subtasktbody.append(tr);
-    });
-}
 
 function toggleCreateCard() {
     $("#createCardBox").show();
