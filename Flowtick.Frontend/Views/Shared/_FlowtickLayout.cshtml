@@ -201,14 +201,16 @@
 
         // Sidebar Toggle
         $(function () {
-
+            /*
              //take data from access token
             const token = localStorage.getItem("accessToken");
 
             const tokenData = parseJwt(token);
               var loginUserID = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-            const userName = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];            
-            $('#userAvatar').text(getInitials(userName));
+            const userName = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];       
+            */
+            let user = getLoggedInUser();
+            $('#userAvatar').text(getInitials(user.name));
 
             //end
 
