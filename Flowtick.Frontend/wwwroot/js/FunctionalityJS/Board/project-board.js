@@ -166,10 +166,25 @@ function loadFilterTaskTypeDropdown() {
 function loadFilterTaskAssigneeDropdown() {
 
     var $filterTaskAssigneeMenu = $('.filter-task-assignee-menu');
-
     $filterTaskAssigneeMenu.empty();
+    let loggedInUser = getLoggedInUser();
+    
+    let loggedInUserDetail = _projectMember.find(row => row.userId == loggedInUser.id);
+    /*
+    var li =
+    `
+        <li>
+             <a class="dropdown-item" href="#" data-id="${1}" onclick="filterTaskAssigneeSelection(event,${loggedInUserDetail.userId},'My Review');">
+                               <input type="checkbox" class="fs-5 task-assignee-checkbox" />
+				 <div class="assignee-avatar-sm profile-image"style="background:${loggedInUserDetail.colorCode}">${getInitials(loggedInUserDetail.user)}</div>
+				 <span class="user-name me-2">My Review</span>
+             </a>
+		</li>
+    `
+    $filterTaskAssigneeMenu.append(li);
+    */
     $.each(_projectMember, function (index, user) {
-        var li = `
+        li = `
 							 
                            <li>
                                <a class="dropdown-item" href="#" data-id="${user.userId}" onclick="filterTaskAssigneeSelection(event,${user.userId},'${user.user}');">
@@ -266,7 +281,7 @@ function filterTaskAssigneeSelection(event, id = 0, text = null) {
 }
 function filterTasks() {
     $('.task-card').each(function () {
-
+        console.log($(this).data('task-id'));
         const assigneeId = $(this)
             .find('.assignee-avatar-sm')
             .data('assignee-id');

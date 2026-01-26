@@ -3487,3 +3487,14 @@ function renderTinyMCE(inputIdAttr = 'textArea',fkeyId = 0) {
         }
     });
 }
+function getLoggedInUser() {
+    const token = localStorage.getItem("accessToken");
+
+    const tokenData = parseJwt(token);
+    var loginUserID = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+    const userName = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+    return {
+        id: loginUserID,
+        name: userName
+    };
+}
