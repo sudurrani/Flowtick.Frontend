@@ -2,7 +2,7 @@
 $(function () {
     renderTinyMCE('#DescriptionEditor, #Comment');
     $('#modalTaskCode').click(function () {
-        redirectToAction(`/Task/Detail?projectId=${encodeURIComponent(encryptNumber(projectId))}&id=`, $('#modalTaskID').val());
+        redirectToAction(`/Task/Detail?project=${projectName}&projectId=${encodeURIComponent(encryptNumber(projectId))}&id=`, $('#modalTaskID').val());
     })
 
     // Show editor by default

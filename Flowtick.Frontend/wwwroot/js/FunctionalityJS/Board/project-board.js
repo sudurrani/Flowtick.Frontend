@@ -17,7 +17,7 @@ var _projectMember = []
 let isTaskTypeLoaded = false;
 var _taskTypes = [];
 
-let statusID = 0, projectId = 0;
+let statusID = 0, projectId = 0, projectName;
 var assigneeID;
 var reporterID;
 var reviewerID;
@@ -48,6 +48,7 @@ $(function () {
 
     var urlParams = new URLSearchParams(window.location.search);
     projectId = urlParams.get('id');
+    projectName = urlParams.get('project');
     projectId = (getAndDecryptID(projectId));
 
     // Filter  dropdown
