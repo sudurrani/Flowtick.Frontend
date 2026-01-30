@@ -284,7 +284,7 @@
 /* Right panel scroll content wrapper */
 .right-scroll {
     flex: 1;
-    overflow-y: auto;
+   /* overflow-y: auto;*/
     padding-right: 10px;
 }
 
