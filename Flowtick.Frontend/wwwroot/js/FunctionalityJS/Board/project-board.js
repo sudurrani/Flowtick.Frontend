@@ -209,7 +209,7 @@ function filterTaskTypeSelection(event, id = 0, text = null) {
     event.stopPropagation();
     //| Uncheck My Review Checkbox
     const cbMyReview = $("#cbMyReview");
-    if (cbMyReview) {
+    if (cbMyReview.prop("checked")) {
         cbMyReview.prop("checked", !cbMyReview.prop("checked"));
     }
     
@@ -258,7 +258,7 @@ function filterTaskAssigneeSelection(event, id = 0, text = null) {
     event.stopPropagation();
     //| Uncheck My Review Checkbox
     const cbMyReview = $("#cbMyReview");
-    if (cbMyReview) {
+    if (cbMyReview.prop("checked")) {
         cbMyReview.prop("checked", !cbMyReview.prop("checked"));
     }
     //| Uncheck My Review Checkbox
