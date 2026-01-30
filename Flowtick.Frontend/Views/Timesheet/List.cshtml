@@ -62,11 +62,12 @@
     </div>
     <div class="row mt-1">
         <div class="col-12">
-            <div class="table-responsive">
+            <div class="table-responsive" style="overflow-y:auto;height:78.85vh">
                 <table class="table table-timesheet align-middle" id="TimesheetTable">
                     <thead style="background: var(--primary-btn-bg);color: var(--primary-btn-fore)">
                         <tr>
                             <th hidden>ID</th>
+                            <th>Name</th>
                             <th>Date</th>
                             <th>Time-In</th>
                             <th>Time-Out</th>
@@ -84,6 +85,7 @@
 <script>
     let timesheetSchema = {
         id: { type: 'hidden' },
+        name: {type: 'td', maxlength: 50, isReadOnly: false },
         date: { type: 'td', maxlength: 50, isReadOnly: false },
         timeIn: { type: 'td', maxlength: 50, isReadOnly: false },
         timeOut: { type: 'text', maxlength: 50, isReadOnly: false },
@@ -136,6 +138,7 @@
                         if (row.timeOut != null) {
                             row.timeOut = new Date(row.timeOut).toLocaleTimeString('en-GB');
                         }
+                        row.name = row.user.name;                        
                         addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
                         setTimeout(function(){
                             $('#TimesheetTbody tr').each(function (index) {
