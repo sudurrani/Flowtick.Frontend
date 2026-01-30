@@ -207,7 +207,10 @@ function loadFilterTaskAssigneeDropdown() {
 function filterTaskTypeSelection(event, id = 0, text = null) {
     event.preventDefault();
     event.stopPropagation();
-
+    //| Uncheck My Review Checkbox
+    const checkbox = $("#cbMyReview");
+    checkbox.prop("checked", !checkbox.prop("checked"));
+    //| Uncheck My Review Checkbox
     var checkbox = event.currentTarget.querySelector('input[type="checkbox"]');
 
     if (id == 0) {
@@ -250,6 +253,10 @@ function filterTaskTypeSelection(event, id = 0, text = null) {
 function filterTaskAssigneeSelection(event, id = 0, text = null) {
     //event.preventDefault();
     event.stopPropagation();
+    //| Uncheck My Review Checkbox
+    const checkbox = $("#cbMyReview");
+    checkbox.prop("checked", !checkbox.prop("checked"));
+    //| Uncheck My Review Checkbox
 
     var checkbox = event.currentTarget.querySelector('input[type="checkbox"]');
 
@@ -289,7 +296,7 @@ function filterTasks() {
         let reviewerId = $(this).find('.reviewer-id').text();
         const checkbox = $("#cbMyReview");
         let isMyReviewChecked = checkbox.prop("checked");
-        console.log(`${reviewerId} | ${loginUserID} | ${isMyReviewChecked}`);
+        
         const assigneeId = $(this)
             .find('.assignee-avatar-sm')
             .data('assignee-id');
