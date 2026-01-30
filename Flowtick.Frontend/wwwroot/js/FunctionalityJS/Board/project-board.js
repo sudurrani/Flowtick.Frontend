@@ -208,8 +208,8 @@ function filterTaskTypeSelection(event, id = 0, text = null) {
     event.preventDefault();
     event.stopPropagation();
     //| Uncheck My Review Checkbox
-    const checkbox = $("#cbMyReview");
-    checkbox.prop("checked", !checkbox.prop("checked"));
+    const cbMyReview = $("#cbMyReview");
+    cbMyReview.prop("checked", !cbMyReview.prop("checked"));
     //| Uncheck My Review Checkbox
     var checkbox = event.currentTarget.querySelector('input[type="checkbox"]');
 
@@ -254,8 +254,8 @@ function filterTaskAssigneeSelection(event, id = 0, text = null) {
     //event.preventDefault();
     event.stopPropagation();
     //| Uncheck My Review Checkbox
-    const checkbox = $("#cbMyReview");
-    checkbox.prop("checked", !checkbox.prop("checked"));
+    const cbMyReview = $("#cbMyReview");
+    cbMyReview.prop("checked", !cbMyReview.prop("checked"));
     //| Uncheck My Review Checkbox
 
     var checkbox = event.currentTarget.querySelector('input[type="checkbox"]');
@@ -294,8 +294,8 @@ function filterTaskAssigneeSelection(event, id = 0, text = null) {
 function filterTasks() {
     $('.task-card').each(function () {
         let reviewerId = $(this).find('.reviewer-id').text();
-        const checkbox = $("#cbMyReview");
-        let isMyReviewChecked = checkbox.prop("checked");
+        const cbMyReview = $("#cbMyReview");
+        let isMyReviewChecked = cbMyReview.prop("checked");
         
         const assigneeId = $(this)
             .find('.assignee-avatar-sm')
