@@ -209,7 +209,10 @@ function filterTaskTypeSelection(event, id = 0, text = null) {
     event.stopPropagation();
     //| Uncheck My Review Checkbox
     const cbMyReview = $("#cbMyReview");
-    cbMyReview.prop("checked", !cbMyReview.prop("checked"));
+    if (cbMyReview) {
+        cbMyReview.prop("checked", !cbMyReview.prop("checked"));
+    }
+    
     //| Uncheck My Review Checkbox
     var checkbox = event.currentTarget.querySelector('input[type="checkbox"]');
 
@@ -255,7 +258,9 @@ function filterTaskAssigneeSelection(event, id = 0, text = null) {
     event.stopPropagation();
     //| Uncheck My Review Checkbox
     const cbMyReview = $("#cbMyReview");
-    cbMyReview.prop("checked", !cbMyReview.prop("checked"));
+    if (cbMyReview) {
+        cbMyReview.prop("checked", !cbMyReview.prop("checked"));
+    }
     //| Uncheck My Review Checkbox
 
     var checkbox = event.currentTarget.querySelector('input[type="checkbox"]');
