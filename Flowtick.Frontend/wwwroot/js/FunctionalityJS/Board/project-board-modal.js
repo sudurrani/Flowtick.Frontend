@@ -618,18 +618,10 @@ function renderComments(comments) {
     $.each(comments, function (index, comment) {
         const isLoginUser = comment.user.id === Number(loginUserID);
         const sideClass = isLoginUser ? "right" : "left";
-        const userName = comment.user.name
-        //const localDateTime = new Date(`${comment.date}T${comment.time}`);
-        //let utcDateTime = localDateTime.toISOString();
-        //comment.time  = utcDateTime.split("T")[1].split(".")[0];
-        const utcDateTime = new Date(`${comment.date}T${comment.time}:00Z`); // Z = UTC
-        // Convert to local date & time
-        const localDate = utcDateTime.toLocaleDateString(); // e.g., 2/2/2026
-        const localTime = utcDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // e.g., 10:14
-
-        // Update comment object
-        comment.date = localDate;
-        comment.time = localTime;
+        const userName = comment.user.name        
+        const utcDateTime = new Date(`${comment.date}T${comment.time}:00Z`);        
+        //comment.date  = utcDateTime.toLocaleDateString(); 2/2/2026
+        comment.time = utcDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });                
         
         const html = `
                 <div class="comment-item ${sideClass}" data-id="${comment.id}">
