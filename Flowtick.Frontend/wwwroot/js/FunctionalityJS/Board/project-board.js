@@ -767,7 +767,7 @@ function renderTaskCard(task) {
                                           <i class="bi bi-flag priority-icon ${task.priority}"></i>
                                           ${subtasks}
                                       </div>
-                                       <div class="reviewer-id">${task.reviewer.id}</div>
+                                       <div class="reviewer-id" hidden>${task.reviewer.id}</div>
                                        <div class="dropdown">
                                           <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
                                                <div class="selected-card-assignee d-flex align-items-center"onclick="event.stopPropagation();">
