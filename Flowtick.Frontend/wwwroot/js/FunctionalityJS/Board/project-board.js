@@ -103,8 +103,7 @@ $(function () {
         });
     });
 
-    $('#btnFilterOnlyTitle').on('click', function (e) {
-
+    $('#btnFilterOnlyTitle').on('click', function (e) {        
         const checkbox = $("#cbFilterOnlyTitle");
         checkbox.prop("checked", !checkbox.prop("checked"));
 
@@ -112,7 +111,13 @@ $(function () {
         $('.task-labels').toggleClass('d-none');
         $('.task-footer').toggleClass('d-none');
     });
+    $('#btnMyReview').on('click', function (e) {
 
+        const checkbox = $("#cbMyReview");
+        checkbox.prop("checked", !checkbox.prop("checked"));
+
+        filterTasks();
+    });
 
     $('#SideBarParent').on('click', function () {
         $(".task-modal").addClass("task-modal-fade-effect");
@@ -171,18 +176,18 @@ function loadFilterTaskAssigneeDropdown() {
     
     let loggedInUserDetail = _projectMember.find(row => row.userId == loggedInUser.id);
     /*
-    var li =
-    `
-        <li>
-             <a class="dropdown-item" href="#" data-id="${1}" onclick="filterTaskAssigneeSelection(event,${loggedInUserDetail.userId},'My Review');">
-                               <input type="checkbox" class="fs-5 task-assignee-checkbox" />
-				 <div class="assignee-avatar-sm profile-image"style="background:${loggedInUserDetail.colorCode}">${getInitials(loggedInUserDetail.user)}</div>
-				 <span class="user-name me-2">My Review</span>
-             </a>
-		</li>
-    `
-    $filterTaskAssigneeMenu.append(li);
-    */
+    console.log(loggedInUserDetail);
+    $filterTaskAssigneeMenu.append
+        (
+            `<li>
+                               <a class="dropdown-item" href="#" data-id="${loggedInUserDetail.userId}" onclick="filterTaskAssigneeSelection(event,${loggedInUserDetail.userId},'My Review');">
+                                    <input type="checkbox" class="fs-5 task-assignee-checkbox" />
+									 
+									 <span class="user-name me-2"><strong style="color:${loggedInUserDetail.colorCode}">My Review</strong></span>
+                               </a>
+							</li>`
+        );
+        */
     $.each(_projectMember, function (index, user) {
         li = `
 							 
@@ -202,7 +207,13 @@ function loadFilterTaskAssigneeDropdown() {
 function filterTaskTypeSelection(event, id = 0, text = null) {
     event.preventDefault();
     event.stopPropagation();
-
+    //| Uncheck My Review Checkbox
+    const cbMyReview = $("#cbMyReview");
+    if (cbMyReview.prop("checked")) {
+        cbMyReview.prop("checked", !cbMyReview.prop("checked"));
+    }
+    
+    //| Uncheck My Review Checkbox
     var checkbox = event.currentTarget.querySelector('input[type="checkbox"]');
 
     if (id == 0) {
@@ -245,6 +256,12 @@ function filterTaskTypeSelection(event, id = 0, text = null) {
 function filterTaskAssigneeSelection(event, id = 0, text = null) {
     //event.preventDefault();
     event.stopPropagation();
+    //| Uncheck My Review Checkbox
+    const cbMyReview = $("#cbMyReview");
+    if (cbMyReview.prop("checked")) {
+        cbMyReview.prop("checked", !cbMyReview.prop("checked"));
+    }
+    //| Uncheck My Review Checkbox
 
     var checkbox = event.currentTarget.querySelector('input[type="checkbox"]');
 
@@ -281,7 +298,10 @@ function filterTaskAssigneeSelection(event, id = 0, text = null) {
 }
 function filterTasks() {
     $('.task-card').each(function () {
-        console.log($(this).data('task-id'));
+        let reviewerId = $(this).find('.reviewer-id').text();
+        const cbMyReview = $("#cbMyReview");
+        let isMyReviewChecked = cbMyReview.prop("checked");
+        
         const assigneeId = $(this)
             .find('.assignee-avatar-sm')
             .data('assignee-id');
@@ -323,6 +343,16 @@ function filterTasks() {
             } else {
                 $(this).hide();
 
+            }
+        }
+        if (isMyReviewChecked) {
+            if (loginUserID == reviewerId) {
+                console.log('found');
+                $(this).show();
+            }
+            else {
+                $(this).hide();
+                console.log('not found');
             }
         }
     });
@@ -737,7 +767,7 @@ function renderTaskCard(task) {
                                           <i class="bi bi-flag priority-icon ${task.priority}"></i>
                                           ${subtasks}
                                       </div>
-
+                                       <div class="reviewer-id" hidden>${task.reviewer.id}</div>
                                        <div class="dropdown">
                                           <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
                                                <div class="selected-card-assignee d-flex align-items-center"onclick="event.stopPropagation();">
