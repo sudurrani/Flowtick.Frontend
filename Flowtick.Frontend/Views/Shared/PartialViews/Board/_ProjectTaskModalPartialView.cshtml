@@ -1,386 +1,416 @@
 ﻿<link href="~/css/board/project-board-modal.css" rel="stylesheet" />
 <!-- Task Modal -->
 <div class="task-modal" style="display:none">
-    <input type="hidden" id="modalTaskID" />
-    <input type="hidden" id="modalSubTaskID" />
-    <div class="task-modal-box">
+	<input type="hidden" id="modalTaskID" />
+	<input type="hidden" id="modalSubTaskID" />
+	<div class="task-modal-box">
 
-        <!-- HEADER -->
-        <div class="task-modal-header">
+		<!-- HEADER -->
+		<div class="task-modal-header">
 
-            <!-- LEFT ICONS -->
-            <div class="header-left-icons" style="display:flex; align-items:center; gap:0px;">
-                @* <button class="icon-btn"><img src="your-uploaded-icon.png" alt="icon" style="width:20px;height:20px;"></button> *@
-                @* <i class="bi bi-lightning-charge task-icon"></i> *@
-                <!-- project Epics dropdown  dropdown -->
-                <div class="dropdown d-flex align-items-center" id="epicParentLinkDropdown">
-                    <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown" id="epicDropdown">
-                        <div class=" d-flex align-items-center">
-                            <div id="epicParentLink" style="cursor:pointer;" class="selected-epic-code "><i class="bi bi-lightning-charge task-icon" id="epicParentLinkIcon"></i><span class="task-code">no-parent</span></div>
-                        </div>
-                    </div>
-                    <i class="bi bi-slash-lg link-icon" style="transform: rotate(-20deg);font-size:15px;font-weight:600 !important;"></i>
-                    <div class="dropdown-menu flowtick-dropdown" style="width:365px">
-                        <div class="flowtick-dropdown-search">
-                            <i class="bi bi-search"></i>
-                            <input type="text" class="seach-user-dropdown" placeholder="Search Epic">
-                        </div>
+			<!-- LEFT ICONS -->
+			<div class="header-left-icons" style="display:flex; align-items:center; gap:0px;">
+				@* <button class="icon-btn"><img src="your-uploaded-icon.png" alt="icon" style="width:20px;height:20px;"></button> *@
+				@* <i class="bi bi-lightning-charge task-icon"></i> *@
+				<!-- project Epics dropdown  dropdown -->
+				<div class="dropdown d-flex align-items-center" id="epicParentLinkDropdown">
+					<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown" id="epicDropdown">
+						<div class=" d-flex align-items-center">
+							<div id="epicParentLink" style="cursor:pointer;" class="selected-epic-code "><i class="bi bi-lightning-charge task-icon" id="epicParentLinkIcon"></i><span class="task-code">no-parent</span></div>
+						</div>
+					</div>
+					<i class="bi bi-slash-lg link-icon" style="transform: rotate(-20deg);font-size:15px;font-weight:600 !important;"></i>
+					<div class="dropdown-menu flowtick-dropdown" style="width:365px">
+						<div class="flowtick-dropdown-search">
+							<i class="bi bi-search"></i>
+							<input type="text" class="seach-user-dropdown" placeholder="Search Epic">
+						</div>
 
-                        <ul class="dropdown-list project-epics-list"></ul>
-                    </div>
+						<ul class="dropdown-list project-epics-list"></ul>
+					</div>
 
-                </div>
+				</div>
 
-                <div class="dropdown">
-                    <a class="text-decoration-none  no-caret dropdown-toggle " data-bs-toggle="dropdown" id="" tabindex="0">
-                        <span id="modalTaskTypeIcon" style="cursor:pointer;"><i></i></span>
-                    </a>
+				<div class="dropdown">
+					<a class="text-decoration-none  no-caret dropdown-toggle " data-bs-toggle="dropdown" id="" tabindex="0">
+						<span id="modalTaskTypeIcon" style="cursor:pointer;"><i></i></span>
+					</a>
 
-                    <ul class="dropdown-menu task-type-menu">
-                        <!-- Dynamic items will load here -->
-                    </ul>
-                </div>
-                <span href="#" class="task-code ms-1" id="modalTaskCode"></span>
-            </div>
+					<ul class="dropdown-menu task-type-menu">
+						<!-- Dynamic items will load here -->
+					</ul>
+				</div>
+				<span href="#" class="task-code ms-1" id="modalTaskCode"></span>
+			</div>
 
-            <!-- RIGHT ICONS -->
-            <div class="header-right-icons" style="margin-left:auto; display:flex; align-items:center; gap:8px; padding-top:2px; padding-bottom:2px;">
-                @* <button id="updateTask" class="primary-button" style="background-color:#00757D; margin-right:10px; padding:4px 12px;"> <i class="bi bi-plus text-white "></i> Save</button> *@
-                <span class="header-right-icon">	<i class="bi bi-eye"></i></span>
-                <span class="header-right-icon">	<i class="bi bi-share"></i></span>
-                <span class="header-right-icon"><i class="bi bi-three-dots"></i></span>
-                <span class="header-right-icon"><i class="bi bi-arrows-angle-contract"></i></span>
-                <span class="header-right-icon" onclick="closTaskModal();"><i class="bi bi-x-lg btn-close-modal"></i></span>
-            </div>
+			<!-- RIGHT ICONS -->
+			<div class="header-right-icons" style="margin-left:auto; display:flex; align-items:center; gap:8px; padding-top:2px; padding-bottom:2px;">
+				@* <button id="updateTask" class="primary-button" style="background-color:#00757D; margin-right:10px; padding:4px 12px;"> <i class="bi bi-plus text-white "></i> Save</button> *@
+				<span class="header-right-icon">	<i class="bi bi-eye"></i></span>
+				<span class="header-right-icon">	<i class="bi bi-share"></i></span>
+				<span class="header-right-icon"><i class="bi bi-three-dots"></i></span>
+				<span class="header-right-icon"><i class="bi bi-arrows-angle-contract"></i></span>
+				<span class="header-right-icon" onclick="closTaskModal();"><i class="bi bi-x-lg btn-close-modal"></i></span>
+			</div>
 
-        </div>
+		</div>
 
-        <!-- BODY -->
-        <div class="task-modal-body">
+		<!-- BODY -->
+		<div class="task-modal-body">
 
-            <!-- LEFT PANEL -->
-            <div class="task-left">
+			<!-- LEFT PANEL -->
+			<div class="task-left">
 
-                <!-- TASK TITLE MOVED HERE -->
-                <div class="task-title" style="margin-bottom:12px;">
-                    <input type="text" class="task-title-input" value="Landlord Management v1.0" id="modalTaskTitle" />
-                </div>
+				<!-- TASK TITLE MOVED HERE -->
+				<div class="task-title" style="margin-bottom:12px;">
+					<input type="text" class="task-title-input" value="Landlord Management v1.0" id="modalTaskTitle" />
+				</div>
 
-                <label class="section-title">Description</label>
+				<label class="section-title">Description</label>
 
-                <div id="description-view">
-                    <div id="description-display" class="description-text">
-                        Edit description
-                    </div>
-                </div>
-                @await Html.PartialAsync(
-                         "~/Views/Shared/PartialViews/Common/_EditorPartialView.cshtml",
-                         new Flowtick.Frontend.Models.EditorPartialView.EditorPartialViewInputModel
-                {
-                    IdAttr = "DescriptionEditor"
-                })
+				<div id="description-view">
+					<div id="description-display" class="description-text">
+						Edit description
+					</div>
+				</div>
+				@await Html.PartialAsync(
+									"~/Views/Shared/PartialViews/Common/_EditorPartialView.cshtml",
+									new Flowtick.Frontend.Models.EditorPartialView.EditorPartialViewInputModel
+				{
+					IdAttr = "DescriptionEditor"
+				})
 
 
 
-                <div class="row mt-1">
-                    <div class="col-10">
-                       
-                    </div>
-                    <div class="col-2 text-end">
-                        @* <div class="action-buttons"> *@
-                            <button id="updateTask" class="btn-create"><i class="bi bi-plus"></i>Save</button>
-                            @* 	<button id="cancel-description" class="cancel-button">Cancel</button> *@
-                        @* </div> *@
-                    </div>
-                </div>
-                @await Html.PartialAsync(
-                         "~/Views/Shared/PartialViews/Common/_FileUploadPartialView.cshtml"
-                         )
+				<div class="row mt-1">
+					<div class="col-10">
+					</div>
+					<div class="col-2 text-end">
+						@* <div class="action-buttons"> *@
+						<button id="updateTask" class="btn-create"><i class="bi bi-plus"></i>Save</button>
+						@* 	<button id="cancel-description" class="cancel-button">Cancel</button> *@
+						@* </div> *@
+					</div>
+				</div>
+				@await Html.PartialAsync(
+									"~/Views/Shared/PartialViews/Common/_FileUploadPartialView.cshtml"
+									)
 
-                
-                <!-- CHILD ITEMS -->
-                <div class="panel-section" id="childWorkPanel">
-                    <details class="child-panel">
-                        <summary class="panel-title d-flex align-items-center justify-content-between">
 
-                            <!-- LEFT SIDE: Arrow + Title -->
-                            <div class="d-flex align-items-center gap-2" style="color:var(--primary-color)">
-                                <span class="header-right-icon"> <i class="arrow-icon"></i></span>
-                                <span>Child work items</span>
-                            </div>
+				<!-- CHILD ITEMS -->
+				<div class="panel-section" id="childWorkPanel">
+					<details class="child-panel">
+						<summary class="panel-title d-flex align-items-center justify-content-between">
 
-                            <!-- RIGHT SIDE: Icons -->
-                            <div class="d-flex align-items-center gap-3">
+							<!-- LEFT SIDE: Arrow + Title -->
+							<div class="d-flex align-items-center gap-2" style="color:var(--primary-color)">
+								<span class="header-right-icon"> <i class="arrow-icon"></i></span>
+								<span>Child work items</span>
+							</div>
 
-                                <!-- Three dots -->
-                                <span class="right-icon more-options">
-                                    <span class="header-right-icon"> <i class="bi bi-three-dots"></i></span>
-                                </span>
+							<!-- RIGHT SIDE: Icons -->
+							<div class="d-flex align-items-center gap-3">
 
-                                <!-- Configuration -->
-                                @* 								<span class="right-icon config-icon">
+								<!-- Three dots -->
+								<span class="right-icon more-options">
+									<span class="header-right-icon"> <i class="bi bi-three-dots"></i></span>
+								</span>
+
+								<!-- Configuration -->
+								@* 								<span class="right-icon config-icon">
                                 <span class="header-right-icon"><i class="bi bi-gear"></i></span>
                                 </span> *@
 
-                                <!-- Plus -->
-                                <span class="right-icon " id="btnAddChildWork">
-                                    <span class="header-right-icon"><i class="bi bi-plus-lg"></i></span>
-                                </span>
+								<!-- Plus -->
+								<span class="right-icon " id="btnAddChildWork">
+									<span class="header-right-icon"><i class="bi bi-plus-lg"></i></span>
+								</span>
 
-                            </div>
+							</div>
 
-                        </summary>
+						</summary>
 
-                        <div class="child-panel-content">
-                            <table class="child-table" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th style="width:50%">Work</th>
-                                        <th style="width:15%">Priority</th>
-                                        @* <th style="width:25%">Story</th> *@
-                                        <th style="width:20%">Assignee</th>
-                                        <th style="width:15%">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="childWorkTableTbody">
-                      
-                                </tbody>
-                            </table>
-                        </div>
-                    </details>
+						<div class="child-panel-content">
+							<table class="child-table" style="width:100%">
+								<thead>
+									<tr>
+										<th style="width:50%">Work</th>
+										<th style="width:15%">Priority</th>
+										@* <th style="width:25%">Story</th> *@
+										<th style="width:20%">Assignee</th>
+										<th style="width:15%">Status</th>
+									</tr>
+								</thead>
+								<tbody id="childWorkTableTbody">
+								</tbody>
+							</table>
+						</div>
+					</details>
 
-                </div>
+				</div>
 
-                <!-- LINKED ITEMS -->
-                <div class="panel-section">
-                    <div class="panel-title">Linked work items</div>
-                    <a class="link-item">Add linked work item</a>
-                </div>
-
-
-
-                <div class="container mt-5">
-                    <div class="d-flex justify-content-between align-items-center tab-container">
-                        <h6 class="mb-0 fw-bold tab-container">Activity</h6>
-                        <!-- Tab Navigation -->
-                        <ul class="nav nav-tabs tab-buttons" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link " id="allTab" data-bs-toggle="tab" href="#allTabContent" role="tab">
-                                    All
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="commentsTab" data-bs-toggle="tab" href="#commentsTabContent" role="tab">
-                                    Comments
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="historyTab" data-bs-toggle="tab" href="#historyTabContent" role="tab">
-                                    History
-                                </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="workLogTab" data-bs-toggle="tab" href="#workLogTabContent" role="tab">
-                                    Work log
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Tab Content -->
-                    <div class="tab-content">
-                        <div class="tab-pane fade " id="allTabContent" role="tabpanel">
-                            <h4>All</h4>
-
-                        </div>
-                        <div class="tab-pane fade show active" id="commentsTabContent" role="tabpanel">
-                            <!-- COMMENTS -->
-                            <div class="panel-section">
-                              @*   <textarea class="comment-box">Add a Comment</textarea> *@
-                                @await Html.PartialAsync(
-                                         "~/Views/Shared/PartialViews/Common/_EditorPartialView.cshtml",
-                                         new Flowtick.Frontend.Models.EditorPartialView.EditorPartialViewInputModel
-                                {
-                                    IdAttr = "Comment"
-                                })
-                                <button id="addComment" class="btn-create mt-2"><i class="bi bi-plus"></i>Add</button>
-                   @*              	<button id="cancel-description" class="cancel-button">Cancel</button> *@
-
-                                <!-- COMMENTS WRAPPER -->
-                                <div class="comments-container">
-                                    <!-- Dynamic comments will be appended here -->
-                                </div>
+				<!-- LINKED ITEMS -->
+				<div class="panel-section">
+					<div class="panel-title">Linked work items</div>
+					<a class="link-item">Add linked work item</a>
+				</div>
 
 
 
+				<div class="container mt-5">
+					<div class="d-flex justify-content-between align-items-center tab-container">
+						<h6 class="mb-0 fw-bold tab-container">Activity</h6>
+						<!-- Tab Navigation -->
+						<ul class="nav nav-tabs tab-buttons" role="tablist">
+							<li class="nav-item" role="presentation">
+								<a class="nav-link " id="allTab" data-bs-toggle="tab" href="#allTabContent" role="tab">
+									All
+								</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link active" id="commentsTab" data-bs-toggle="tab" href="#commentsTabContent" role="tab">
+									Comments
+								</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link" id="historyTab" data-bs-toggle="tab" href="#historyTabContent" role="tab">
+									History
+								</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a class="nav-link" id="workLogTab" data-bs-toggle="tab" href="#workLogTabContent" role="tab">
+									Work log
+								</a>
+							</li>
+						</ul>
+					</div>
 
-                            </div>
+					<!-- Tab Content -->
+					<div class="tab-content">
+						<div class="tab-pane fade " id="allTabContent" role="tabpanel">
+							<h4>All</h4>
 
-                        </div>
-                        <div class="tab-pane fade" id="historyTabContent" role="tabpanel">
-                            <h4>history</h4>
+						</div>
+						<div class="tab-pane fade show active" id="commentsTabContent" role="tabpanel">
+							<!-- COMMENTS -->
+							<div class="panel-section">
+								@*   <textarea class="comment-box">Add a Comment</textarea> *@
+								@await Html.PartialAsync(
+																	"~/Views/Shared/PartialViews/Common/_EditorPartialView.cshtml",
+																	new Flowtick.Frontend.Models.EditorPartialView.EditorPartialViewInputModel
+								{
+									IdAttr = "Comment"
+								})
+								<button id="addComment" class="btn-create mt-2"><i class="bi bi-plus"></i>Add</button>
+								@*              	<button id="cancel-description" class="cancel-button">Cancel</button> *@
 
-                        </div>
-                        <div class="tab-pane fade" id="workLogTabContent" role="tabpanel">
-                            <h4>workLogTabContent</h4>
-                        </div>
-                    </div>
-                </div>
+								<!-- COMMENTS WRAPPER -->
+								<div class="comments-container">
+									<!-- Dynamic comments will be appended here -->
+								</div>
 
-            </div>
 
-            <!-- RIGHT PANEL -->
-            <div class="task-right">
-                <div class="status-row">
-                    <!-- Task staus dropdown -->
-                    <div class="dropdown">
-                        <a class="text-decoration-none dropdown-toggle btn-task-status btn-create fw-bold p-2 cursor-pointer" data-bs-toggle="dropdown" style="font-size: 0.8rem;">
-                            <span id="taskStatusID"></span>
-                        </a>
-                        <ul class="dropdown-menu task-status-list select-status">
-                            <!-- Dynamic items will load here -->
-                        </ul>
-                    </div>
-                    <span class="header-right-icon"><i class="bi bi-lightning-charge task-icon"></i></span>
-                </div>
 
-                <div class="right-scroll">
-                    <div class="detail-block">
-                        <div class="label">Assignee</div>
-                        <div class="dropdown mt-2">
-                            <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
-                                <div class="selected-assignee d-flex align-items-center" id="modalAssigneeID" style="cursor:pointer">
-                                    @* selected value here *@
-                                </div>
-                            </div>
-                            <div class="dropdown-menu flowtick-dropdown">
-                                <div class="flowtick-dropdown-search">
-                                    <i class="bi bi-search"></i>
-                                    <input type="text" class="seach-user-dropdown" placeholder="Search users">
-                                </div>
-                                <ul class="dropdown-list asignee-user-list">
-                                    @* 	dropdown list  here *@
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="detail-block">
-                        <div class="label">Reviewer</div>
-                        <div class="dropdown mt-2">
-                            <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
-                                <div class="selected-reviewer d-flex align-items-center" id="modalReviewerID" style="cursor:pointer">
-                                    @* selected value here *@
-                                </div>
-                            </div>
+							</div>
 
-                            <div class="dropdown-menu flowtick-dropdown">
-                                <div class="flowtick-dropdown-search">
-                                    <i class="bi bi-search"></i>
-                                    <input type="text" class="seach-user-dropdown" placeholder="Search users">
-                                </div>
+						</div>
+						<div class="tab-pane fade" id="historyTabContent" role="tabpanel">
+							<h4>history</h4>
 
-                                <ul class="dropdown-list reviewer-user-list">
-                                    @* 	dropdown list  here *@
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+						</div>
+						<div class="tab-pane fade" id="workLogTabContent" role="tabpanel">
+							<h4>workLogTabContent</h4>
+						</div>
+					</div>
+				</div>
 
-                    <div class="detail-block">
-                        <div class="label">Reporter</div>
-                        <div class="dropdown mt-2">
-                            <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
-                                <div class="selected-reporter d-flex align-items-center" id="modalReporterID" style="cursor:pointer">
-                                    @* selected value here *@
-                                </div>
-                            </div>
-                            <div class="dropdown-menu flowtick-dropdown">
-                                <div class="flowtick-dropdown-search">
-                                    <i class="bi bi-search"></i>
-                                    <input type="text" class="seach-user-dropdown" placeholder="Search users">
-                                </div>
-                                <ul class="dropdown-list reporter-user-list">
-                                    @* 	dropdown list  here *@
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+			</div>
 
-                    <div class="detail-block">
-                        <div class="label">Labels</div>
-                        <a class="link-item">Add labels</a>
-                    </div>
-                    <div class="detail-block" id="SideBarParentContainer">
-                        <div class="label">Parent</div>
-                        <div class="link-item" id="SideBarParent"><span class="task-no">Test</span>-
-                            <span class="child-task-title">dasfas</span>
-                        </div>
-                    </div>
+			<!-- RIGHT PANEL -->
+			<div class="task-right">
+				<div class="status-row">
+					<!-- Task staus dropdown -->
+					<div class="dropdown">
+						<a class="text-decoration-none dropdown-toggle btn-task-status btn-create fw-bold p-2 cursor-pointer" data-bs-toggle="dropdown" style="font-size: 0.8rem;">
+							<span id="taskStatusID"></span>
+						</a>
+						<ul class="dropdown-menu task-status-list select-status">
+							<!-- Dynamic items will load here -->
+						</ul>
+					</div>
+					<span class="header-right-icon"><i class="bi bi-lightning-charge task-icon"></i></span>
+				</div>
 
-                    <div class="detail-block">
-                        <div class="d-flex align-items-center">
-                            <div class="label">Sprint </div>
-                            <i class="bi bi-info-circle ms-2"></i>
-                        </div>
-                        <a class="link-item">Till - Dec-25</a>
-                    </div>
+				<div class="right-scroll">
+					<div class="detail-block">
+						<div class="label">Assignee</div>
+						<div class="dropdown mt-2">
+							<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<div class="selected-assignee d-flex align-items-center" id="modalAssigneeID" style="cursor:pointer">
+									@* selected value here *@
+								</div>
+							</div>
+							<div class="dropdown-menu flowtick-dropdown">
+								<div class="flowtick-dropdown-search">
+									<i class="bi bi-search"></i>
+									<input type="text" class="seach-user-dropdown" placeholder="Search users">
+								</div>
+								<ul class="dropdown-list asignee-user-list">
+									@* 	dropdown list  here *@
+								</ul>
+							</div>
+						</div>
+					</div>
 
-                    <div class="detail-block">
-                        <div class="label">Priority</div>
+					<div class="detail-block">
+						<div class="label">Reviewer</div>
+						<div class="dropdown mt-2">
+							<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<div class="selected-reviewer d-flex align-items-center" id="modalReviewerID" style="cursor:pointer">
+									@* selected value here *@
+								</div>
+							</div>
 
-                        <div class="dropdown mt-2">
-                            <span class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
-                                <i class="priority-icon bi bi-filter"
-                                   style="color:#E06C00;"></i>
-                                <span class="user-name ms-2 " id="selectedPriority">Medium</span>
-                            </span>
-                            <div class="dropdown-menu flowtick-dropdown">
-                                <ul class="dropdown-list">
+							<div class="dropdown-menu flowtick-dropdown">
+								<div class="flowtick-dropdown-search">
+									<i class="bi bi-search"></i>
+									<input type="text" class="seach-user-dropdown" placeholder="Search users">
+								</div>
 
-                                    <li class="dropdown-item priority-option">
-                                        <i class="bi bi-chevron-double-up priority-icon-item"
-                                           data-icon="bi bi-chevron-double-up"
-                                           data-color="#4E8CE3" style="color:#4E8CE3"></i>
-                                        <span class="user-name">Highest</span>
-                                    </li>
-                                    <li class="dropdown-item priority-option">
-                                        <i class="bi bi-chevron-up priority-icon-item"
-                                           data-icon="bi bi-chevron-up"
-                                           data-color="#4E8CE3" style="color:#4E8CE3"></i>
-                                        <span class="user-name">High</span>
-                                    </li>
-                                    <li class="dropdown-item priority-option">
-                                        <i class="bi bi-filter priority-icon-item"
-                                           data-icon="bi bi-filter"
-                                           data-color="#E06C00" style="color:#E06C00"></i>
-                                        <span class="user-name">Medium</span>
-                                    </li>
-                                    <li class="dropdown-item priority-option">
-                                        <i class="bi bi-chevron-down priority-icon-item"
-                                           data-icon="bi bi-chevron-down"
-                                           data-color="#E06C00" style="color:#E06C00"></i>
-                                        <span class="user-name">Low</span>
-                                    </li>
-                                    <li class="dropdown-item priority-option">
-                                        <i class="bi bi-chevron-double-down priority-icon-item"
-                                           data-icon="bi bi-chevron-double-down"
-                                           data-color="#E06C00" style="color:#E06C00"></i>
-                                        <span class="user-name">Lowest</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+								<ul class="dropdown-list reviewer-user-list">
+									@* 	dropdown list  here *@
+								</ul>
+							</div>
+						</div>
+					</div>
 
-                    </div>
+					<div class="detail-block">
+						<div class="label">Reporter</div>
+						<div class="dropdown mt-2">
+							<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<div class="selected-reporter d-flex align-items-center" id="modalReporterID" style="cursor:pointer">
+									@* selected value here *@
+								</div>
+							</div>
+							<div class="dropdown-menu flowtick-dropdown">
+								<div class="flowtick-dropdown-search">
+									<i class="bi bi-search"></i>
+									<input type="text" class="seach-user-dropdown" placeholder="Search users">
+								</div>
+								<ul class="dropdown-list reporter-user-list">
+									@* 	dropdown list  here *@
+								</ul>
+							</div>
+						</div>
+					</div>
 
-                </div>
+					<div class="detail-block">
+						<form>
+							<fieldset class="time-fieldset">
+								<legend>Assignee Time</legend>
+								<div class="row time-row g-2 align-items-center">
+									<div class="col-6 ">
+										<input type="text" id="AssigneeStartTime" class="form-control form-control-sm" placeholder="Estimated(HR)">
+									</div>
+									<div class="col-6">
+										<input type="text" id="AssigneeEstimateTime" class="form-control form-control-sm" placeholder="Actual(HR)">
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+					<div class="detail-block">
+						<form>
+							<fieldset class="time-fieldset">
+								<legend>Reviewer Time</legend>
+								<div class="row g-2 align-items-center ">
+									<div class="col-6 ">
+										<input type="text" id="ReviewerStartTime" class="form-control form-control-sm" placeholder="Estimated(HR)">
+									</div>
+									<div class="col-6">
+										<input type="text" id="ReviewerEstimateTime" class="form-control form-control-sm" placeholder="Actual(HR)">
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
 
-            </div>
+					<div class="detail-block">
+						<div class="label">Labels</div>
+						<a class="link-item">Add labels</a>
+					</div>
+					<div class="detail-block" id="SideBarParentContainer">
+						<div class="label">Parent</div>
+						<div class="link-item" id="SideBarParent">
+							<span class="task-no">Test</span>-
+							<span class="child-task-title">dasfas</span>
+						</div>
+					</div>
 
-        </div>
+					<div class="detail-block">
+						<div class="d-flex align-items-center">
+							<div class="label">Sprint </div>
+							<i class="bi bi-info-circle ms-2"></i>
+						</div>
+						<a class="link-item">Till - Dec-25</a>
+					</div>
 
-    </div>
+					<div class="detail-block">
+						<div class="label">Priority</div>
+
+						<div class="dropdown mt-2">
+							<span class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<i class="priority-icon bi bi-filter"
+								   style="color:#E06C00;"></i>
+								<span class="user-name ms-2 " id="selectedPriority">Medium</span>
+							</span>
+							<div class="dropdown-menu flowtick-dropdown">
+								<ul class="dropdown-list">
+
+									<li class="dropdown-item priority-option">
+										<i class="bi bi-chevron-double-up priority-icon-item"
+										   data-icon="bi bi-chevron-double-up"
+										   data-color="#4E8CE3" style="color:#4E8CE3"></i>
+										<span class="user-name">Highest</span>
+									</li>
+									<li class="dropdown-item priority-option">
+										<i class="bi bi-chevron-up priority-icon-item"
+										   data-icon="bi bi-chevron-up"
+										   data-color="#4E8CE3" style="color:#4E8CE3"></i>
+										<span class="user-name">High</span>
+									</li>
+									<li class="dropdown-item priority-option">
+										<i class="bi bi-filter priority-icon-item"
+										   data-icon="bi bi-filter"
+										   data-color="#E06C00" style="color:#E06C00"></i>
+										<span class="user-name">Medium</span>
+									</li>
+									<li class="dropdown-item priority-option">
+										<i class="bi bi-chevron-down priority-icon-item"
+										   data-icon="bi bi-chevron-down"
+										   data-color="#E06C00" style="color:#E06C00"></i>
+										<span class="user-name">Low</span>
+									</li>
+									<li class="dropdown-item priority-option">
+										<i class="bi bi-chevron-double-down priority-icon-item"
+										   data-icon="bi bi-chevron-double-down"
+										   data-color="#E06C00" style="color:#E06C00"></i>
+										<span class="user-name">Lowest</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
 
 </div>
 <script src="~/js/functionalityjs/board/project-board-modal.js"></script>
