@@ -674,3 +674,30 @@
         opacity: 1;
     }
 
+.time-fieldset {
+    border: 1px solid #cfcfcf;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 0;
+    position: relative;
+}
+
+    /* Force legend to show */
+    .time-fieldset legend {
+        position: absolute;
+        top: -12px;
+        left: 10px;
+        background: #fff;
+        padding: 0 4px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--primary-color);
+        width: auto;
+    }
+/* Reduce placeholder font size */
+#AssigneeStartTime::placeholder,
+#ReviewerStartTime::placeholder,
+#ReviewerEstimateTime::placeholder,
+#AssigneeEstimateTime::placeholder {
+    font-size: 12px;
+}
