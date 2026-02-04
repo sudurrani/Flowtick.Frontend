@@ -156,9 +156,21 @@
     var getTimesheetCallBack = function (response) {
         if (response.request.status === 200) {
             if (_isAllLoad) {
-                _allTimesheetsArray = response.data;
+                _allTimesheetsArray = JSON.parse(JSON.stringify(response.data));
             }
             $('#TimesheetTbody').empty();
+            const renderData = response.data.map(item => ({
+                ...item,
+                timeIn: new Date(item.timeIn).toLocaleTimeString('en-GB'),
+                timeOut: item.timeOut
+                    ? new Date(item.timeOut).toLocaleTimeString('en-GB')
+                    : null,
+                name: item.user.name
+            }));
+            $.each(renderData, function (index, row) {
+                addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
+            });
+            /*
             $.each(response.data, function (index, row) {
                 row.timeIn = new Date(row.timeIn).toLocaleTimeString('en-GB');
                 if (row.timeOut != null) {
@@ -166,21 +178,23 @@
                 }
                 row.name = row.user.name;                
                 addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
-                setTimeout(function () {
-                    $('#TimesheetTbody tr').each(function (index) {
-
-                        if ($(this).find('td.tdshortHr').text() != null && $(this).find('td.tdshortHr').text() != '') {
-                            let shorHours = $(this).find('td.tdshortHr').text();
-                            $(this).find('td.tdshortHr').html(`<strong style="color:#dc3545">${shorHours}</strong>`);
-                        }
-                        if ($(this).find('td.tdextraHr').text() != null && $(this).find('td.tdextraHr').text() != '') {
-                            let extraHours = $(this).find('td.tdextraHr').text();
-                            $(this).find('td.tdextraHr').html(`<strong style="color:#28a745!important">${extraHours}</strong>`);
-                        }
-                    });
-                }, 500)
+                
 
             });
+            */
+            setTimeout(function () {
+                $('#TimesheetTbody tr').each(function (index) {
+
+                    if ($(this).find('td.tdshortHr').text() != null && $(this).find('td.tdshortHr').text() != '') {
+                        let shorHours = $(this).find('td.tdshortHr').text();
+                        $(this).find('td.tdshortHr').html(`<strong style="color:#dc3545">${shorHours}</strong>`);
+                    }
+                    if ($(this).find('td.tdextraHr').text() != null && $(this).find('td.tdextraHr').text() != '') {
+                        let extraHours = $(this).find('td.tdextraHr').text();
+                        $(this).find('td.tdextraHr').html(`<strong style="color:#28a745!important">${extraHours}</strong>`);
+                    }
+                });
+            }, 500)
             if (_isAllLoad) {
                 //| Distinct Users
                 if (response.data) {
@@ -206,51 +220,11 @@
                 }
             }
 
-            _isAllLoad = false;
+            _isAllLoad = false;            
         }
         else {
             errorExtractor(response);
         }
-    }
-
-    function addBranchRow() {
-        addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', { id: 0 });
-    }
-    function loadFilterTimesheetDropdown() {
-
-        var $filterTimesheetMenu = $('.filter-timesheet-menu');
-        $filterTimesheetMenu.empty();
-        let loggedInUser = getLoggedInUser();
-        /*
-        console.log(loggedInUserDetail);
-        $filterTaskAssigneeMenu.append
-            (
-                `<li>
-                                   <a class="dropdown-item" href="#" data-id="${loggedInUserDetail.userId}" onclick="filterTaskAssigneeSelection(event,${loggedInUserDetail.userId},'My Review');">
-                                        <input type="checkbox" class="fs-5 task-assignee-checkbox" />
-
-                                         <span class="user-name me-2"><strong style="color:${loggedInUserDetail.colorCode}">My Review</strong></span>
-                                   </a>
-                                </li>`
-            );
-            */
-        //style="background:${user.colorCode}"
-        $.each(_distinctUsersArray, function (index, user) {
-            console.log(user);
-            li = `
-
-                                   <li>
-                                           <a class="dropdown-item" href="#" data-id="${user.value}" onclick="filterTimesheet(event,${user.value},'${user.text}');">
-                                            <input type="checkbox" class="fs-5 task-assignee-checkbox" />
-                                             <div class="assignee-avatar-sm profile-image">${getInitials(user.text)}</div>
-                                             <span class="user-name me-2">${user.text}</span>
-                                       </a>
-                                    </li>
-                                  `;
-
-            $filterTimesheetMenu.append(li);
-
-        });
     }
     function filterTimesheet(event, id = 0, text = null) {
         //event.preventDefault();
@@ -266,18 +240,44 @@
             } else {
                 _filterArray.push(id);
             }
-        }
+        }        
+        const filteredResult = !_filterArray || _filterArray.length === 0
+            ? _allTimesheetsArray
+            : _allTimesheetsArray.filter(item =>
+                _filterArray.includes(item.user.id)
+            );
 
-        const filteredResult = _allTimesheetsArray.filter(item =>
-            _filterArray.includes(item.user.id)
-        );
         let fiteredResponse = {
             request: {
                 status: 200
             }
             , data: filteredResult
         };
-        getTimesheetCallBack(fiteredResponse)
-        console.log(fiteredResponse);
+        getTimesheetCallBack(fiteredResponse)        
     }
+    function addBranchRow() {
+        addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', { id: 0 });
+    }
+    function loadFilterTimesheetDropdown() {
+
+        var $filterTimesheetMenu = $('.filter-timesheet-menu');
+        $filterTimesheetMenu.empty();
+        let loggedInUser = getLoggedInUser();        
+        $.each(_distinctUsersArray, function (index, user) {            
+            li = `
+
+                                   <li>
+                                           <a class="dropdown-item" href="#" data-id="${user.value}" onclick="filterTimesheet(event,${user.value},'${user.text}');">
+                                            <input type="checkbox" class="fs-5 task-assignee-checkbox" />
+                                             <div class="assignee-avatar-sm profile-image">${getInitials(user.text)}</div>
+                                             <span class="user-name me-2">${user.text}</span>
+                                       </a>
+                                    </li>
+                                  `;
+
+            $filterTimesheetMenu.append(li);
+
+        });
+    }
+   
 </script>
