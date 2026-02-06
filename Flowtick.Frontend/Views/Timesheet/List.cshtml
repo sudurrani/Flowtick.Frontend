@@ -2,6 +2,7 @@
     ViewData["Title"] = "Timesheet - Employee Self Service | Flowtick";
     Layout = "~/Views/Shared/_FlowtickLayout.cshtml";
 }
+<link href="~/css/board/project-board.css" rel="stylesheet" />
 <style>
     .table-timesheet {
         border: 1px solid var(--border-color);
@@ -42,15 +43,27 @@
         }
 
         .table-timesheet tbody td,
-        .table-timesheet tbody td input{
+        .table-timesheet tbody td input {
             font-size: 0.85rem !important;
         }
 
 </style>
+<div class="filter-bar" id="filterBar" style="display:none;">
+    <div class="detail-block mb-0">
+        <button class="text-decoration-none  filter-timesheet-btn dropdown  filter-btn" data-bs-toggle="dropdown" tabindex="0">
+            <i class="bi bi-people"></i>
+            <span id="filterTimesheetButtonText">Filter by Name</span>
+            <i class="bi bi-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu filter-timesheet-menu">
+            <!-- Dynamic items will load here -->
+        </div>
+    </div>
+</div>
 <div class="board-container">
     <div class="row">
         <div class="col-11">
-            <label class="ps-1 pe-1" style="background: var(--primary-btn-bg);color: var(--primary-btn-fore)">Time-Out must be entered in 24-hour format (hh:mm:ss). For example, 6:00 PM should be entered as 18:00:00</label>
+            <label class="ps-1 pe-1" style="background: var(--primary-btn-bg);color: var(--primary-btn-fore)">Time-Out must be entered in 24-hour format (hh:mm:ss). For example, 6:00 PM should be entered as 18:00</label>
         </div>
         <div class="col-1">
             <button class="btn-create" id="btnSave">
@@ -58,8 +71,10 @@
                 Save
             </button>
         </div>
-        
+
     </div>
+
+
     <div class="row mt-1">
         <div class="col-12">
             <div class="table-responsive" style="overflow-y:auto;height:78.85vh">
@@ -85,7 +100,7 @@
 <script>
     let timesheetSchema = {
         id: { type: 'hidden' },
-        name: {type: 'td', maxlength: 50, isReadOnly: false },
+        name: { type: 'td', maxlength: 50, isReadOnly: false },
         date: { type: 'td', maxlength: 50, isReadOnly: false },
         timeIn: { type: 'td', maxlength: 50, isReadOnly: false },
         timeOut: { type: 'text', maxlength: 50, isReadOnly: false },
@@ -94,13 +109,16 @@
         extraHr: { type: 'td', maxlength: 50, isReadOnly: false },
 
         Action: { type: 'action', addRowFunction: '', removeRowFunction: '' }
-    };   
+    };
+    let _distinctUsersArray = [],
+        _filterArray = [];
+    let _isAllLoad = false;
     $(function () {
         getTimesheet();
         $('#btnSave').on('click', function () {
             let timesheetsArray = getTableRowsBySchema(timesheetSchema, 'TimesheetTbody');
             $.each(timesheetsArray, function (index, row) {
-                if (row.timeOut != null) {                    
+                if (row.timeOut != null) {
                     const localDateTime = new Date(`${row.date}T${row.timeOut}`);
                     let utcDateTime = localDateTime.toISOString();
                     row.timeOut = utcDateTime.split("T")[1].split(".")[0];
@@ -112,7 +130,7 @@
                 url: url,
                 type: 'POST',
                 data: timesheetsArray,
-                callBack: function (response) {                    
+                callBack: function (response) {
                     if (response.request.status === 201) {
                         successToastr('Saved Successfully!', 'Timesheet');
                         getTimesheet();
@@ -125,44 +143,141 @@
         });
     });
     function getTimesheet() {
+        _isAllLoad = true;
         $('#TimesheetTbody').html('');
         let url = `ess/timesheets`;
         apiRequest({
             url: url,
             type: 'GET',
             data: {},
-            callBack: function (response) {
-                if (response.request.status === 200) {
-                    $.each(response.data, function (index, row) {                                                
-                        row.timeIn = new Date(row.timeIn).toLocaleTimeString('en-GB');
-                        if (row.timeOut != null) {
-                            row.timeOut = new Date(row.timeOut).toLocaleTimeString('en-GB');
-                        }
-                        row.name = row.user.name;                        
-                        addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
-                        setTimeout(function(){
-                            $('#TimesheetTbody tr').each(function (index) {
-                                
-                                if ($(this).find('td.tdshortHr').text() != null && $(this).find('td.tdshortHr').text() != '') {                                    
-                                    let shorHours = $(this).find('td.tdshortHr').text();
-                                    $(this).find('td.tdshortHr').html(`<strong style="color:#dc3545">${shorHours}</strong>`);                                    
-                                }
-                                if ($(this).find('td.tdextraHr').text() != null && $(this).find('td.tdextraHr').text() != '') {
-                                    let extraHours = $(this).find('td.tdextraHr').text();
-                                    $(this).find('td.tdextraHr').html(`<strong style="color:#28a745!important">${extraHours}</strong>`);
-                                }
-                            });
-                        },500)
-                        
-                    });
+            callBack: getTimesheetCallBack
+        });
+    }
+    var getTimesheetCallBack = function (response) {
+        if (response.request.status === 200) {
+            if (_isAllLoad) {
+                _allTimesheetsArray = JSON.parse(JSON.stringify(response.data));
+            }
+            $('#TimesheetTbody').empty();
+            const renderData = response.data.map(item => ({
+                ...item,
+                timeIn: new Date(item.timeIn).toLocaleTimeString('en-GB'),
+                timeOut: item.timeOut
+                    ? new Date(item.timeOut).toLocaleTimeString('en-GB')
+                    : null,
+                name: item.user.name
+            }));
+            $.each(renderData, function (index, row) {
+                addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
+            });
+            /*
+            $.each(response.data, function (index, row) {
+                row.timeIn = new Date(row.timeIn).toLocaleTimeString('en-GB');
+                if (row.timeOut != null) {
+                    row.timeOut = new Date(row.timeOut).toLocaleTimeString('en-GB');
                 }
-                else {
-                    errorExtractor(response);
+                row.name = row.user.name;                
+                addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
+                
+
+            });
+            */
+            setTimeout(function () {
+                $('#TimesheetTbody tr').each(function (index) {
+
+                    if ($(this).find('td.tdshortHr').text() != null && $(this).find('td.tdshortHr').text() != '') {
+                        let shorHours = $(this).find('td.tdshortHr').text();
+                        $(this).find('td.tdshortHr').html(`<strong style="color:#dc3545">${shorHours}</strong>`);
+                    }
+                    if ($(this).find('td.tdextraHr').text() != null && $(this).find('td.tdextraHr').text() != '') {
+                        let extraHours = $(this).find('td.tdextraHr').text();
+                        $(this).find('td.tdextraHr').html(`<strong style="color:#28a745!important">${extraHours}</strong>`);
+                    }
+                });
+            }, 500)
+            if (_isAllLoad) {
+                //| Distinct Users
+                if (response.data) {
+                    _distinctUsersArray = [
+                        ...new Map(
+                            response.data.map(item => [
+                                item.user.id,
+                                {
+                                    value: item.user.id,
+                                    text: item.user.name.trim()
+                                }
+                            ])
+                        ).values()
+                    ];
+                    //|Show Hide User Search Panel
+                    if (_distinctUsersArray.length > 1) {
+                        $('#filterBar').css('display','block');
+                    }
+                    else{
+                        $('#filterBar').css('display', 'none');
+                    }
+                    loadFilterTimesheetDropdown();
                 }
             }
-        });
+
+            _isAllLoad = false;            
+        }
+        else {
+            errorExtractor(response);
+        }
+    }
+    function filterTimesheet(event, id = 0, text = null) {
+        //event.preventDefault();
+        event.stopPropagation();
+        var checkbox = event.currentTarget.querySelector('input[type="checkbox"]');
+
+        if (event.target.tagName !== 'INPUT') {
+            checkbox.checked = !checkbox.checked;
+
+            if (_filterArray.includes(id)) {
+                _filterArray = _filterArray.filter(v => v !== id);
+
+            } else {
+                _filterArray.push(id);
+            }
+        }        
+        const filteredResult = !_filterArray || _filterArray.length === 0
+            ? _allTimesheetsArray
+            : _allTimesheetsArray.filter(item =>
+                _filterArray.includes(item.user.id)
+            );
+
+        let fiteredResponse = {
+            request: {
+                status: 200
+            }
+            , data: filteredResult
+        };
+        getTimesheetCallBack(fiteredResponse)        
     }
     function addBranchRow() {
         addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', { id: 0 });
     }
+    function loadFilterTimesheetDropdown() {
+
+        var $filterTimesheetMenu = $('.filter-timesheet-menu');
+        $filterTimesheetMenu.empty();
+        let loggedInUser = getLoggedInUser();        
+        $.each(_distinctUsersArray, function (index, user) {            
+            li = `
+
+                                   <li>
+                                           <a class="dropdown-item" href="#" data-id="${user.value}" onclick="filterTimesheet(event,${user.value},'${user.text}');">
+                                            <input type="checkbox" class="fs-5 task-assignee-checkbox" />
+                                             <div class="assignee-avatar-sm profile-image">${getInitials(user.text)}</div>
+                                             <span class="user-name me-2">${user.text}</span>
+                                       </a>
+                                    </li>
+                                  `;
+
+            $filterTimesheetMenu.append(li);
+
+        });
+    }
+   
 </script>
