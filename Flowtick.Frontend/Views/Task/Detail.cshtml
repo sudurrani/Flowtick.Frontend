@@ -199,7 +199,11 @@
 
 							</div>
 							<div class="tab-pane fade" id="historyTabContent" role="tabpanel">
-								<h4>history</h4>
+								@{
+									@await Html.PartialAsync("~/Views/Shared/PartialViews/Board/_TaskHistoryPartialView.cshtml")
+									;
+								}
+
 
 							</div>
 							<div class="tab-pane fade" id="workLogTabContent" role="tabpanel">

@@ -1,4 +1,6 @@
 ﻿var _getProjectEpics = []
+
+
 $(function () {
     renderTinyMCE('#DescriptionEditor, #Comment');
     $('#modalTaskCode').click(function () {
@@ -26,6 +28,23 @@ $(function () {
         const taskId = $("#modalTaskID").val().trim();
         addComment(taskId);
     });
+
+    $(document).on('click', '#watchToggle', function () {
+        debugger;
+        var currentText = $('#watchText').text().trim();
+
+        if (currentText === "Start Watching") {
+            $('#watchText').text('Stop Watching');
+            $('.no-watchers').addClass('d-none');
+            $('.watchers-section').removeClass('d-none');
+        } else {
+            $('#watchText').text('Start Watching');
+            $('.no-watchers').removeClass('d-none');
+            $('.watchers-section').addClass('d-none');
+        }
+
+    });
+
 })
 
 function getTaskDetail(taskID) {
