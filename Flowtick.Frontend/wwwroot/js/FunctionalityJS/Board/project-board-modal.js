@@ -30,22 +30,116 @@ $(function () {
     });
 
     $(document).on('click', '#watchToggle', function () {
-        debugger;
         var currentText = $('#watchText').text().trim();
 
+        const taskId = $("#modalTaskID").val().trim();
+
         if (currentText === "Start Watching") {
-            $('#watchText').text('Stop Watching');
-            $('.no-watchers').addClass('d-none');
-            $('.watchers-section').removeClass('d-none');
+            addToWatchersList(taskId);
         } else {
-            $('#watchText').text('Start Watching');
-            $('.no-watchers').removeClass('d-none');
-            $('.watchers-section').addClass('d-none');
+            removeFromWatchersList(taskId);
         }
 
     });
-
+   
 })
+
+function getTaskWatchers(taskId) {
+
+    let url = `flowtick/task/${taskId}/watchers`;
+    apiRequest({
+        url: url,
+        type: 'GET',
+        data: {},
+        callBack: getTaskWatchersCallBack
+    });
+}
+var getTaskWatchersCallBack = function (response) {
+    if (response.request.status === 200) {
+
+        loadTaskWatchersList(response.data);
+    }
+    else {
+        errorExtractor(response);
+    }
+};
+function loadTaskWatchersList(watcherList) {
+    let html = "";
+
+    if (watcherList && watcherList.length > 0) {
+
+        let exsistLoginUser = watcherList.find(user => user.id == loginUserID) || null;
+
+        // Change button text
+        if (exsistLoginUser) {
+            $('#watchText').text('Stop Watching');
+        } else {
+            $('#watchText').text('Start Watching');
+        }
+
+        // Render watchers
+        watcherList.forEach(user => {
+            html += `
+                <li class="dropdown-item" data-id="${user.id}">
+                    <div class="assignee-avatar-sm profile-image"
+                         style="background:${user.colorCode}">
+                         ${getInitials(user.name)}
+                    </div>
+                    <span class="user-name ms-2">${user.name}</span>
+                </li>
+            `;
+        });
+
+    }
+    else {
+        $('#watchText').text('Start Watching');
+
+        html = `
+              <span class="text-center">No watchers yet!</span>
+        `;
+    }
+
+    $(".task-watcher-list").html(html);
+}
+
+function addToWatchersList(taskId) {
+
+    let url = `flowtick/task/${taskId}/watchers`;
+    apiRequest({
+        url: url,
+        type: 'POST',
+        data: {},
+        callBack: addToWatchersListCallBack
+    });
+}
+var addToWatchersListCallBack = function (response) {
+    if (response.request.status === 201) {
+        const taskId = $("#modalTaskID").val().trim();
+        getTaskWatchers(taskId);
+    }
+    else {
+        errorExtractor(response);
+    }
+};
+
+function removeFromWatchersList(taskId) {
+    let url = `flowtick/task/${taskId}/watchers`;
+    apiRequest({
+        url: url,
+        type: 'DELETE',
+        data: {},
+        callBack: removeFromWatchersListCallBack
+    });
+}
+var removeFromWatchersListCallBack = function (response) {
+    if (response.request.status === 204) {
+        const taskId = $("#modalTaskID").val().trim();
+        getTaskWatchers(taskId);
+    }
+    else {
+        errorExtractor(response);
+    }
+};
 
 function getTaskDetail(taskID) {
     let url = `flowtick/tasks/${taskID}`;

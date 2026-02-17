@@ -840,6 +840,7 @@ function openTaskModal(task = null) {
     /* Commented as betting Linking detail in task getbyId
     getProjectEpics();
     */
+    getTaskWatchers(task ? task.id : 0);
 }
 
 function loadProjectUserDropdown(dropdownList, targetSelectedUser, selectedUserId = null) {
