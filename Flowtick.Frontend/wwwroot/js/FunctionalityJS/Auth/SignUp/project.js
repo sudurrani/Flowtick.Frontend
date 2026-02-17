@@ -2,8 +2,18 @@
     e.preventDefault();
     createProject();
 });
-function createProject() {
-    debugger;
+function createProject() {    
+    let boardTypeId = null;
+    if (selectedTemplate == 'scrum') {
+        boardTypeId = 1
+    }
+    else if (selectedTemplate == 'basic') {
+        boardTypeId = 2
+    }
+    else if (selectedTemplate == 'kanban') {
+        boardTypeId = 3
+    }
+    
     if (customValidateForm('ProjectForm')) {
         const inputJSON = getFormDataAsJSONObject('ProjectForm');
         project = inputJSON.project;
@@ -12,7 +22,8 @@ function createProject() {
             type: 'POST',
             data: {
                 "name": project,
-                "email": userEmail
+                "email": userEmail,
+                "boardTypeId": boardTypeId
 
             },
             callBack: createProjectCallBack
