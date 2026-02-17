@@ -54,8 +54,8 @@ var loginProjectCallBack = function (response) {
 
         redirectToAction('/Dashboard/Main?ID=', 0);
     }
-    else if (response.request.status === 401) {
-        infoToastr('Invalid email or password', 'info');
+    else if (response.request.status === 401) {        
+        infoToastr(response.error.responseJSON.error, 'info');
         $("#btnLogin, #email, #password").removeClass("readonly").prop("disabled", false).text("Sign in");
     }
     else {
