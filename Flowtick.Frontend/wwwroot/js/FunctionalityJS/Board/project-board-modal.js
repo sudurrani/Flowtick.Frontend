@@ -781,7 +781,14 @@ function getTaskLogs(taskLogs) {
         const userName = log.user?.name?.trim() || "Unknown";
         const userColor = log.user?.colorCode || "#0d9488";
         // Build details rows
-        let detailsHtml = "";
+        let detailsHtml = "";        
+        let dateTime = new Date(log.createdDate).toLocaleDateString('en-GB').replace(/\//g, '-')
+            == 
+            new Date().toLocaleDateString('en-GB').replace(/\//g, '-')
+            ?
+            new Date(log.createdDate).toLocaleTimeString('en-GB')
+            :
+            `${new Date(log.createdDate).toLocaleDateString('en-GB').replace(/\//g, '-') } ${new Date(log.createdDate).toLocaleTimeString('en-GB') }`
 
         if (Array.isArray(log.details) && log.details.length > 0) {
 
@@ -820,7 +827,7 @@ function getTaskLogs(taskLogs) {
                             </div>
                             <div class="user-info">
                                 <span class="task-history-user-name">${userName}</span>
-                                <span class="task-history-time">Just now</span>
+                                <span class="task-history-time">${dateTime}</span>
                             </div>
                         </div>
                     </div>
