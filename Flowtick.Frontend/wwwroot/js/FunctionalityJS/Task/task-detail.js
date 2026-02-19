@@ -992,7 +992,6 @@
 		}
 	};
 function getTaskLogs(taskLogs) {
-	debugger;
 	const $timeline = $(".task-history-timeline");
 	$timeline.html(""); // clear previous logs
 
