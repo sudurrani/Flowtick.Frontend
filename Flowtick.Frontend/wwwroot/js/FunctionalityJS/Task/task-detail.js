@@ -428,6 +428,7 @@
 			 /// GET TASK ATTACHMENTS
 			 getTaskAttachments(getTaskData.id);
 			 /// GET TASK ATTACHMENTS
+			 getTaskLogs(getTaskData.taskLogs);
 		 }
 		 else {
 			 errorExtractor(response);
@@ -994,3 +995,81 @@
 			errorExtractor(response);
 		}
 	};
+function getTaskLogs(taskLogs) {
+	const $timeline = $(".task-history-timeline");
+	$timeline.html(""); // clear previous logs
+
+	if (!Array.isArray(taskLogs) || taskLogs.length === 0) {
+		$timeline.html("<div class='text-center text-muted'>No history found</div>");
+		return;
+	}
+
+	taskLogs.forEach(log => {
+
+		// Get user info
+		const userName = log.user?.name?.trim() || "Unknown";
+		const userColor = log.user?.colorCode || "#0d9488";
+		// Build details rows
+		let detailsHtml = "";
+		let dateTime = new Date(log.createdDate).toLocaleDateString('en-GB').replace(/\//g, '-')
+			==
+			new Date().toLocaleDateString('en-GB').replace(/\//g, '-')
+			?
+			new Date(log.createdDate).toLocaleTimeString('en-GB')
+			:
+			`${new Date(log.createdDate).toLocaleDateString('en-GB').replace(/\//g, '-')} ${new Date(log.createdDate).toLocaleTimeString('en-GB')}`
+
+		if (Array.isArray(log.details) && log.details.length > 0) {
+
+			log.details.forEach(detail => {
+
+				let oldValue = detail.from || "None";
+				let newValue = detail.to || "None";
+
+				detailsHtml += `
+                                <div class="change-row">
+                                    <span class="change-label">${detail.type}:</span>
+                                    <span class=" change-old">${oldValue}</span>
+                                    <span class="change-arrow">
+                                        <i class="bi bi-arrow-right"></i>
+                                    </span>
+                                    <span class=" change-new">${newValue}</span>
+                                </div>
+                `;
+			});
+
+		}
+
+		// Full log item
+		const logHtml = `
+            <div class="task-history-item">
+                <div class="task-history-icon status-change">
+                    <i class="bi bi-file-text"></i>
+                </div>
+                <div class="task-history-content">
+                    <div class="task-history-header">
+                        <div class="task-history-user">
+                            <div class="task-history-user-avatar" 
+                                 style="background:${userColor}">
+                               
+                                   ${getInitials(userName)}
+                            </div>
+                            <div class="user-info">
+                                <span class="task-history-user-name">${userName}</span>
+                                <span class="task-history-time">${dateTime}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-history-description">
+                        ${log.description || ""}
+                    </div>
+                    <div class="change-details">
+                        ${detailsHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+
+		$timeline.append(logHtml);
+	});
+}
