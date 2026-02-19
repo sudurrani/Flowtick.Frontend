@@ -528,7 +528,29 @@
 #AssigneeEstimateTime::placeholder {
     font-size: 12px;
 }
+/* Stop Watching Section */
+.watch-action {
+    cursor: pointer;
+    background: #fff;
+}
 
+    .watch-action:hover {
+        background: #f3f4f6;
+    }
+
+.watch-shortcut {
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 12px;
+    background: #f3f4f6;
+    color: var(--primary-color);
+}
+
+#watchText {
+    color: var(--primary-color);
+    font-size: 14px;
+}
 
 
  

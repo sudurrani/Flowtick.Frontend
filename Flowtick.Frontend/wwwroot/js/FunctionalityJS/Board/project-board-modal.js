@@ -237,6 +237,8 @@ var getTaskDetailCallBack = function (response) {
         /// GET TASK ATTACHMENTS
         getTaskAttachments(getTaskData.id);
         /// GET TASK ATTACHMENTS
+
+        getTaskLogs(getTaskData.taskLogs);
     }
     else {
         errorExtractor(response);
@@ -324,6 +326,7 @@ $(document).on('click', '.priority-option', function () {
 });
 //handle click of task status
 $(document).on("click", ".select-status .dropdown-item", function () {
+    debugger;
     // get values from clicked element
     var selectedStatusId = $(this).data("id");
     var text = $(this).text().trim();
@@ -467,6 +470,7 @@ var getProjectEpicsCallBack = function (response) {
 };
 
 function updateTask() {
+    debugger;
     const id = $("#modalTaskID").val();
     const taskTitle = $("#modalTaskTitle").val().trim();
     const taskDescription = tinymce.get('DescriptionEditor').getContent() //quill.root.innerHTML;
@@ -759,5 +763,80 @@ function renderComments(comments) {
             `;
 
         $wrapper.append(html);
+    });
+}
+
+function getTaskLogs(taskLogs) {
+    debugger;
+    console.log(taskLogs);
+
+    const $timeline = $(".task-history-timeline");
+    $timeline.html(""); // clear previous logs
+
+    if (!Array.isArray(taskLogs) || taskLogs.length === 0) {
+        $timeline.html("<div class='text-center text-muted'>No history found</div>");
+        return;
+    }
+
+    taskLogs.forEach(log => {
+
+        // Get user info
+        const userName = log.user?.name?.trim() || "Unknown";
+        const userColor = log.user?.colorCode || "#0d9488";
+        // Build details rows
+        let detailsHtml = "";
+
+        if (Array.isArray(log.details) && log.details.length > 0) {
+
+            log.details.forEach(detail => {
+
+                let oldValue = detail.from || "None";
+                let newValue = detail.to || "None";
+
+                detailsHtml += `
+                                <div class="change-row">
+                                    <span class="change-label">${detail.type}:</span>
+                                    <span class=" change-old">${oldValue}</span>
+                                    <span class="change-arrow">
+                                        <i class="bi bi-arrow-right"></i>
+                                    </span>
+                                    <span class=" change-new">${newValue}</span>
+                                </div>
+                `;
+            });
+
+        }
+
+        // Full log item
+        const logHtml = `
+            <div class="task-history-item">
+                <div class="task-history-icon status-change">
+                    <i class="bi bi-layers"></i>
+                </div>
+                <div class="task-history-content">
+                    <div class="task-history-header">
+                        <div class="task-history-user">
+                            <div class="task-history-user-avatar" 
+                                 style="background:${userColor}">
+                               
+                                   ${getInitials(userName)}
+                            </div>
+                            <div class="user-info">
+                                <span class="task-history-user-name">${userName}</span>
+                                <span class="task-history-time">Just now</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-history-description">
+                        ${log.description || ""}
+                    </div>
+                    <div class="change-details">
+                        ${detailsHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        $timeline.append(logHtml);
     });
 }
