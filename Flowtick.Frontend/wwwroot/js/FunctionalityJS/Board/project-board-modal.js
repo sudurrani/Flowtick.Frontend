@@ -326,7 +326,7 @@ $(document).on('click', '.priority-option', function () {
 });
 //handle click of task status
 $(document).on("click", ".select-status .dropdown-item", function () {
-    debugger;
+
     // get values from clicked element
     var selectedStatusId = $(this).data("id");
     var text = $(this).text().trim();
@@ -470,7 +470,7 @@ var getProjectEpicsCallBack = function (response) {
 };
 
 function updateTask() {
-    debugger;
+    
     const id = $("#modalTaskID").val();
     const taskTitle = $("#modalTaskTitle").val().trim();
     const taskDescription = tinymce.get('DescriptionEditor').getContent() //quill.root.innerHTML;
@@ -669,7 +669,7 @@ function loadChildTasksTable(parentTask = {}, tasksArray = []) {
     });
 }
 function addComment(taskId) {
-    debugger;
+  
     // alert(taskId);
     const commentDescription = tinymce.get('Comment').getContent();
 
@@ -717,8 +717,7 @@ function getComments() {
 }
 var getCommentsCallBack = function (response) {
     if (response.request.status === 200) {
-        // debugger;
-        console.log(response.data);
+
         const getComments = response.data;
         renderComments(getComments);
 
@@ -767,9 +766,7 @@ function renderComments(comments) {
 }
 
 function getTaskLogs(taskLogs) {
-    debugger;
-    console.log(taskLogs);
-
+  
     const $timeline = $(".task-history-timeline");
     $timeline.html(""); // clear previous logs
 
@@ -811,7 +808,7 @@ function getTaskLogs(taskLogs) {
         const logHtml = `
             <div class="task-history-item">
                 <div class="task-history-icon status-change">
-                    <i class="bi bi-layers"></i>
+                    <i class="bi bi-file-text"></i>
                 </div>
                 <div class="task-history-content">
                     <div class="task-history-header">

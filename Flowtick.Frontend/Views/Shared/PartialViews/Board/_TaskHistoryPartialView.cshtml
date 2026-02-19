@@ -75,9 +75,9 @@
     }
 
         .task-history-icon.status-change {
-            background: #dbeafe;
-            border-color: #3b82f6;
-            color: #1e40af;
+            background: #f3e8ff;
+            border-color: #a855f7;
+            color: #6b21a8;
         }
 
         .task-history-icon.title-change {
@@ -230,237 +230,18 @@
     .status-blocked {
         background: #fee2e2;
         color: #991b1b;
-     */}
+        } */
 
 </style>
 
 <div class="task-history-wrapper">
-
-    <!-- Header -->
-    <div class="task-history-top-header">
-        <h4><i class="bi bi-clock-task-history"></i> Task Activity Log</h4>
-        <p class="task-history-subtitle">Complete history of all changes made to this task</p>
-    </div>
-
-    <!-- Filters -->
-    <div class="task-history-tabs">
-        <ul class="nav nav-tabs tab-buttons" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="allActivityTab" data-bs-toggle="tab" href="#taskHistoryAllActivityTabContent" role="tab">
-                    All Activity
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link " id="commentsTab" data-bs-toggle="tab" href="#taskHistoryStatusChangeTabContent" role="tab">
-                    Status Change
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="historyTab" data-bs-toggle="tab" href="#taskHistoryAssignmentsTabContent" role="tab">
-                    Assignments
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="workLogTab" data-bs-toggle="tab" href="#taskHistoryUpdatesTabContent" role="tab">
-                    Updates
-                </a>
-            </li>
-        </ul>
-    </div>
     <div class="tab-content">
         <div class="tab-pane fade show active " id="taskHistoryAllActivityTabContent" role="tabpanel">
             <!-- Timeline -->
             <!-- task-history Timeline -->
             <div class="task-history-timeline mt-4">
 
-                <!-- Status Change -->
-             @*    <div class="task-history-item">
-                    <div class="task-history-icon status-change">
-                        <i class="bi bi-arrow-repeat"></i>
-                    </div>
-                    <div class="task-history-content">
-                        <div class="task-history-header">
-                            <div class="task-history-user">
-                                <div class="task-history-user-avatar">JS</div>
-                                <div class="user-info">
-                                    <span class="task-history-user-name">John Smith</span>
-                                    <span class="task-history-time">2 hours ago</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="task-history-description">
-                            Changed task status
-                        </div>
-                        <div class="change-details">
-                            <div class="change-row">
-                                <span class="change-label">Status:</span>
-                                <span class="status-badge status-in-progress change-old">In Progress</span>
-                                <span class="change-arrow"><i class="bi bi-arrow-right"></i></span>
-                                <span class="status-badge status-done change-new">Done</span>
-                            </div>
-                        </div>
-                    </div>
-                </div> *@
 
-                <!-- Assignee Change -->
-                @* <div class="task-history-item">
-                    <div class="task-history-icon assignee-change">
-                        <i class="bi bi-person"></i>
-                    </div>
-                    <div class="task-history-content">
-                        <div class="task-history-header">
-                            <div class="task-history-user">
-                                <div class="task-history-user-avatar">EM</div>
-                                <div class="user-info">
-                                    <span class="task-history-user-name">Emily Martinez</span>
-                                    <span class="task-history-time">5 hours ago</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="task-history-description">
-                            Re-assigned the task
-                        </div>
-                        <div class="change-details">
-                            <div class="change-row">
-                                <span class="change-label">Assignee:</span>
-                                <span class="change-old">Emily Martinez</span>
-                                <span class="change-arrow"><i class="bi bi-arrow-right"></i></span>
-                                <span class="change-new">John Smith</span>
-                            </div>
-                        </div>
-                    </div>
-                </div> *@
-
-                <!-- Title Change -->
-            @*     <div class="task-history-item">
-                    <div class="task-history-icon title-change">
-                        <i class="bi bi-pencil"></i>
-                    </div>
-                    <div class="task-history-content">
-                        <div class="task-history-header">
-                            <div class="task-history-user">
-                                <div class="task-history-user-avatar">SK</div>
-                                <div class="user-info">
-                                    <span class="task-history-user-name">Sarah Kim</span>
-                                    <span class="task-history-time">Yesterday at 3:45 PM</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="task-history-description">
-                            Updated task title
-                        </div>
-                        <div class="change-details">
-                            <div class="change-row">
-                                <span class="change-label">Title:</span>
-                                <span class="change-old">Fix login bug</span>
-                                <span class="change-arrow"><i class="bi bi-arrow-right"></i></span>
-                                <span class="change-new">Fix authentication bug in login flow</span>
-                            </div>
-                        </div>
-                    </div>
-                </div> *@
-
-                <!-- Description Change -->
-               @*  <div class="task-history-item">
-                    <div class="task-history-icon description-change">
-                        <i class="bi bi-file-text"></i>
-                    </div>
-                    <div class="task-history-content">
-                        <div class="task-history-header">
-                            <div class="task-history-user">
-                                <div class="task-history-user-avatar">SK</div>
-                                <div class="user-info">
-                                    <span class="task-history-user-name">Sarah Kim</span>
-                                    <span class="task-history-time">Yesterday at 3:42 PM</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="task-history-description">
-                            Updated task description
-                        </div>
-                        <div class="change-details">
-                            <div class="change-row">
-                                <span class="change-label">Description:</span>
-                                <div style="flex: 1;">
-                                    <div class="mb-2">
-                                        <small class="text-muted">Previous:</small>
-                                        <div class="change-old" style="display: block; margin-top: 0.25rem;">
-                                            Users cannot login to the system
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <small class="text-muted">Current:</small>
-                                        <div class="change-new" style="display: block; margin-top: 0.25rem;">
-                                            Users are experiencing authentication errors when trying to login. The issue appears to be related to session token validation. Need to investigate and fix.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> *@
-
-                <!-- Multiple Changes -->
-              @*   <div class="task-history-item">
-                    <div class="task-history-icon status-change">
-                        <i class="bi bi-layers"></i>
-                    </div>
-                    <div class="task-history-content">
-                        <div class="task-history-header">
-                            <div class="task-history-user">
-                                <div class="task-history-user-avatar">EM</div>
-                                <div class="user-info">
-                                    <span class="task-history-user-name">Emily Martinez</span>
-                                    <span class="task-history-time">2 days ago</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="task-history-description">
-                            Made multiple changes
-                        </div>
-                        <div class="change-details">
-                            <div class="change-row">
-                                <span class="change-label">Status:</span>
-                                <span class="status-badge status-todo change-old">To Do</span>
-                                <span class="change-arrow"><i class="bi bi-arrow-right"></i></span>
-                                <span class="status-badge status-in-progress change-new">In Progress</span>
-                            </div>
-                            <div class="change-row">
-                                <span class="change-label">Priority:</span>
-                                <span class="change-old">Medium</span>
-                                <span class="change-arrow"><i class="bi bi-arrow-right"></i></span>
-                                <span class="change-new">High</span>
-                            </div>
-                            <div class="change-row">
-                                <span class="change-label">Due Date:</span>
-                                <span class="change-old">Feb 10, 2026</span>
-                                <span class="change-arrow"><i class="bi bi-arrow-right"></i></span>
-                                <span class="change-new">Feb 8, 2026</span>
-                            </div>
-                        </div>
-                    </div>
-                </div> *@
-
-                <!-- Task Created -->
-               @*  <div class="task-history-item">
-                    <div class="task-history-icon created">
-                        <i class="bi bi-plus-circle"></i>
-                    </div>
-                    <div class="task-history-content">
-                        <div class="task-history-header">
-                            <div class="task-history-user">
-                                <div class="task-history-user-avatar">EM</div>
-                                <div class="user-info">
-                                    <span class="task-history-user-name">Emily Martinez</span>
-                                    <span class="task-history-time">3 days ago</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="task-history-description">
-                            <strong>Created this task</strong>
-                        </div>
-                    </div>
-                </div> *@
 
             </div>
 
