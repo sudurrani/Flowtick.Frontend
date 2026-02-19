@@ -751,8 +751,7 @@
 		 });
 	 }
 	 var getCommentsCallBack = function (response) {
-		 if (response.request.status === 200) {
-			 console.log(response.data);
+		 if (response.request.status === 200) {			 
 			 const getComments = response.data;
 			 renderComments(getComments);
 
@@ -769,7 +768,12 @@
 		 $.each(comments, function (index, comment) {
 			 const isLoginUser = comment.user.id === Number(loginUserID);
 			 const sideClass = isLoginUser ? "right" : "left";
-			 const userName = comment.user.name
+             const userName = comment.user.name
+
+             const utcDateTime = new Date(`${comment.date}T${comment.time}:00Z`);
+             //comment.date  = utcDateTime.toLocaleDateString(); 2/2/2026
+             comment.time = utcDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });    
+
 			 const html = `
 					 <div class="comment-item ${sideClass}" data-id="${comment.id}">
 
