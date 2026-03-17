@@ -176,22 +176,49 @@
                 if (row.timeOut != null) {
                     row.timeOut = new Date(row.timeOut).toLocaleTimeString('en-GB');
                 }
-                row.name = row.user.name;                
+                row.name = row.user.name;
                 addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', row);
-                
+
 
             });
             */
             setTimeout(function () {
                 $('#TimesheetTbody tr').each(function (index) {
+                    if ($(this).find('td.tdhours').text() != null && $(this).find('td.tdhours').text() != '') {
+                        let hours = $(this).find('td.tdhours').text();
+                        let colorCode = hours == 'Absent'
+                            ? '#dc3545' //red
+                            //: shorHours == 'Absent'
+                            : '#000' //black
+                        //: '#28a745'; //green
 
+                        let tag = hours == 'Absent'
+                            ? 'strong'
+                            : 'span';
+                        $(this).find('td.tdhours').html(`<${tag} style="color:${colorCode}">${hours}</${tag}>`);
+                    }
                     if ($(this).find('td.tdshortHr').text() != null && $(this).find('td.tdshortHr').text() != '') {
                         let shorHours = $(this).find('td.tdshortHr').text();
-                        $(this).find('td.tdshortHr').html(`<strong style="color:#dc3545">${shorHours}</strong>`);
+                        let colorCode = shorHours == 'Off'
+                            ? '#000'
+                            : '#dc3545';                            
+                        let tag = shorHours == 'Absent'
+                            ? 'strong'
+                            : 'span';
+                        $(this).find('td.tdshortHr').html(`<${tag} style="color:${colorCode}">${shorHours}</${tag}>`);
                     }
                     if ($(this).find('td.tdextraHr').text() != null && $(this).find('td.tdextraHr').text() != '') {
-                        let extraHours = $(this).find('td.tdextraHr').text();
-                        $(this).find('td.tdextraHr').html(`<strong style="color:#28a745!important">${extraHours}</strong>`);
+                        let extraHours = $(this).find('td.tdextraHr').text();                        
+                        let colorCode = extraHours == 'Off'
+                            ? '#000' //black
+                            : extraHours == 'Absent'
+                                ? '#dc3545' //red
+                                : '#28a745'; //green
+
+                        let tag = extraHours == 'Absent'
+                            ? 'strong'
+                            : 'span';
+                        $(this).find('td.tdextraHr').html(`<${tag} style="color:${colorCode}!important">${extraHours}</${tag}>`);
                     }
                 });
             }, 500)
@@ -211,16 +238,16 @@
                     ];
                     //|Show Hide User Search Panel
                     if (_distinctUsersArray.length > 1) {
-                        $('#filterBar').css('display','block');
+                        $('#filterBar').css('display', 'block');
                     }
-                    else{
+                    else {
                         $('#filterBar').css('display', 'none');
                     }
                     loadFilterTimesheetDropdown();
                 }
             }
 
-            _isAllLoad = false;            
+            _isAllLoad = false;
         }
         else {
             errorExtractor(response);
@@ -240,7 +267,7 @@
             } else {
                 _filterArray.push(id);
             }
-        }        
+        }
         const filteredResult = !_filterArray || _filterArray.length === 0
             ? _allTimesheetsArray
             : _allTimesheetsArray.filter(item =>
@@ -253,7 +280,7 @@
             }
             , data: filteredResult
         };
-        getTimesheetCallBack(fiteredResponse)        
+        getTimesheetCallBack(fiteredResponse)
     }
     function addBranchRow() {
         addTableRowsBySchema(timesheetSchema, 'TimesheetTbody', { id: 0 });
@@ -262,22 +289,22 @@
 
         var $filterTimesheetMenu = $('.filter-timesheet-menu');
         $filterTimesheetMenu.empty();
-        let loggedInUser = getLoggedInUser();        
-        $.each(_distinctUsersArray, function (index, user) {            
+        let loggedInUser = getLoggedInUser();
+        $.each(_distinctUsersArray, function (index, user) {
             li = `
 
-                                   <li>
-                                           <a class="dropdown-item" href="#" data-id="${user.value}" onclick="filterTimesheet(event,${user.value},'${user.text}');">
-                                            <input type="checkbox" class="fs-5 task-assignee-checkbox" />
-                                             <div class="assignee-avatar-sm profile-image">${getInitials(user.text)}</div>
-                                             <span class="user-name me-2">${user.text}</span>
-                                       </a>
-                                    </li>
-                                  `;
+                                       <li>
+                                               <a class="dropdown-item" href="#" data-id="${user.value}" onclick="filterTimesheet(event,${user.value},'${user.text}');">
+                                                <input type="checkbox" class="fs-5 task-assignee-checkbox" />
+                                                 <div class="assignee-avatar-sm profile-image">${getInitials(user.text)}</div>
+                                                 <span class="user-name me-2">${user.text}</span>
+                                           </a>
+                                        </li>
+                                      `;
 
             $filterTimesheetMenu.append(li);
 
         });
     }
-   
+
 </script>
