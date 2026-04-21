@@ -161,7 +161,9 @@
             $('#TimesheetTbody').empty();
             const renderData = response.data.map(item => ({
                 ...item,
-                timeIn: new Date(item.timeIn).toLocaleTimeString('en-GB'),
+                timeIn: item.timeIn 
+                        ? new Date(item.timeIn).toLocaleTimeString('en-GB')
+                        : null,
                 timeOut: item.timeOut
                     ? new Date(item.timeOut).toLocaleTimeString('en-GB')
                     : null,
