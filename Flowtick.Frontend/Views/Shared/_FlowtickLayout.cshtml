@@ -315,16 +315,49 @@
 
                    let isOwner = project.role && project.role.name === "Owner";
 
-                    $('#ProjectContainer').append(
-                        `<a href="#" class="nav-link" data-bs-toggle="tooltip" data-bs-placement="right" title="${project.name}"
-                                                        onclick="redirectToAction('/Board/Project?project=${project.name}&id=',${project.id})">
-                                                                    <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
-                                                            <span class="nav-link-text">${project.name}</span>
-                                                            ${isOwner ? `<span class="ms-auto three-dots" style="z-index:1000;" onclick="handleThreeDots(event, ${project.id})">
-                                                                            <i class="bi bi-three-dots" style="margin-right:0;"></i>
-                                                             </span>` : ''}
-                                                </a>`
-                    );
+                     $('#ProjectContainer').append(
+                            `<div class="project-item">
+
+                                <!-- Parent Project -->
+                                <a href="#" class="nav-link project-toggle d-flex align-items-center"
+                                    onclick="toggleProjectMenu(event, ${project.id})"
+                                    data-bs-toggle="tooltip" title="${project.name}">
+
+                                    <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
+                                    <span class="nav-link-text ">${project.name}</span>
+
+                                    ${isOwner ? `
+                                    <span class="ms-auto three-dots" onclick="handleThreeDots(event, ${project.id})">
+                                        <i class="bi bi-three-dots"></i>
+                                    </span>` : ''}
+
+                                </a>
+
+                                <!-- Submenu -->
+                                <div class="project-submenu ps-4" id="submenu-${project.id}" style="display:none;">
+
+                                    <a href="#" class="nav-link"
+                                       onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"data-bs-toggle="tooltip" title="Scrum Board">
+                                          <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
+                                          <span class="nav-link-text ">Scrum Board</span>
+                                    </a>
+
+                                    <a href="#" class="nav-link"
+                                        onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"data-bs-toggle="tooltip" title="Kanban Board">
+                                           <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
+                                          <span class="nav-link-text ">Kanban Board</span>
+                                    </a>
+
+                                    <a href="#" class="nav-link"
+                                        onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"data-bs-toggle="tooltip" title="Sprints">
+                                          <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
+                                          <span class="nav-link-text ">Sprints</span>
+                                    </a>
+
+                                </div>
+
+                            </div>`
+                            );
                     // Dashboard project cards
                     $container.append(`
                                                                     <div class="col-12 col-sm-6 col-md-4">
@@ -358,6 +391,17 @@
 
             }
         };
+        function toggleProjectMenu(e, projectId) {
+            e.preventDefault();
+
+            let submenu = $('#submenu-' + projectId);
+
+            // toggle current
+            submenu.slideToggle(200);
+
+            // OPTIONAL: close others
+            $('.project-submenu').not(submenu).slideUp(200);
+        }
         // Initialize Tooltips
         function initTooltips() {
             const sidebar = $('#sidebar');
