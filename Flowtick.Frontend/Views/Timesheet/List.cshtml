@@ -123,6 +123,9 @@
                     let utcDateTime = localDateTime.toISOString();
                     row.timeOut = utcDateTime.split("T")[1].split(".")[0];
                 }
+                if (row.timeIn == undefined || row.timeIn == '') {
+                    row.timeIn = null;
+                }
 
             });
             let url = `ess/timesheets`;
