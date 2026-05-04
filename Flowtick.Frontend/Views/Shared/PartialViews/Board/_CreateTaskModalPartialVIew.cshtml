@@ -1,0 +1,328 @@
+﻿
+<link href="~/css/board/project-board-modal.css" rel="stylesheet" />
+<style>
+	/* ===== MODAL Design Start ===== */
+	.create-task-modal {
+		position: fixed;
+		inset: 0;
+		background: rgba(140, 144, 152, 0.75);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 2;
+		overflow: auto;
+		padding: 20px;
+	}
+</style>
+<!-- Task Modal -->
+<div class="create-task-modal" style="display:none" id="openCreateTaskModal">
+	@* 	<input type="hidden" id="modalTaskID" />
+	<input type="hidden" id="modalSubTaskID" /> *@
+	<div class="task-modal-box">
+
+		<!-- HEADER -->
+		<div class="task-modal-header">
+			<!-- LEFT ICONS -->
+			<div class="header-left-icons" style="display:flex; align-items:center; gap:0px;">
+				<!-- Epic/Task/Bug dropdown -->
+				<div class="dropdown">
+					<a class="text-decoration-none  dropdown-toggle  create-task-type-btn " data-bs-toggle="dropdown" id="createModalTaskTypeID" tabindex="0">
+						<i class=""></i><span class="ms-2 text-black"></span>
+					</a>
+					<div class="dropdown-menu create-task-type-menu">
+						<!-- Dynamic items will load here -->
+					</div>
+				</div>
+			</div>
+			<!-- RIGHT ICONS -->
+			<div class="header-right-icons" style="margin-left:auto; display:flex; align-items:center; gap:8px; padding-top:2px; padding-bottom:2px;">
+				<span class="header-right-icon" onclick="closCreateTaskModal();"><i class="bi bi-x-lg btn-close-modal"></i></span>
+			</div>
+
+		</div>
+
+		<!-- BODY -->
+		<div class="task-modal-body">
+
+			<!-- LEFT PANEL -->
+			<div class="task-left">
+
+				<!-- TASK TITLE MOVED HERE -->
+				<div class="task-title" style="margin-bottom:12px;">
+				     <input type="text" class="task-title-input" id="modalCreateTaskTitle" placeholder="Task Title" />
+				</div>
+
+				<label class="section-title">Description</label>
+
+				@await Html.PartialAsync(
+									"~/Views/Shared/PartialViews/Common/_EditorPartialView.cshtml",
+									new Flowtick.Frontend.Models.EditorPartialView.EditorPartialViewInputModel
+				{
+					IdAttr = "CreateTaskDescriptionEditor"
+				})
+
+				<div class="row mt-1">
+					<div class="col-10">
+					</div>
+					<div class="col-2 text-end">
+						@* <div class="action-buttons"> *@
+						<button onclick="createTaskFromModal()" class="btn-create"><i class="bi bi-plus"></i>Save</button>
+						@* 	<button id="cancel-description" class="cancel-button">Cancel</button> *@
+						@* </div> *@
+					</div>
+				</div>
+			</div>
+
+			<!-- RIGHT PANEL -->
+			<div class="task-right">
+				<div class="status-row">
+					<!-- Task staus dropdown -->
+					<div class="dropdown">
+						<a class="text-decoration-none dropdown-toggle btn-create-task-status btn-create fw-bold p-2 cursor-pointer" data-bs-toggle="dropdown" style="font-size: 0.8rem;">
+							<span id="taskStatusID"></span>
+						</a>
+						<ul class="dropdown-menu create-task-status-list">
+							<!-- Dynamic items will load here -->
+						</ul>
+					</div>
+					<span class="header-right-icon"><i class="bi bi-lightning-charge task-icon"></i></span>
+				</div>
+
+				<div class="right-scroll">
+					<div class="detail-block">
+						<div class="label">Assignee</div>
+						<div class="dropdown mt-2">
+							<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<div class="create-task-selected-assignee d-flex align-items-center" id="createTaskModalAssigneeID" style="cursor:pointer">
+									@* selected value here *@
+								</div>
+							</div>
+							<div class="dropdown-menu flowtick-dropdown">
+								<div class="flowtick-dropdown-search">
+									<i class="bi bi-search"></i>
+									<input type="text" class="seach-user-dropdown" placeholder="Search users">
+								</div>
+								<ul class="dropdown-list create-task-asignee-user-list">
+									@* 	dropdown list  here *@
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="detail-block">
+						<div class="label">Reviewer</div>
+						<div class="dropdown mt-2">
+							<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<div class="create-task-selected-reviewer d-flex align-items-center" id="createTaskModalReviewerID" style="cursor:pointer">
+									@* selected value here *@
+								</div>
+							</div>
+							<div class="dropdown-menu flowtick-dropdown">
+								<div class="flowtick-dropdown-search">
+									<i class="bi bi-search"></i>
+									<input type="text" class="seach-user-dropdown" placeholder="Search users">
+								</div>
+								<ul class="dropdown-list create-task-reviewer-user-list">
+									@* 	dropdown list  here *@
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="detail-block">
+						<div class="label">Reporter</div>
+						<div class="dropdown mt-2">
+							<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+								<div class="create-task-selected-reporter d-flex align-items-center" id="createTaskModalReporterID" style="cursor:pointer">
+									@* selected value here *@
+								</div>
+							</div>
+							<div class="dropdown-menu flowtick-dropdown">
+								<div class="flowtick-dropdown-search">
+									<i class="bi bi-search"></i>
+									<input type="text" class="seach-user-dropdown" placeholder="Search users">
+								</div>
+								<ul class="dropdown-list create-task-reporter-user-list">
+									@* 	dropdown list  here *@
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+		//handle click of task type
+	$(document).on("click", ".create-task-type-menu .dropdown-item", function (e) {
+		e.preventDefault();
+
+		// Get values from clicked element
+		var id = $(this).data("id");
+		var icon = $(this).find("i").attr("class");
+		var style = $(this).find("i").attr("style");
+		var text = $(this).text().trim();
+
+		// Find the specific dropdown button for this menu
+		var $btn = $(this).closest(".dropdown").find(".create-task-type-btn");
+
+		// Update only this button
+		$btn.attr("data-id", id);
+		$btn.find("i").attr("class", icon).attr("style", style);
+		$(".create-task-type-btn span").text(text);
+	});
+
+		//handle click of task status
+	$(document).on("click", ".create-task-status-list .dropdown-item", function () {
+
+		// get values from clicked element
+		var selectedStatusId = $(this).data("id");
+		var text = $(this).text().trim();
+		// update selected text
+		$(".btn-create-task-status").attr("data-id", selectedStatusId);
+		$(".btn-create-task-status span").text(text);
+	});
+
+		// handle click for assignee in modal
+	$(document).on("click", ".create-task-asignee-user-list .dropdown-item", function () {
+
+		let name = $(this).data("name");
+		let userId = $(this).data("id");
+		let backgrounColor = $(this).find(".profile-image").attr("style");
+		let avatar = `<div class="assignee-avatar-sm profile-image"  data-user-id="${userId}" style="${backgrounColor}">${getInitials(name)}</div>`;
+		$(".create-task-selected-assignee").html(`${avatar} <span class="user-name ms-2">${name}</span> `);
+	});
+	// handle click for reporter
+	$(document).on("click", ".create-task-reporter-user-list .dropdown-item", function () {
+
+		let name = $(this).data("name");
+		let reporterId = $(this).data("id");
+		let backgrounColor = $(this).find(".profile-image").attr("style");
+
+		let avatar = `<div class="assignee-avatar-sm profile-image" data-user-id="${reporterId}" style="${backgrounColor}">${getInitials(name)}</div> `;
+
+		$(".create-task-selected-reporter").html(` ${avatar} <span class="user-name ms-2">${name}</span>`);
+	});
+
+	// handle click for reviewer
+	$(document).on("click", ".create-task-reviewer-user-list .dropdown-item", function () {
+
+		let name = $(this).data("name");
+		let reviewerId = $(this).data("id");
+		let backgrounColor = $(this).find(".profile-image").attr("style");
+
+		let avatar = `<div class="assignee-avatar-sm profile-image" data-user-id="${reviewerId}" style="${backgrounColor}">${getInitials(name)}</div> `;
+
+		$(".create-task-selected-reviewer").html(`  ${avatar}  <span class="user-name ms-2">${name}</span>`);
+	});
+
+	function openCreateTaskModal(){
+
+		$(".create-task-modal").fadeIn(500);
+
+		loadProjectUserDropdown("create-task-asignee-user-list", "create-task-selected-assignee",loginUserID)
+		loadProjectUserDropdown("create-task-reporter-user-list", "create-task-selected-reporter",loginUserID);
+		loadProjectUserDropdown("create-task-reviewer-user-list", "create-task-selected-reviewer",loginUserID);
+		loadCreateTaskStatusDropdown();
+		loadCreateTaskTypeDropdown();
+	}
+
+	function closCreateTaskModal() {
+		$(".create-task-modal").fadeOut(200);
+	}
+	function loadCreateTaskStatusDropdown() {
+
+		$(".btn-create-task-status").attr("data-id", 1);
+		$(".btn-create-task-status span").text('ToDo');
+		var $taskStatusList = $('.create-task-status-list');
+		$taskStatusList.empty(); // Clear old items
+
+		$.each(_taskStatusesArray, function (index, item) {
+			var li = `
+				      <li>
+						<a class="dropdown-item" href="#" data-id="${item.id}" style="font-size:13px;">
+							<i class="${item.icon} " ${item.iconCSS}></i>
+								${item.description}
+						 </a>
+					  </li>
+				 `;
+
+			$taskStatusList.append(li);
+		});
+	}
+
+	function loadCreateTaskTypeDropdown() {
+
+		// default selected type in create task  id = 3
+		var defaultItem = _taskTypes.find(x => x.id == 3);
+		if (defaultItem) {
+			$(".create-task-type-btn").attr("data-id", defaultItem.id);
+			$(".create-task-type-btn i").attr("class", defaultItem.icon).attr("style", defaultItem.iconCSS.replace('style="', '').replace('"', ''));
+
+			$(".create-task-type-btn span").text(defaultItem.description);
+		}
+
+		var $taskTypeMenu = $('.create-task-type-menu');
+
+		$taskTypeMenu.empty(); // Clear old items
+
+		$.each(_taskTypes, function (index, item) {
+			var li = `
+				<li>
+					 <a class="dropdown-item" href="#" data-id="${item.id}">
+						 <i class="${item.icon} " ${item.iconCSS}></i>
+						 ${item.description}
+					 </a>
+				 </li>
+			`;
+			$taskTypeMenu.append(li);
+		});
+	}
+
+	function createTaskFromModal() { 
+		var inputJSON = {
+			"title": $("#modalCreateTaskTitle").val().trim(),
+			"description": tinymce.get('CreateTaskDescriptionEditor').getContent(),
+			"assigneeId": $("#createTaskModalAssigneeID .profile-image").data("user-id"),
+			"reporterId":  $("#createTaskModalReviewerID .profile-image").data("user-id"),
+			"reviewerId": $("#createTaskModalReporterID .profile-image").data("user-id"),
+			"statusId": $('.btn-create-task-status').data("id"),
+			"typeId": $("#createModalTaskTypeID").data("id"),
+			"parentId": null   // epicId is empty
+		};
+
+		// Validation after object creation
+		if (!inputJSON.title) {
+		    infoToastr("Title is required", 'info');
+			return;
+		}
+
+		if (!inputJSON.description || inputJSON.description.trim() === "" || inputJSON.description === "<p></p>") {
+			infoToastr("Description is required", 'info');
+			return;
+		}
+
+		let url = `flowtick/project/${projectId}/tasks`;
+		//console.log(inputJSON);
+		apiRequest({
+			url: url,
+			type: 'POST',
+			data: inputJSON,
+			callBack: createTaskFromModalCallBack
+		});
+	}
+	var createTaskFromModalCallBack = function (response, options) {
+		if (response.request.status === 201) {
+			successToastr($("#modalCreateTaskTitle").val(), 'Task');
+			getProjectTasks();
+			$(".create-task-modal").fadeOut(200);
+			$("#modalCreateTaskTitle").val("");
+			tinymce.get('CreateTaskDescriptionEditor').setContent('');
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+</script>

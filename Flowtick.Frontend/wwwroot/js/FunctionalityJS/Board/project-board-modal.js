@@ -2,7 +2,7 @@
 
 
 $(function () {
-    renderTinyMCE('#DescriptionEditor, #Comment');
+    renderTinyMCE('#DescriptionEditor, #Comment, #CreateTaskDescriptionEditor');
     $('#modalTaskCode').click(function () {
         redirectToAction(`/Task/Detail?project=${projectName}&projectId=${encodeURIComponent(encryptNumber(projectId))}&id=`, $('#modalTaskID').val());
     })

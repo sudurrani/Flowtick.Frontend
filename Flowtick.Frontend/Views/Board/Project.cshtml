@@ -48,10 +48,22 @@
         Sprint
         <i class="bi bi-chevron-down"></i>
     </button>
-    <button class="btn-create ms-auto" data-bs-toggle="modal" data-bs-target="#taskModal">
+@*     <button class="btn-create ms-auto" data-bs-toggle="modal" data-bs-target="#taskModal">
         <i class="bi bi-plus-lg"></i>
         Create Issue
-    </button>
+    </button> *@
+    <div class="btn-group ms-auto">
+        <button class="btn-create  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-plus-lg"></i>
+            Create
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item" href="#" data-bs-toggle="modal"data-bs-target="#createProjectModal">Project</a>
+            </li>
+            <li><a class="dropdown-item" href="#" onclick="openCreateTaskModal()">Task</a></li>
+        </ul>
+    </div>
 </div>
 
 <!-- Board Container -->
@@ -67,6 +79,10 @@
     ;
 }
 
+@{
+    @await Html.PartialAsync("~/Views/Shared/PartialViews/Board/_createtaskmodalpartialview.cshtml")
+    ;
+}
 
 <script src="~/layout/js/quill.js"></script>
 <script src="~/js/functionalityjs/board/project-board.js"></script>
