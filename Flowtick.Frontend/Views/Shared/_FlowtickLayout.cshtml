@@ -312,8 +312,23 @@
                 $sidebar.html("");
 
                 $.each(projects, function (index, project) {
-
                    let isOwner = project.role && project.role.name === "Owner";
+
+                   let boardsHtml = '';
+
+                    //  loop boards here
+                    if (project.boards && project.boards.length > 0) {
+                        $.each(project.boards, function (i, board) {
+                            boardsHtml += `
+                                <a href="#" class="nav-link"
+                                   onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"
+                                   data-bs-toggle="tooltip" title="${board.name}">
+                                   <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
+                                   <span class="nav-link-text ">${board.name}</span>
+                                </a>
+                            `;
+                        });
+                    }
 
                      $('#ProjectContainer').append(
                             `<div class="project-item">
@@ -335,25 +350,7 @@
 
                                 <!-- Submenu -->
                                 <div class="project-submenu ps-4" id="submenu-${project.id}" style="display:none;">
-
-                                    <a href="#" class="nav-link"
-                                       onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"data-bs-toggle="tooltip" title="Scrum Board">
-                                          <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
-                                          <span class="nav-link-text ">Scrum Board</span>
-                                    </a>
-
-                                    <a href="#" class="nav-link"
-                                        onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"data-bs-toggle="tooltip" title="Kanban Board">
-                                           <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
-                                          <span class="nav-link-text ">Kanban Board</span>
-                                    </a>
-
-                                    <a href="#" class="nav-link"
-                                        onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"data-bs-toggle="tooltip" title="Sprints">
-                                          <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
-                                          <span class="nav-link-text ">Sprints</span>
-                                    </a>
-
+                                       ${boardsHtml}
                                 </div>
 
                             </div>`
