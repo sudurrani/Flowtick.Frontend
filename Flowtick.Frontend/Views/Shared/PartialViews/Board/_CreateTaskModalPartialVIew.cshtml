@@ -78,8 +78,8 @@
 				<div class="status-row">
 					<!-- Task staus dropdown -->
 					<div class="dropdown">
-						<a class="text-decoration-none dropdown-toggle btn-create-task-status btn-create fw-bold p-2 cursor-pointer" data-bs-toggle="dropdown" style="font-size: 0.8rem;">
-							<span id="taskStatusID"></span>
+						<a class="text-decoration-none dropdown-toggle btn-create-task-status btn-create fw-bold p-2 cursor-pointer" id="createTaskModalStatusID" data-bs-toggle="dropdown" style="font-size: 0.8rem;">
+							<span></span>
 						</a>
 						<ul class="dropdown-menu create-task-status-list">
 							<!-- Dynamic items will load here -->
@@ -178,10 +178,10 @@
 	$(document).on("click", ".create-task-status-list .dropdown-item", function () {
 
 		// get values from clicked element
-		var selectedStatusId = $(this).data("id");
+		var selectedStatusId = $(this).data("status-id");
 		var text = $(this).text().trim();
 		// update selected text
-		$(".btn-create-task-status").attr("data-id", selectedStatusId);
+		$(".btn-create-task-status").attr("data-status-id", selectedStatusId);
 		$(".btn-create-task-status span").text(text);
 	});
 
@@ -234,7 +234,7 @@
 	}
 	function loadCreateTaskStatusDropdown() {
 
-		$(".btn-create-task-status").attr("data-id", 1);
+		$(".btn-create-task-status").attr("data-status-id", 1);
 		$(".btn-create-task-status span").text('ToDo');
 		var $taskStatusList = $('.create-task-status-list');
 		$taskStatusList.empty(); // Clear old items
@@ -242,7 +242,7 @@
 		$.each(_taskStatusesArray, function (index, item) {
 			var li = `
 				      <li>
-						<a class="dropdown-item" href="#" data-id="${item.id}" style="font-size:13px;">
+						<a class="dropdown-item" href="#" data-status-id="${item.id}" style="font-size:13px;">
 							<i class="${item.icon} " ${item.iconCSS}></i>
 								${item.description}
 						 </a>
@@ -282,13 +282,14 @@
 	}
 
 	function createTaskFromModal() { 
+		debugger;
 		var inputJSON = {
 			"title": $("#modalCreateTaskTitle").val().trim(),
 			"description": tinymce.get('CreateTaskDescriptionEditor').getContent(),
 			"assigneeId": $("#createTaskModalAssigneeID .profile-image").data("user-id"),
-			"reporterId":  $("#createTaskModalReviewerID .profile-image").data("user-id"),
-			"reviewerId": $("#createTaskModalReporterID .profile-image").data("user-id"),
-			"statusId": $('.btn-create-task-status').data("id"),
+			"reporterId":  $("#createTaskModalReporterID .profile-image").data("user-id"),
+			"reviewerId": $("#createTaskModalReviewerID .profile-image").data("user-id"),
+			"statusId": $('#createTaskModalStatusID').attr("data-status-id"),
 			"typeId": $("#createModalTaskTypeID").data("id"),
 			"parentId": null   // epicId is empty
 		};
