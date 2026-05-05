@@ -162,7 +162,6 @@
 
                     <div class="modal-footer">
                         <button class="btn btn-create " id="closeModal" data-bs-dismiss="modal" style="background:#6c757d;">Close</button>
-
                         <button type="button" class="btn btn-create ms-0" id="addPeople"><i class="bi bi-plus-lg me-1"></i> Add </button>
                     </div>
                 </form>
@@ -192,6 +191,53 @@
             </div>
         </div>
     </div>
+
+    @* add board modal  *@
+    <div class="modal fade flowtic-modal" id="addBoardModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content flowtick-modal-box p-0">
+                <form id="boardForm">
+                    <div class="modal-header flowtick-modal-header  py-1">
+                        <h5 class="modal-title">
+                            <i class="bi bi-person-plus me-2 green"></i> Add Board
+                        </h5>
+                        <button type="button" class="btn border-0 p-0" data-bs-dismiss="modal"><i class="bi bi-x-lg modal-btn-close"></i></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="form-label">Type <span class="required">*</span> </label>
+                                <select id="typeId" class="form-select selector_2" required>
+                                    <option  value="">Select Type</option>
+                                    <option value="kanban">Kanban</option>
+                                    <option value="scrum">Scrum</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label class="form-label">Name <span class="required">*</span> </label>
+                                <input type="text" class="form-control custom-input " id="boardName" placeholder="Enter Board Name" required>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label class="form-label">Description <span class="required">*</span> </label>
+                                <input type="text" class="form-control custom-input " id="boardDescription" placeholder="Enter Board Description" required>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-create " id="closeModal" data-bs-dismiss="modal" style="background:#6c757d;">Close</button>
+                        <button type="button" class="btn btn-create ms-0" id="addPeople"><i class="bi bi-plus-lg me-1"></i> Save </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script src="~/layout/js/select2.min.js"></script>
     <script src="~/js/functionalityjs/common-script.js"></script>
 
@@ -217,6 +263,10 @@
              $('#roleId').select2({
                 dropdownParent: $('#addPeopleModal'),
                      width: "100%",
+            });
+            $('#typeId').select2({
+               dropdownParent: $('#addBoardModal'),
+               width: "100%",
             });
 
 
@@ -321,7 +371,7 @@
                         $.each(project.boards, function (i, board) {
                             boardsHtml += `
                                 <a href="#" class="nav-link"
-                                   onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"
+                                   onclick="redirectToAction('/Board/Project?project=${project.name}&type=${board.type}&id=', ${project.id})"
                                    data-bs-toggle="tooltip" title="${board.name}">
                                    <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
                                    <span class="nav-link-text ">${board.name}</span>
@@ -436,7 +486,7 @@
                             ">
                             <li><a class="dropdown-item" onclick="redirectToAction('/Project/Backlog?id=',${projectId});"><i class="bi bi-list-task me-2"></i>Backlog </a></li>
                             <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add Member</a></li>
-                            <li><a class="dropdown-item"><i class="bi bi-clipboard me-2"></i>Save as template</a></li>
+                            <li><a class="dropdown-item" onclick="openAddBoardModal(${projectId});"><i class="bi bi-clipboard me-2"></i>Add Board</a></li>
                             <li><a class="dropdown-item" id="projectSetting" onclick="redirectToAction('/Project/Settings?id=',${projectId});"><i class="bi bi-gear me-2"></i>Settings</a></li>
                             <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete</a></li>
                         </ul>
@@ -584,6 +634,10 @@
                 errorExtractor(response);
             }
         };
+
+        function openAddBoardModal(projectID){
+             $('#addBoardModal').modal('show');
+        }
     </script>
 </body>
 </html>
