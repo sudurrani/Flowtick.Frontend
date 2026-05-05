@@ -689,7 +689,7 @@
 	  // loop on backlog start
 		// Get backlog tbody 
 	  var $backlogTbody = $("#backlogTableTbody");
-
+		$backlogTbody.empty();
 	  $.each(backlogArray, function (tIndex, task) {
 		  var tr = `
 			<tr data-id="${task.id}">
@@ -778,6 +778,7 @@
 	var createTaskCallBack = function (response, options) {
 		if (response.request.status === 201) {
 			successToastr($("#taskTitle").val(), 'Task');
+			getSprintBacklog();
 		}
 		else {
 			errorExtractor(response);
@@ -854,7 +855,6 @@
 		if (response.request.status === 201) {
 
 			sprintBacklogArray = response.data; // your array
-			// loadTaskTypeDropdown();
 			//console.log(sprintBacklogArray);
 			renderSprintsBacklog();
 		}
