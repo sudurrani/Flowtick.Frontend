@@ -1,0 +1,677 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    @{
+        Layout = null;
+    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/logo/logo.png" type="image/x-icon">
+    <title>Flowtick - Reset Password</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0d9488;
+            --primary-btn-bg: #0d9488;
+            --primary-btn-fore: #fff;
+            --primary-hover: #0f766e;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Left Side - Form */
+        .form-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: #ffffff;
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .logo-section {
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .logo-icon::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 2px;
+            transform: rotate(-45deg);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .icon-wrapper {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .reset-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            /* margin-bottom: 20px; */
+        }
+
+            .reset-icon i {
+                font-size: 35px;
+                color: var(--primary-color);
+            }
+
+        .key-icon {
+            width: 36px;
+            height: 36px;
+            color: var(--primary-color);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #6b7280;
+            font-size: 15px;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 46px 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        input[type="password"]:focus,
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: #6b7280;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: var(--primary-color);
+        }
+
+        .toggle-password svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .password-requirements {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+
+        .requirement-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .requirement-list {
+            list-style: none;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+
+        .requirement-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .requirement-icon {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .requirement-item.valid {
+            color: var(--primary-color);
+        }
+
+        .requirement-item.valid .requirement-icon {
+            color: var(--primary-color);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+        }
+
+        .strength-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+
+        .strength-meter {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .strength-weak {
+            width: 33%;
+            background: #ef4444;
+        }
+
+        .strength-medium {
+            width: 66%;
+            background: #f59e0b;
+        }
+
+        .strength-strong {
+            width: 100%;
+            background: var(--primary-color);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-btn-bg);
+            color: var(--primary-btn-fore);
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 24px;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .submit-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        /* Right Side - Info Section */
+        .info-section {
+            flex: 1;
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-section::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+        }
+
+        .info-section::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -100px;
+        }
+
+        .info-content {
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+        }
+
+        .info-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .info-description {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: start;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tip-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .tip-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .tip-content {
+            flex: 1;
+        }
+
+        .tip-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .tip-desc {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @@media (max-width: 968px) {
+            .info-section {
+                display: none;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .form-section {
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Side - Form -->
+        <div class="form-section">
+            <div class="form-wrapper">
+                <div class="logo-section">
+                    <div class="logo">
+                        @* <div class="logo-icon"> *@
+                        <img src="/img/logo/logo.png" width="40" height="40" />
+                        @* </div> *@
+                        <span class="logo-text">Flowtick</span>
+                    </div>
+                </div>
+
+                <div class="icon-wrapper">
+                    <div class="reset-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                </div>
+
+                <h1 class="page-title">Set new password</h1>
+               @*  <p class="page-subtitle">
+                    Your new password must be different from previously used passwords.
+                </p> *@
+
+                <form id="resetPasswordForm">
+                    <div class="form-group">
+                        <label for="newPassword">New password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="newPassword" placeholder="Enter your new password" required>
+                            <button type="button" class="toggle-password" data-target="newPassword">
+                                <svg class="eye-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="password-strength">
+                            <div class="strength-label">Password strength: <span id="strengthText">Weak</span></div>
+                            <div class="strength-meter">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="confirmPassword" placeholder="Confirm your new password" required>
+                            <button type="button" class="toggle-password" data-target="confirmPassword">
+                                <svg class="eye-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="password-requirements">
+                        <div class="requirement-title">Password must contain:</div>
+                        <ul class="requirement-list">
+                            <li class="requirement-item" id="req-length">
+                                <svg class="requirement-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                At least 8 characters
+                            </li>
+                            <li class="requirement-item" id="req-uppercase">
+                                <svg class="requirement-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                One uppercase letter
+                            </li>
+                            <li class="requirement-item" id="req-lowercase">
+                                <svg class="requirement-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                One lowercase letter
+                            </li>
+                            <li class="requirement-item" id="req-number">
+                                <svg class="requirement-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                                One number
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn" disabled>Reset password</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Side - Info Section -->
+        <div class="info-section">
+            <div class="info-content">
+                <h2 class="info-title">Create a strong password</h2>
+                <p class="info-description">
+                    A strong password helps protect your account from unauthorized access. Follow these best practices for maximum security.
+                </p>
+
+                <ul class="tips-list">
+                    <li class="tip-item">
+                        <div class="tip-icon">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="tip-content">
+                            <div class="tip-title">Use a unique password</div>
+                            <div class="tip-desc">Don't reuse passwords from other accounts</div>
+                        </div>
+                    </li>
+
+                    <li class="tip-item">
+                        <div class="tip-icon">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <div class="tip-content">
+                            <div class="tip-title">Make it complex</div>
+                            <div class="tip-desc">Mix uppercase, lowercase, numbers, and symbols</div>
+                        </div>
+                    </li>
+
+                    <li class="tip-item">
+                        <div class="tip-icon">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="tip-content">
+                            <div class="tip-title">Keep it private</div>
+                            <div class="tip-desc">Never share your password with anyone</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const submitBtn = document.getElementById('submitBtn');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+
+        // Password requirements
+        const requirements = {
+            length: { regex: /.{8,}/, element: document.getElementById('req-length') },
+            uppercase: { regex: /[A-Z]/, element: document.getElementById('req-uppercase') },
+            lowercase: { regex: /[a-z]/, element: document.getElementById('req-lowercase') },
+            number: { regex: /[0-9]/, element: document.getElementById('req-number') }
+        };
+
+        // Toggle password visibility
+        document.querySelectorAll('.toggle-password').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const input = document.getElementById(targetId);
+                const type = input.type === 'password' ? 'text' : 'password';
+                input.type = type;
+
+                // Toggle icon
+                const icon = this.querySelector('.eye-icon');
+                if (type === 'text') {
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>';
+                } else {
+                    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+                }
+            });
+        });
+
+        // Check password requirements and strength
+        newPasswordInput.addEventListener('input', function() {
+            const password = this.value;
+            let validCount = 0;
+
+            // Check each requirement
+            Object.keys(requirements).forEach(key => {
+                const req = requirements[key];
+                const isValid = req.regex.test(password);
+                
+                if (isValid) {
+                    req.element.classList.add('valid');
+                    req.element.querySelector('.requirement-icon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>';
+                    validCount++;
+                } else {
+                    req.element.classList.remove('valid');
+                    req.element.querySelector('.requirement-icon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>';
+                }
+            });
+
+            // Update strength meter
+            strengthFill.className = 'strength-fill';
+            if (validCount === 0 || password.length === 0) {
+                strengthFill.style.width = '0%';
+                strengthText.textContent = 'Weak';
+            } else if (validCount <= 2) {
+                strengthFill.classList.add('strength-weak');
+                strengthText.textContent = 'Weak';
+            } else if (validCount === 3) {
+                strengthFill.classList.add('strength-medium');
+                strengthText.textContent = 'Medium';
+            } else {
+                strengthFill.classList.add('strength-strong');
+                strengthText.textContent = 'Strong';
+            }
+
+            checkFormValidity();
+        });
+
+        confirmPasswordInput.addEventListener('input', checkFormValidity);
+
+        function checkFormValidity() {
+            const password = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            // Check if all requirements are met
+            const allRequirementsMet = Object.keys(requirements).every(key => 
+                requirements[key].regex.test(password)
+            );
+
+            // Check if passwords match
+            const passwordsMatch = password === confirmPassword && password.length > 0;
+
+            submitBtn.disabled = !(allRequirementsMet && passwordsMatch);
+        }
+
+        // Form submission
+        document.getElementById('resetPasswordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newPassword = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            console.log('Password reset successful');
+            alert('Your password has been reset successfully!\n\nYou will be redirected to the login page.');
+            
+            // Add your password reset logic here
+            // After successful reset:
+            // window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
