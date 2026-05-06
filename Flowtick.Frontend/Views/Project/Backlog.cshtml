@@ -268,10 +268,11 @@
 					<table class="child-table" style="width:100%">
 						<thead>
 							<tr>
-								<th style="width:50%">Work</th>
+								<th style="width:35%">Work</th>
 								<th style="width:15%">Priority</th>
 								<th style="width:20%">Assignee</th>
 								<th style="width:15%">Status</th>
+								<th style="width:15%">Add To Sprint</th>
 							</tr>
 						</thead>
 						<tbody id="backlogTableTbody">
@@ -334,6 +335,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.0/dist/js/bootstrap-datepicker.min.js"></script>
 <script>
 	var _taskTypes = [],sprintBacklogArray;
+	var _projectSprintArray = [];
 	var loginUserID,
 	 projectId;
 	
@@ -453,6 +455,7 @@
 		width: "100%",
 	  });
 		getTaskTypes();
+		getProjectSprints();
 	    getSprintBacklog();
 		
 
@@ -492,6 +495,40 @@
 	});
 
 
+	// Filter Sprint  dropdown
+	$(document).on('keyup', '.seach-sprint-dropdown', function (e) {
+		e.stopImmediatePropagation();
+		let value = $(this).val().toLowerCase();
+
+		let dropdown = $(this).closest('.flowtick-dropdown');
+
+		dropdown.find('.dropdown-item').each(function () {
+			$(this).toggle(
+				$(this).find('.add-sprint-name').text().toLowerCase().includes(value)
+			);
+		});
+	});
+	$(document).on("click", ".add-sprint-item", function () {
+
+		var $li = $(this);
+		var sprintId = $li.data("sprint-id");
+		var sprintName = $li.text().trim();
+
+		var $row = $li.closest("tr");
+		var taskId = $row.data("id");
+		$li.closest(".dropdown").find("#addSprintBtnText").text(sprintName);
+
+		addTaskToSprint(taskId , sprintId);
+	});
+	$(document).on("click", ".activate-sprint-btn", function () {
+		var sprintId = $(this).data("sprint-id");
+		activateSprint(sprintId);
+	});
+
+	$(document).on("click", ".complete-sprint-btn", function () {
+		var sprintId = $(this).data("sprint-id");
+		completeSprint(sprintId);
+	});
 		//add subtask row to create subtask inside task
 	$(document).on("click", "#btnAddChildWork", function (e) {
 		// Stop click from propagating to parent elements
@@ -553,6 +590,25 @@
 			errorExtractor(response);
 		}
 	};
+	function getProjectSprints() {
+			let url = `flowtick/project/${projectId}/sprints`;
+		apiRequest({
+			url: url,
+			type: 'GET',
+			data: {},
+			callBack: getProjectSprintsCallBack
+		});
+	}
+	var getProjectSprintsCallBack = function (response) {
+		if (response.request.status === 200) {
+
+			_projectSprintArray = response.data;
+			//console.log(_projectSprintArray);
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
 	function loadTaskTypeDropdown() {
 		// default selected type in create Subtask  id = 3
 		var defaultItemForSubTask = _taskTypes.find(x => x.id == 3);
@@ -593,6 +649,13 @@
 
 	  $.each(sprintArray, function (sIndex, sprint) {
 
+		   var actionBtn = "";
+		   if (sprint.status.description === "Planned") {
+				actionBtn = `<button class="btn btn-sm btn-success activate-sprint-btn" data-sprint-id="${sprint.id}">Activate</button>`;
+			}
+			else if (sprint.status.description === "Active") {
+				actionBtn = `<button class="btn btn-sm btn-primary complete-sprint-btn" data-sprint-id="${sprint.id}">Complete</button>`;
+			}
 		var sprintHtml = `
 		  <div class="row">
 			<div class="col-12">
@@ -603,8 +666,12 @@
 					  <i class="arrow-icon"></i>
 					</span>
 					<span class="panel-title">
-					  ${sprint.name} ${sprint.startDate} - ${sprint.endDate}
+					  ${sprint.name} ${sprint.startDate} - ${sprint.endDate} - ${sprint.status.description}
 					</span>
+				  </div>
+				
+				  <div>
+					 ${actionBtn}
 				  </div>
 				</summary>
 
@@ -690,6 +757,17 @@
 		// Get backlog tbody 
 	  var $backlogTbody = $("#backlogTableTbody");
 		$backlogTbody.empty();
+
+		var sprintList = "";
+		$.each(_projectSprintArray, function (i, sprint) {
+			sprintList += `
+				<li class="dropdown-item add-sprint-item"
+					data-task-id=""
+					data-sprint-id="${sprint.id}">
+					 <span class="add-sprint-name ms-2">${sprint.name}</span>
+				</li>
+			`;
+		});
 	  $.each(backlogArray, function (tIndex, task) {
 		  var tr = `
 			<tr data-id="${task.id}">
@@ -728,6 +806,23 @@
 					 data-id="">
 					<span>${task.status}</span>
 				  </a>
+				</div>
+			  </td>
+			  <td>
+				<div class="dropdown mt-2">
+					<button class="text-decoration-none  dropdown  filter-btn" data-bs-toggle="dropdown" tabindex="0" id="addSprintBtn">
+						<span id="addSprintBtnText">Select Sprint</span>
+						<i class="bi bi-chevron-down"></i>
+					</button>
+					<div class="dropdown-menu flowtick-dropdown">
+						<div class="flowtick-dropdown-search">
+							<i class="bi bi-search"></i>
+							<input type="text" class="seach-sprint-dropdown" placeholder="Search users">
+						</div>
+						<ul class="dropdown-list">
+						    ${sprintList}
+						</ul>
+					 </div>
 				</div>
 			  </td>
 			</tr>
@@ -852,11 +947,66 @@
 		});
 	}
 	var getSprintBacklogCallBack = function (response) {
-		if (response.request.status === 201) {
+		if (response.request.status === 200) {
 
 			sprintBacklogArray = response.data; // your array
 			//console.log(sprintBacklogArray);
 			renderSprintsBacklog();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+	function addTaskToSprint(taskId , sprintId){
+		let url = `flowtick/tasks/${taskId}/sprint/${sprintId}`;
+			apiRequest({
+				url: url,
+				type: 'PUT',
+				data: {},
+				callBack: addTaskToSprintCallBack
+			});
+	}
+	var addTaskToSprintCallBack = function (response) {
+		if (response.request.status === 204) {
+			successToastr("Assigned successfully", 'Sprint');
+		    getSprintBacklog();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+	function activateSprint(sprintId){
+		let url = `flowtick/sprints/${sprintId}/active`;
+			apiRequest({
+				url: url,
+				type: 'PUT',
+				data: {},
+				callBack: activateSprintCallBack
+			});
+	}
+	var activateSprintCallBack = function (response) {
+		if (response.request.status === 204) {
+			successToastr("Activated successfully", 'Sprint');
+			getSprintBacklog();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+
+	function completeSprint(sprintId){
+		let url = `flowtick/sprints/${sprintId}/complete`;
+			apiRequest({
+				url: url,
+				type: 'PUT',
+				data: {},
+				callBack: completeSprintCallBack
+			});
+	}
+	var completeSprintCallBack = function (response) {
+		if (response.request.status === 204) {
+			successToastr("Completed successfully", 'Sprint');
+			getSprintBacklog();
 		}
 		else {
 			errorExtractor(response);
