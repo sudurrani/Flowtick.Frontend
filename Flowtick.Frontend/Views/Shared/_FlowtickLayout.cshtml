@@ -64,7 +64,7 @@
                     Project(s)
                 </label>
             </div>
-            <div class="nav-item ps-3" id="ProjectContainer">
+            <div class="nav-item ps-3" id="sidebarProjects">
             </div>
             <div class="nav-item">
                 <a href="#" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Tasks" ? "active" : "")" data-bs-toggle="tooltip" data-bs-placement="right" title="Tasks">
@@ -162,7 +162,6 @@
 
                     <div class="modal-footer">
                         <button class="btn btn-create " id="closeModal" data-bs-dismiss="modal" style="background:#6c757d;">Close</button>
-
                         <button type="button" class="btn btn-create ms-0" id="addPeople"><i class="bi bi-plus-lg me-1"></i> Add </button>
                     </div>
                 </form>
@@ -192,6 +191,54 @@
             </div>
         </div>
     </div>
+
+    @* add board modal  *@
+    <div class="modal fade flowtic-modal" id="addBoardModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content flowtick-modal-box p-0">
+                <form id="boardForm">
+                    <input type="hidden" name="name" id="boardProjectId" value="" />
+                    <div class="modal-header flowtick-modal-header  py-1">
+                        <h5 class="modal-title">
+                            <i class="bi bi-person-plus me-2 green"></i> Add Board
+                        </h5>
+                        <button type="button" class="btn border-0 p-0" data-bs-dismiss="modal"><i class="bi bi-x-lg modal-btn-close"></i></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="form-label">Type <span class="required">*</span> </label>
+                                <select id="typeId" class="form-select selector_2" required>
+                                    <option  >Select Type</option>
+                                    <option value="kanban">Kanban</option>
+                                    <option value="scrum">Scrum</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label class="form-label">Name <span class="required">*</span> </label>
+                                <input type="text" class="form-control custom-input " id="boardName" placeholder="Enter Board Name" required>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <label class="form-label">Description <span class="required">*</span> </label>
+                                <input type="text" class="form-control custom-input " id="boardDescription" placeholder="Enter Board Description" required>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-create " id="closeModal" data-bs-dismiss="modal" style="background:#6c757d;">Close</button>
+                        <button type="button" class="btn btn-create ms-0" id="addboard" onclick="addBoard()"><i class="bi bi-plus-lg me-1"></i> Save </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script src="~/layout/js/select2.min.js"></script>
     <script src="~/js/functionalityjs/common-script.js"></script>
 
@@ -217,6 +264,10 @@
              $('#roleId').select2({
                 dropdownParent: $('#addPeopleModal'),
                      width: "100%",
+            });
+            $('#typeId').select2({
+               dropdownParent: $('#addBoardModal'),
+               width: "100%",
             });
 
 
@@ -312,10 +363,25 @@
                 $sidebar.html("");
 
                 $.each(projects, function (index, project) {
-
                    let isOwner = project.role && project.role.name === "Owner";
 
-                     $('#ProjectContainer').append(
+                   let boardsHtml = '';
+
+                    //  loop boards here
+                    if (project.boards && project.boards.length > 0) {
+                        $.each(project.boards, function (i, board) {
+                            boardsHtml += `
+                                <a href="#" class="nav-link"
+                                   onclick="redirectToAction('/Board/Project?project=${project.name}&type=${board.type}&id=', ${project.id})"
+                                   data-bs-toggle="tooltip" title="${board.name}">
+                                   <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
+                                   <span class="nav-link-text ">${board.name}</span>
+                                </a>
+                            `;
+                        });
+                    }
+
+                    $sidebar.append(
                             `<div class="project-item">
 
                                 <!-- Parent Project -->
@@ -335,25 +401,7 @@
 
                                 <!-- Submenu -->
                                 <div class="project-submenu ps-4" id="submenu-${project.id}" style="display:none;">
-
-                                    <a href="#" class="nav-link"
-                                       onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"data-bs-toggle="tooltip" title="Scrum Board">
-                                          <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
-                                          <span class="nav-link-text ">Scrum Board</span>
-                                    </a>
-
-                                    <a href="#" class="nav-link"
-                                        onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"data-bs-toggle="tooltip" title="Kanban Board">
-                                           <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
-                                          <span class="nav-link-text ">Kanban Board</span>
-                                    </a>
-
-                                    <a href="#" class="nav-link"
-                                        onclick="redirectToAction('/Board/Project?project=${project.name}&id=', ${project.id})"data-bs-toggle="tooltip" title="Sprints">
-                                          <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
-                                          <span class="nav-link-text ">Sprints</span>
-                                    </a>
-
+                                       ${boardsHtml}
                                 </div>
 
                             </div>`
@@ -376,10 +424,10 @@
                                                               `);
                 });
 
-                $("#ProjectContainer a.nav-link").each(function () {
+                $("#sidebarProjects a.nav-link").each(function () {
                     const title = $(this).attr("title");
                     if (title === $('#ProjectName').text()) {
-                        $("#ProjectContainer a.nav-link").removeClass("active");
+                        $("#sidebarProjects a.nav-link").removeClass("active");
                         $(this).addClass("active");
                     }
                 });
@@ -439,7 +487,7 @@
                             ">
                             <li><a class="dropdown-item" onclick="redirectToAction('/Project/Backlog?id=',${projectId});"><i class="bi bi-list-task me-2"></i>Backlog </a></li>
                             <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add Member</a></li>
-                            <li><a class="dropdown-item"><i class="bi bi-clipboard me-2"></i>Save as template</a></li>
+                            <li><a class="dropdown-item" onclick="openAddBoardModal(${projectId});"><i class="bi bi-clipboard me-2"></i>Add Board</a></li>
                             <li><a class="dropdown-item" id="projectSetting" onclick="redirectToAction('/Project/Settings?id=',${projectId});"><i class="bi bi-gear me-2"></i>Settings</a></li>
                             <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete</a></li>
                         </ul>
@@ -587,6 +635,45 @@
                 errorExtractor(response);
             }
         };
+
+        function openAddBoardModal(projectId){
+             $('#boardName').val('');
+             $('#boardDescription').val('');
+             $('#typeId').val('').trigger('change');
+             $('#addBoardModal').modal('show');
+
+             $('#boardProjectId').val(projectId);
+
+        }
+        function addBoard(){
+             if (customValidateForm('boardForm')) {
+
+                const inputJSON = {
+                            "name":  $('#boardName').val(),
+                            "description": $('#boardDescription').val(),
+                            "type":$('#typeId').val()
+                }
+                let projectID = $('#boardProjectId').val();
+                console.log(projectID);
+                console.log(inputJSON);
+                let url = `flowtick/project/${projectID}/boards`;
+                apiRequest({
+                    url: url,
+                    type: 'POST',
+                    data: inputJSON,
+                    callBack: function (response) {
+                        if (response.request.status === 201) {
+                             $('#addBoardModal').modal('hide');
+                            successToastr("Saved successfully", 'Board');
+                           getMyProjects();
+                        }
+                        else {
+                            errorExtractor(response);
+                        }
+                     }
+                });
+            };
+        }
     </script>
 </body>
 </html>

@@ -226,7 +226,7 @@
 <div class="filter-bar">
 
 
-	<button class="btn-create ms-auto" data-bs-toggle="modal" data-bs-target="#createSprintModal">
+	<button class="btn-create ms-auto" id="openSprintModal">
 		<i class="bi bi-plus-lg"></i>
 		Create Sprint
 	</button>
@@ -268,10 +268,11 @@
 					<table class="child-table" style="width:100%">
 						<thead>
 							<tr>
-								<th style="width:50%">Work</th>
+								<th style="width:35%">Work</th>
 								<th style="width:15%">Priority</th>
 								<th style="width:20%">Assignee</th>
 								<th style="width:15%">Status</th>
+								<th style="width:15%">Add To Sprint</th>
 							</tr>
 						</thead>
 						<tbody id="backlogTableTbody">
@@ -294,37 +295,36 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-12">
+						<div class="col-6 pe-0">
 							<label class="form-label">Name</label>
-							<input type="text" class="form-control" id="name" placeholder="Enter  Name">
+							<input type="text" class="form-control" id="name" placeholder="Enter  Name" required>
+						</div>
+						<div class="col-6">
+							<label class="form-label">Status <span class="required">*</span> </label>
+							<select id="statusId" class="form-select selector_2" required>
+							</select>
 						</div>
 					</div>
-
 					<div class="row mt-2">
 						<div class="col-6 pe-0">
 							<label class="form-label">Start Date</label>
-							<input type="text" class="form-control datepicker" id="startDate" placeholder="Select start date">
+							<input type="text" class="form-control datepicker" id="startDate" placeholder="Select start date" required>
 						</div>
 						<div class="col-6">
 							<label class="form-label">End Date</label>
-							<input type="text" class="form-control datepicker" id="endDate" placeholder="Select end date">
-
+							<input type="text" class="form-control datepicker" id="endDate" placeholder="Select end date" required>
 						</div>
 					</div>
-
-
 					<div class="row mt-2">
 						<div class="col-12">
 							<label class="form-label">Description</label>
-							<textarea class="form-control" id="description" rows="3" placeholder="Enter sprint description"></textarea>
+							<textarea class="form-control" id="description" rows="3" placeholder="Enter sprint description" required></textarea>
 						</div>
 					</div>
-
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn-create" id="saveSprint">
-						<i class="bi bi-plus-lg"></i> Save
-					</button>
+					<button class="btn btn-create " id="closeModal" data-bs-dismiss="modal" style="background:#6c757d;">Close</button>
+					<button type="button" class="btn btn-create ms-0" id="saveSprint"><i class="bi bi-plus-lg me-1"></i> Save </button>
 				</div>
 			</form>
 
@@ -334,7 +334,8 @@
 <!-- Bootstrap Datepicker JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.0/dist/js/bootstrap-datepicker.min.js"></script>
 <script>
-	var _taskTypes = [];
+	var _taskTypes = [],sprintBacklogArray;
+	var _projectSprintArray = [];
 	var loginUserID,
 	 projectId;
 	
@@ -448,8 +449,30 @@
 		autoclose: true,
 		todayHighlight: true
 	  });
+
+	  $('#statusId').select2({
+		dropdownParent: $('#createSprintModal'),
+		width: "100%",
+	  });
 		getTaskTypes();
-	   renderSprints();
+		getProjectSprints();
+	    getSprintBacklog();
+		
+
+	  $('#openSprintModal').on('click', function () {
+
+		$('#name').val('');
+	    $('#startDate').val('');
+		$('#endDate').val('');
+		$('#description').val('');
+		$("#statusId").prop("disabled", false);
+
+		$('#createSprintModal').modal('show');
+		  getSprintStatuses()
+	  });
+	   $("#saveSprint").click( function(){
+		   createSprint();
+	   })
 
 	});
 		//handle click of task type
@@ -472,6 +495,40 @@
 	});
 
 
+	// Filter Sprint  dropdown
+	$(document).on('keyup', '.seach-sprint-dropdown', function (e) {
+		e.stopImmediatePropagation();
+		let value = $(this).val().toLowerCase();
+
+		let dropdown = $(this).closest('.flowtick-dropdown');
+
+		dropdown.find('.dropdown-item').each(function () {
+			$(this).toggle(
+				$(this).find('.add-sprint-name').text().toLowerCase().includes(value)
+			);
+		});
+	});
+	$(document).on("click", ".add-sprint-item", function () {
+
+		var $li = $(this);
+		var sprintId = $li.data("sprint-id");
+		var sprintName = $li.text().trim();
+
+		var $row = $li.closest("tr");
+		var taskId = $row.data("id");
+		$li.closest(".dropdown").find("#addSprintBtnText").text(sprintName);
+
+		addTaskToSprint(taskId , sprintId);
+	});
+	$(document).on("click", ".activate-sprint-btn", function () {
+		var sprintId = $(this).data("sprint-id");
+		activateSprint(sprintId);
+	});
+
+	$(document).on("click", ".complete-sprint-btn", function () {
+		var sprintId = $(this).data("sprint-id");
+		completeSprint(sprintId);
+	});
 		//add subtask row to create subtask inside task
 	$(document).on("click", "#btnAddChildWork", function (e) {
 		// Stop click from propagating to parent elements
@@ -533,6 +590,25 @@
 			errorExtractor(response);
 		}
 	};
+	function getProjectSprints() {
+			let url = `flowtick/project/${projectId}/sprints`;
+		apiRequest({
+			url: url,
+			type: 'GET',
+			data: {},
+			callBack: getProjectSprintsCallBack
+		});
+	}
+	var getProjectSprintsCallBack = function (response) {
+		if (response.request.status === 200) {
+
+			_projectSprintArray = response.data;
+			//console.log(_projectSprintArray);
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
 	function loadTaskTypeDropdown() {
 		// default selected type in create Subtask  id = 3
 		var defaultItemForSubTask = _taskTypes.find(x => x.id == 3);
@@ -562,30 +638,41 @@
 		});
 	}
 
-	function renderSprints() {
-
+	function renderSprintsBacklog() {
+		//debugger;
 	  var $container = $('.sprint-container');
 	  $container.empty();
+	  var sprintArray = sprintBacklogArray.sprints;
+	  var backlogArray = sprintBacklogArray.backlog;
+	 // console.log(sprintArray);
+	 // console.log(backlogArray);
 
+	  $.each(sprintArray, function (sIndex, sprint) {
 
-	  $.each(sprints, function (sIndex, sprint) {
-
-		// Sprint HTML (tbody is EMPTY here)
+		   var actionBtn = "";
+		   if (sprint.status.description === "Planned") {
+				actionBtn = `<button class="btn btn-sm btn-success activate-sprint-btn" data-sprint-id="${sprint.id}">Activate</button>`;
+			}
+			else if (sprint.status.description === "Active") {
+				actionBtn = `<button class="btn btn-sm btn-primary complete-sprint-btn" data-sprint-id="${sprint.id}">Complete</button>`;
+			}
 		var sprintHtml = `
 		  <div class="row">
 			<div class="col-12">
 			  <details class="collaps-panel">
 				<summary class="d-flex align-items-center justify-content-between">
-
 				  <div class="d-flex align-items-center gap-2" style="color:var(--primary-color)">
 					<span class="backlog-header-icon">
 					  <i class="arrow-icon"></i>
 					</span>
 					<span class="panel-title">
-					  ${sprint.sprintName} ${sprint.startDate} - ${sprint.endDate}
+					  ${sprint.name} ${sprint.startDate} - ${sprint.endDate} - ${sprint.status.description}
 					</span>
 				  </div>
-
+				
+				  <div>
+					 ${actionBtn}
+				  </div>
 				</summary>
 
 				<div class="collaps-panel-content">
@@ -613,37 +700,32 @@
 		var $tbody = $sprintElement.find('.sprint-task-tbody');
 
 		//  LOOP 2: TASK LOOP (INSIDE TBODY)
-		$.each(sprint.tasks, function (tIndex, item) {
-
+		$.each(sprint.tasks, function (tIndex, task) {
+			//debugger;
 		  var tr = `
-			<tr data-id="${item.id}">
+			<tr data-id="${task.id}">
 			  <td>
-				<i class="${item.type ? item.type.icon : ''} task-icon"
-				   ${item.type ? item.type.iconCSS : ''}></i>
-
+				<i class="bi bi-layout-text-window-reverse task-icon"style="color:#14b8a6"></i>
 				<span class="task-no sub-task-detail"
-					  onclick="getSubTaskById(${item.id});"
+					  onclick="getSubTaskById(${task.id});"
 					  role="button">
-				  ${item.code}
+				  TSK-101
 				</span>
-
-				<span class="child-task-title">${item.title}</span>
+				<span class="child-task-title">${task.title}</span>
 			  </td>
-
 			  <td>
 				<i class="bi bi-filter" style="color:#E06C00"></i> Medium
 			  </td>
-
 			  <td>
 				<div class="dropdown">
 				  <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
 					<div class="subtask-selected-assignee d-flex align-items-center">
 					  <div class="assignee-avatar-sm"
-						   style="background:${item.assignee.colorCode}">
-						${getInitials(item.assignee.name)}
+						   style="background:#14b8a6">
+						${getInitials(task.assignee)}
 					  </div>
 					  <span class="user-name ms-2">
-						${item.assignee.name}
+						${task.assignee}
 					  </span>
 					</div>
 				  </div>
@@ -655,8 +737,8 @@
 				<div class="dropdown">
 				  <a class="text-decoration-none dropdown-toggle no-caret btn-task-subtask-status btn-create"
 					 data-bs-toggle="dropdown"
-					 data-id="${item.status.id}">
-					<span>${item.status.name}</span>
+					 data-id="">
+					<span>${task.status}</span>
 				  </a>
 				</div>
 			  </td>
@@ -670,15 +752,101 @@
 		// Append whole sprint block into container
 		$container.append($sprintElement);
 	  });
+
+	  // loop on backlog start
+		// Get backlog tbody 
+	  var $backlogTbody = $("#backlogTableTbody");
+		$backlogTbody.empty();
+
+		var sprintList = "";
+		$.each(_projectSprintArray, function (i, sprint) {
+			sprintList += `
+				<li class="dropdown-item add-sprint-item"
+					data-task-id=""
+					data-sprint-id="${sprint.id}">
+					 <span class="add-sprint-name ms-2">${sprint.name}</span>
+				</li>
+			`;
+		});
+	  $.each(backlogArray, function (tIndex, task) {
+		  var tr = `
+			<tr data-id="${task.id}">
+			  <td>
+				<i class="bi bi-layout-text-window-reverse task-icon"style="color:#14b8a6"></i>
+				<span class="task-no sub-task-detail"
+					  onclick="getSubTaskById(${task.id});"
+					  role="button">
+				  TSK-101
+				</span>
+				<span class="child-task-title">${task.title}</span>
+			  </td>
+			  <td>
+				<i class="bi bi-filter" style="color:#E06C00"></i> Medium
+			  </td>
+			  <td>
+				<div class="dropdown">
+				  <div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+					<div class="subtask-selected-assignee d-flex align-items-center">
+					  <div class="assignee-avatar-sm"
+						   style="background:#14b8a6">
+						${getInitials(task.assignee)}
+					  </div>
+					  <span class="user-name ms-2">
+						${task.assignee}
+					  </span>
+					</div>
+				  </div>
+
+				</div>
+			  </td>
+			  <td>
+				<div class="dropdown">
+				  <a class="text-decoration-none dropdown-toggle no-caret btn-task-subtask-status btn-create"
+					 data-bs-toggle="dropdown"
+					 data-id="">
+					<span>${task.status}</span>
+				  </a>
+				</div>
+			  </td>
+			  <td>
+				<div class="dropdown mt-2">
+					<button class="text-decoration-none  dropdown  filter-btn" data-bs-toggle="dropdown" tabindex="0" id="addSprintBtn">
+						<span id="addSprintBtnText">Select Sprint</span>
+						<i class="bi bi-chevron-down"></i>
+					</button>
+					<div class="dropdown-menu flowtick-dropdown">
+						<div class="flowtick-dropdown-search">
+							<i class="bi bi-search"></i>
+							<input type="text" class="seach-sprint-dropdown" placeholder="Search Sprint">
+						</div>
+						<ul class="dropdown-list">
+						    ${sprintList}
+						</ul>
+					 </div>
+				</div>
+			  </td>
+			</tr>
+		  `;
+
+		  $backlogTbody.append(tr);
+		});
+
+	
+
 	
 	}
 
+	function formatToISO(dateStr) {
+		if (!dateStr) return null;
+		let parts = dateStr.split('-'); // ["01", "05", "2026"]
+		return `${parts[2]}-${parts[1]}-${parts[0]}`; // "2026-05-01"
+	}
 
 	function createTask(taskType = null) {
 
-			if (!customValidateForm('backlogTaskForm')) {
-				return; // stop execution
-			}
+		if (!customValidateForm('backlogTaskForm')) {
+		   return; // stop execution
+		}
 		var inputJSON = {
 			"title": null,
 			"assigneeId": loginUserID,
@@ -687,17 +855,11 @@
 			"statusId": 1,
 			"typeId": null,
 			"parentId": null
-
 		};
-
 		inputJSON.title = $("#childWorkTitle").val().trim();
 		inputJSON.typeId = $("#childTaskTypeID").data("id");
 
-
-
 		let url = `flowtick/project/${projectId}/tasks`;
-
-
 		apiRequest({
 			url: url,
 			type: 'POST',
@@ -707,13 +869,144 @@
 			taskType: taskType,
 			parentId: inputJSON.parentId
 		});
-
-
 	}
 	var createTaskCallBack = function (response, options) {
 		if (response.request.status === 201) {
 			successToastr($("#taskTitle").val(), 'Task');
-	
+			getSprintBacklog();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+
+	function getSprintStatuses() {
+		apiRequest({
+			url: 'flowtick/sprint/statuses',
+			type: 'GET',
+			data: {},
+			callBack: getSprintStatusesCallBack
+		});
+	}
+
+	var getSprintStatusesCallBack = function (response) {
+		if (response.request.status === 200) {
+
+			var statuses = response.data; //  array
+
+			var dropdown = $("#statusId");
+			dropdown.empty();
+			dropdown.append('<option selected disabled>Select status</option>');
+
+			$.each(statuses, function (index, status) {
+				var option = `<option  value="${status.id}">${status.description}</option>`;
+				dropdown.append(option);
+			});
+		}
+		else {
+				errorExtractor(response);
+		}
+	};
+
+	function createSprint(){
+		if (customValidateForm('createSprintForm')) {
+			var inputJSON = getFormDataAsJSONObject('createSprintForm');
+			// convert dates
+			inputJSON.startDate = formatToISO(inputJSON.startDate);
+			inputJSON.endDate = formatToISO(inputJSON.endDate);
+			//console.log(inputJSON);
+
+			let url = `flowtick/project/${projectId}/sprints`;
+			apiRequest({
+				url: url,
+				type: 'POST',
+				data: inputJSON,
+				callBack: createSprintCallBack
+			});
+
+		}
+	}
+	var createSprintCallBack = function (response) {
+		if (response.request.status === 201) {
+			successToastr("Saved successfully", 'Sprint');
+			$('#createSprintModal').modal('hide');
+			getSprintBacklog();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+
+	function getSprintBacklog() {
+			let url = `flowtick/project/${projectId}/backlog`;
+		apiRequest({
+			url: url,
+			type: 'GET',
+			data: {},
+			callBack: getSprintBacklogCallBack
+		});
+	}
+	var getSprintBacklogCallBack = function (response) {
+		if (response.request.status === 200) {
+
+			sprintBacklogArray = response.data; // your array
+			//console.log(sprintBacklogArray);
+			renderSprintsBacklog();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+	function addTaskToSprint(taskId , sprintId){
+		let url = `flowtick/tasks/${taskId}/sprint/${sprintId}`;
+			apiRequest({
+				url: url,
+				type: 'PUT',
+				data: {},
+				callBack: addTaskToSprintCallBack
+			});
+	}
+	var addTaskToSprintCallBack = function (response) {
+		if (response.request.status === 204) {
+			successToastr("Assigned successfully", 'Sprint');
+		    getSprintBacklog();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+	function activateSprint(sprintId){
+		let url = `flowtick/sprints/${sprintId}/active`;
+			apiRequest({
+				url: url,
+				type: 'PUT',
+				data: {},
+				callBack: activateSprintCallBack
+			});
+	}
+	var activateSprintCallBack = function (response) {
+		if (response.request.status === 204) {
+			successToastr("Activated successfully", 'Sprint');
+			getSprintBacklog();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+
+	function completeSprint(sprintId){
+		let url = `flowtick/sprints/${sprintId}/complete`;
+			apiRequest({
+				url: url,
+				type: 'PUT',
+				data: {},
+				callBack: completeSprintCallBack
+			});
+	}
+	var completeSprintCallBack = function (response) {
+		if (response.request.status === 204) {
+			successToastr("Completed successfully", 'Sprint');
+			getSprintBacklog();
 		}
 		else {
 			errorExtractor(response);

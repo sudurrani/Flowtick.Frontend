@@ -17,7 +17,7 @@ var _projectMember = []
 let isTaskTypeLoaded = false;
 var _taskTypes = [];
 
-let statusID = 0, projectId = 0, projectName;
+let statusID = 0, projectId = 0, projectName,projectType;
 var assigneeID;
 var reporterID;
 var reviewerID;
@@ -49,6 +49,7 @@ $(function () {
     var urlParams = new URLSearchParams(window.location.search);
     projectId = urlParams.get('id');
     projectName = urlParams.get('project');
+    projectType = urlParams.get('type');
     projectId = (getAndDecryptID(projectId));
 
     // Filter  dropdown
@@ -628,7 +629,7 @@ function renderBoard() {
 }
 
 function getProjectTasks(isBlockUI = true) {
-    let url = `flowtick/project/${projectId}/tasks`;
+    let url = `flowtick/project/${projectId}/tasks/${projectType}`;
     apiRequest({
         url: url,
         type: 'GET',
