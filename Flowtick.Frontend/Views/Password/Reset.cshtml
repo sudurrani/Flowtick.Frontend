@@ -10,6 +10,16 @@
     <title>Flowtick - Reset Password</title>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="~/layout/js/jquery-3.7.1.min.js"></script>
+    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
+
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+
+
+    <script src="~/scripts/crypto-js.min.js"></script>
+    <script src="~/lib/toastr/toastr.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
     <style>
         :root {
             --primary-color: #0d9488;
@@ -422,6 +432,9 @@
     </style>
 </head>
 <body>
+    @{
+        @await Html.PartialAsync("~/Views/Shared/PartialViews/Common/_AjaxRequestLoaderPartialView.cshtml")
+    }
     <div class="container">
         <!-- Left Side - Form -->
         <div class="form-section">
@@ -564,7 +577,65 @@
         </div>
     </div>
 
+    <script src="~/js/functionalityjs/common-script.js"></script>
     <script>
+        var email = '',code = '';
+        $(function () {
+
+          var urlParams = new URLSearchParams(window.location.search);
+           email = urlParams.get('email');
+           code = urlParams.get('code');
+           console.log(email);
+           console.log(code);
+
+           $("#submitBtn").click( function(){
+
+               updatePassword();
+           })
+        });
+        function updatePassword(){
+          if (customValidateForm('resetPasswordForm')) {
+
+             var inputJSON = {
+                 "email": email ,
+                 "code":code,
+                 "password": $('#confirmPassword').val()
+             }
+             console.log(inputJSON);
+
+             let url = `flowtick/auth/reset-password`;
+                 apiRequest({
+                     url: url,
+                     type: 'PUT',
+                     data: inputJSON,
+                     callBack: updatePasswordCallBack
+                 });
+          }
+        }
+        var updatePasswordCallBack = function (response) {
+            if (response.request.status === 204) {
+                successToastr("Updated successfully", 'Password');
+                setTimeout(function () {
+                    window.location.href = '/Auth/Login';
+                }, 3000);
+            }
+            else if (response.request.status === 404) {
+                infoToastr(response.error, 'Info');
+                setTimeout(function () {
+                    window.location.href = '/Forgot/Password';
+                }, 3000);
+            }
+            else if (response.request.status === 409) {
+                infoToastr(response.error, 'Info');
+                setTimeout(function () {
+                    window.location.href = '/Forgot/Password';
+                }, 3000);
+            }
+            else {
+                errorExtractor(response);
+            }
+        };
+
         const newPasswordInput = document.getElementById('newPassword');
         const confirmPasswordInput = document.getElementById('confirmPassword');
         const submitBtn = document.getElementById('submitBtn');
@@ -665,8 +736,8 @@
                 return;
             }
 
-            console.log('Password reset successful');
-            alert('Your password has been reset successfully!\n\nYou will be redirected to the login page.');
+           // console.log('Password reset successful');
+           // alert('Your password has been reset successfully!\n\nYou will be redirected to the login page.');
             
             // Add your password reset logic here
             // After successful reset:
