@@ -13,6 +13,18 @@
 	}
 
 	:root {
+		/* ── Backgrounds ── */
+		--color-background-primary: light-dark(rgba(255, 255, 255, 1), rgba(48, 48, 46, 1)); 
+		--color-background-secondary: light-dark(rgba(245, 244, 237, 1), rgba(38, 38, 36, 1));
+		 /* table header, strips, hover bg */
+		/* ── Text ── */
+		--color-text-primary: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+		--color-text-secondary: light-dark(rgba(61, 61, 58, 1), rgba(194, 192, 182, 1));
+		/* ── Borders ── */
+		--color-border-tertiary: light-dark(rgba(31, 30, 29, 0.15), rgba(222, 220, 209, 0.15));
+	}
+
+	:root {
 		--pt: #0d9488;
 		--pt-h: #0f766e;
 		--pt-light: #f0fdfa;
@@ -40,7 +52,8 @@
 	.section {
 		border-radius: var(--rl);
 		border: 0.5px solid var(--bd);
-		background: white;
+	/* 	background: white; */
+		background: var(--bg);
 		overflow: hidden
 	}
 
