@@ -53,6 +53,11 @@ $(function () {
     projectType = urlParams.get('type');
     projectId = (getAndDecryptID(projectId));
 
+    if (projectType === 'Scrum') {
+        $('#sprintBtn').show();
+    } else {
+        $('#sprintBtn').hide();
+    }
     // Filter  dropdown
     $(document).on('keyup', '.seach-user-dropdown', function (e) {
         e.stopImmediatePropagation();
