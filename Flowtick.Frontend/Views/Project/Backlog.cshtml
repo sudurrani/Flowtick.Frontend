@@ -29,7 +29,7 @@
 	}
 
 	.page {
-		padding: 1.25rem 1rem 3rem;
+		padding: 0.20rem 1rem 2rem;
 		display: flex;
 		flex-direction: column;
 		gap: 1.25rem;
@@ -880,64 +880,13 @@
 </div>
 <div class="page">
 	<div class="sprint-container"></div>
-	<!-- ══════════════ SPRINT 2 — ACTIVE ══════════════ -->
-	@* 	<div class="section">
-		<div class="sprint-hd active-sprint" onclick="toggle(this,'s2-body','s2-chev')">
-			<div class="hd-left">
-				<i class="ti ti-chevron-down chevron open" id="s2-chev" aria-hidden="true"></i>
-				<span class="sprint-name active-col">Sprint — 2</span>
-				<span class="pill pill-date"><i class="ti ti-calendar" aria-hidden="true" style="font-size:10px"></i>May 1 – May 31, 2026</span>
-				<span class="pill pill-active"><i class="ti ti-circle-filled" aria-hidden="true" style="font-size:8px"></i>Active</span>
-				<span class="pill pill-days"><i class="ti ti-clock" aria-hidden="true" style="font-size:10px"></i><span id="days-left">24</span> days left</span>
-				<span class="pill pill-tasks"><i class="ti ti-list-check" aria-hidden="true" style="font-size:10px"></i>2/3 done</span>
-			</div>
-			<div class="hd-right" onclick="event.stopPropagation()">
-				<button class="btn-action btn-complete"><i class="ti ti-circle-check" aria-hidden="true" style="font-size:13px"></i>Complete</button>
-			</div>
-		</div>
-		<div id="s2-body">
-			<div class="meta-strip">
-				<div class="meta-row">
-					<div class="meta-stat"><i class="ti ti-clock meta-stat-icon" aria-hidden="true"></i><span class="meta-stat-label">Days left:</span><span class="meta-stat-val" id="days-val">24 of 31</span></div>
-					<div class="meta-divider"></div>
-					<div class="meta-stat"><i class="ti ti-list-check meta-stat-icon" aria-hidden="true"></i><span class="meta-stat-label">Tasks:</span><span class="meta-stat-val">2 of 3 done</span></div>
-					<div class="meta-divider"></div>
-					<div class="meta-stat"><i class="ti ti-chart-dots meta-stat-icon" aria-hidden="true"></i><span class="meta-stat-label">Points done:</span><span class="meta-stat-val">12 / 18 pts</span></div>
-					<div class="meta-divider"></div>
-					<div class="meta-stat"><i class="ti ti-users meta-stat-icon" aria-hidden="true"></i><span class="meta-stat-label">Members:</span><span class="meta-stat-val">2</span></div>
-				</div>
-				<div class="progress-row">
-					<span class="prog-label">Task progress</span>
-					<div class="progress-bar"><div class="progress-fill pf-active" style="width:67%"></div></div>
-					<span class="prog-pct pct-active">67%</span>
-				</div>
-				<div class="workload-row">
-					<span class="wl-title">Workload</span>
-					<div class="wl-item"><span class="wl-av wl-av-mn">MN</span><span class="wl-name">M. Nauman</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:75%"></div></div><span class="wl-count">2t</span></div>
-					<div class="wl-item"><span class="wl-av wl-av-ia">IA</span><span class="wl-name">Israr Ahmad</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:35%"></div></div><span class="wl-count">1t</span></div>
-				</div>
-			</div>
-			<div class="tbl-wrap">
-				<table>
-					<thead><tr><th style="width:44%">Title</th><th>Priority</th><th>Assignee</th><th>Status</th></tr></thead>
-					<tbody>
-						<tr><td><div class="task-cell"><i class="ti ti-layout-list t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-1 create task from backlog</span></div></td><td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td><td><div class="assign-cell"><span class="av av-mn">MN</span>M. Nauman</div></td><td><span class="badge b-review"><i class="ti ti-eye" aria-hidden="true" style="font-size:10px"></i>Review</span></td></tr>
-						<tr><td><div class="task-cell"><i class="ti ti-layout-list t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-2 Create subtask</span></div></td><td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td><td><div class="assign-cell"><span class="av av-ia">IA</span>Israr Ahmad</div></td><td><span class="badge b-done"><i class="ti ti-check" aria-hidden="true" style="font-size:10px"></i>Done</span></td></tr>
-						<tr><td><div class="task-cell"><i class="ti ti-bolt t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-3 create epic</span></div></td><td><div class="prio-cell"><span class="prio-dot high"></span><span class="prio-text">High</span></div></td><td><div class="assign-cell"><span class="av av-mn">MN</span>M. Nauman</div></td><td><span class="badge b-done"><i class="ti ti-check" aria-hidden="true" style="font-size:10px"></i>Done</span></td></tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>*@
-
-
 	<!-- ══════════════ BACKLOG ══════════════ -->
 	<div class="section">
 		<div class="backlog-hd" onclick="toggle(this,'backlog-body','backlog-chev')">
 			<div class="hd-left">
 				<i class="ti ti-chevron-down chevron open" id="backlog-chev" aria-hidden="true"></i>
 				<span class="backlog-label">Backlog</span>
-				<span class="count-pill" id="bl-count">3 items</span>
+				<span class="count-pill" id="bl-count"></span>
 			</div>
 			<div class="hd-right" onclick="event.stopPropagation()">
 				<button class="icon-btn" title="Filter" aria-label="Filter"><i class="ti ti-filter" aria-hidden="true"></i></button>
@@ -951,7 +900,7 @@
 				<div class="meta-divider"></div>
 				<div class="bl-stat"><i class="ti ti-users" aria-hidden="true"></i><span class="meta-stat-label">Unassigned:</span><span class="bl-stat-val">0</span></div>
 				<div class="meta-divider"></div>
-				<div class="bl-stat"><i class="ti ti-stack-2" aria-hidden="true"></i><span class="meta-stat-label">Not in sprint:</span><span class="bl-stat-val" id="bl-notsprint">3</span></div>
+				<div class="bl-stat"><i class="ti ti-stack-2" aria-hidden="true"></i><span class="meta-stat-label">Not in sprint:</span><span class="bl-stat-val" id="bl-notsprint"></span></div>
 			</div>
 			<div class="tbl-wrap">
 				<table>
@@ -965,38 +914,19 @@
 						</tr>
 					</thead>
 					<tbody id="backlogTableTbody">
-						@* 						<tr>
-							<td><div class="task-cell"><i class="ti ti-layout-list t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-4 create subTask From Detail</span></div></td>
-							<td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td>
-							<td><div class="assign-cell"><span class="av av-mn">MN</span>M. Nauman</div></td>
-							<td><span class="badge b-todo">ToDo</span></td>
-							<td><select class="sprint-sel" onchange="trackSprint(this)"><option value="">Select sprint</option><option>Sprint — 2</option><option>Sprint — 3</option></select></td>
-						</tr>
-						<tr>
-							<td><div class="task-cell"><i class="ti ti-bug t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-5 create subTask From Detail 2</span></div></td>
-							<td><div class="prio-cell"><span class="prio-dot high"></span><span class="prio-text">High</span></div></td>
-							<td><div class="assign-cell"><span class="av av-mn">MN</span>M. Nauman</div></td>
-							<td><span class="badge b-todo">ToDo</span></td>
-							<td><select class="sprint-sel" onchange="trackSprint(this)"><option value="">Select sprint</option><option>Sprint — 2</option><option>Sprint — 3</option></select></td>
-						</tr>
-						<tr>
-							<td><div class="task-cell"><i class="ti ti-star t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-6 Test child from detail</span></div></td>
-							<td><div class="prio-cell"><span class="prio-dot low"></span><span class="prio-text">Low</span></div></td>
-							<td><div class="assign-cell"><span class="av av-ia">IA</span>Israr Ahmad</div></td>
-							<td><span class="badge b-done"><i class="ti ti-check" aria-hidden="true" style="font-size:10px"></i>Done</span></td>
-							<td><select class="sprint-sel" onchange="trackSprint(this)"><option value="">Select sprint</option><option>Sprint — 2</option><option>Sprint — 3</option></select></td>
-						</tr> *@
+				
 					</tbody>
 				</table>
 			</div>
+			<form id="createTaskBacklogForm">
 			<div class="add-row" id="add-row">
-				<select class="type-sel" id="tasktypeId">
-					<option value="">Select Task Type</option>
+				<select class="type-sel" id="tasktypeId" required>
 				</select>
-				<input class="add-input" id="task-input" placeholder="What needs to be done?" onkeydown="if(event.key==='Enter')addTask();if(event.key==='Escape')toggleAddRow()" />
-				<button class="btn-add" onclick="addTask()"><i class="ti ti-circle-plus" aria-hidden="true" style="font-size:14px"></i>Add task</button>
+				<input class="add-input" id="taskInput" placeholder="What needs to be done?" onkeydown="if(event.key==='Enter')addTask();if(event.key==='Escape')toggleAddRow()"  required/>
+				<button type="button" class="btn-add" onclick="addTask()"><i class="ti ti-circle-plus" aria-hidden="true" style="font-size:14px"></i>Add task</button>
 				<button class="btn-cancel" onclick="toggleAddRow()" title="Cancel" aria-label="Cancel"><i class="ti ti-x" aria-hidden="true"></i></button>
 			</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -1135,26 +1065,26 @@
 	  const row=document.getElementById('add-row');
 	  const btn=document.getElementById('add-btn');
 	  const vis=row.classList.contains('visible');
-	  if(vis){row.classList.remove('visible');btn.classList.remove('active');document.getElementById('task-input').value='';}
-	  else{row.classList.add('visible');btn.classList.add('active');setTimeout(()=>document.getElementById('task-input').focus(),50);}
+	  if(vis){row.classList.remove('visible');btn.classList.remove('active');document.getElementById('taskInput').value='';}
+	  else{row.classList.add('visible');btn.classList.add('active');setTimeout(()=>document.getElementById('taskInput').focus(),50);}
 	}
 
-	function addTask(){
-	  const inp=document.getElementById('task-input');
-	  const type=document.getElementById('task-type').value;
-	  const name=inp.value.trim();
-	  if(!name)return;
-	  count++;notsprint++;
-	  document.getElementById('bl-count').textContent=count+' items';
-	  document.getElementById('bl-notsprint').textContent=notsprint;
-	  const icons={Task:'ti-layout-list',Bug:'ti-bug',Story:'ti-star',Epic:'ti-bolt'};
-	  const icon=icons[type]||'ti-layout-list';
-	  const tr=document.createElement('tr');
-	  tr.className='new-row';
-	  tr.innerHTML=`<td><div class="task-cell"><i class="ti ${icon} t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-${n++} ${name}</span></div></td><td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td><td><div class="assign-cell"><span class="av av-mn">MN</span>M. Nauman</div></td><td><span class="badge b-todo">ToDo</span></td><td><select class="sprint-sel" onchange="trackSprint(this)"><option value="">Select sprint</option><option>Sprint — 2</option><option>Sprint — 3</option></select></td>`;
-	  document.getElementById('add-row').insertAdjacentElement('beforebegin',tr);
-	  inp.value='';inp.focus();
-	}
+	// function addTask(){
+	//   const inp=document.getElementById('taskInput');
+	//   const type=document.getElementById('task-type').value;
+	//   const name=inp.value.trim();
+	//   if(!name)return;
+	//   count++;notsprint++;
+	//   document.getElementById('bl-count').textContent=count+' items';
+	//   document.getElementById('bl-notsprint').textContent=notsprint;
+	//   const icons={Task:'ti-layout-list',Bug:'ti-bug',Story:'ti-star',Epic:'ti-bolt'};
+	//   const icon=icons[type]||'ti-layout-list';
+	//   const tr=document.createElement('tr');
+	//   tr.className='new-row';
+	//   tr.innerHTML=`<td><div class="task-cell"><i class="ti ${icon} t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-${n++} ${name}</span></div></td><td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td><td><div class="assign-cell"><span class="av av-mn">MN</span>M. Nauman</div></td><td><span class="badge b-todo">ToDo</span></td><td><select class="sprint-sel" onchange="trackSprint(this)"><option value="">Select sprint</option><option>Sprint — 2</option><option>Sprint — 3</option></select></td>`;
+	//   document.getElementById('add-row').insertAdjacentElement('beforebegin',tr);
+	//   inp.value='';inp.focus();
+	// }
 
 	function trackSprint(sel){
 	  if(sel.value){
@@ -1216,6 +1146,7 @@
 		if (response.request.status === 201) {
 			successToastr("Saved successfully", 'Sprint');
 			$('#createSprintModal').modal('hide');
+			getProjectSprints();
 			getSprintBacklog();
 		}
 		else {
@@ -1250,22 +1181,18 @@
 	function loadTaskTypeDropdown() {
 
 		var $taskTypeSelect = $('#tasktypeId');
-
-		$taskTypeSelect.empty(); // Clear existing options
-
-		// Optional default option
 		$taskTypeSelect.append(
 			`<option value="">Select Task Type</option>`
 		);
 
 		$.each(_taskTypes, function (index, item) {
 
+			var selected = item.id == 3 ? 'selected' : '';
 			var option = `
-				<option value="${item.id}">
+				<option value="${item.id}" ${selected}>
 					${item.description}
 				</option>
 			`;
-
 			$taskTypeSelect.append(option);
 		});
 	}
@@ -1321,9 +1248,42 @@
 
 	  $.each(sprintArray, function (sIndex, sprint) {
 
+			let totalTasks = sprint.taskStatusCount.all;
+			let doneTasks = sprint.taskStatusCount.done;
+
+			let progressPercentage = 0;
+				progressPercentage = ((doneTasks / totalTasks) * 100).toFixed(0);
+
+			// Dates
+			let today = new Date();
+			let startDate = new Date(sprint.startDate);
+			let endDate = new Date(sprint.endDate);
+
+			// Duration (start → end)
+			let durationDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+			if (durationDays < 0) durationDays = 0;
+
+			// Days left (today → end)
+			let daysLeft = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+			if (daysLeft < 0) daysLeft = 0;
+
+			// Starts in (today → start)
+			let startsIn = Math.ceil((startDate - today) / (1000 * 60 * 60 * 24));
+			if (startsIn < 0) startsIn = 0;
 
 		   var sprintHtmlBaseOnStatus = "";
 		   if (sprint.status.description === "Planned") {
+
+				let workloadHtml = '';
+				let totalMember = sprint.assigneeCount.length;
+				$.each(sprint.assigneeCount, function(index, item) {
+
+					workloadHtml += `
+					   <div class="wl-item"><span class="wl-av wl-av-mn">${getInitials(item.name)}</span><span class="wl-name">${item.name}</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:${item.workLoad}%;background:#6366f1"></div></div><span class="wl-count" style="color:#6366f1">${item.count}t</span></div>
+					`;
+				});
+
+
 				sprintHtmlBaseOnStatus = `
 					  <div class="section mt-3">
 						  <div class="sprint-hd planned-sprint" onclick="toggle(this,'${sprint.name}-body','chev-${sprint.id}')">
@@ -1332,7 +1292,7 @@
 							  <span class="sprint-name planned-col"> ${sprint.name}</span>
 							  <span class="pill pill-date-p"><i class="ti ti-calendar" aria-hidden="true" style="font-size:10px"></i>${sprint.startDate} - ${sprint.endDate}</span>
 							  <span class="pill pill-planned"><i class="ti ti-clock-pause" aria-hidden="true" style="font-size:10px"></i>${sprint.status.description}</span>
-							  <span class="pill pill-tasks"><i class="ti ti-list-check" aria-hidden="true" style="font-size:10px"></i>3 tasks</span>
+							  <span class="pill pill-tasks"><i class="ti ti-list-check" aria-hidden="true" style="font-size:10px"></i>${sprint.taskStatusCount.all} tasks</span>
 							</div>
 							<div class="hd-right">
 							  <button class="btn-action btn-activate activate-sprint-btn" data-sprint-id="${sprint.id}"><i class="ti ti-player-play" aria-hidden="true" style="font-size:13px"></i>Activate</button>
@@ -1341,21 +1301,20 @@
 						  <div id="${sprint.name}-body"style="display:none">
 							<div class="meta-strip">
 							  <div class="meta-row">
-								<div class="meta-stat"><i class="ti ti-calendar-event meta-stat-icon" style="color:#6366f1" aria-hidden="true"></i><span class="meta-stat-label">Starts in:</span><span class="meta-stat-val">25 days</span></div>
+								<div class="meta-stat"><i class="ti ti-calendar-event meta-stat-icon" style="color:#6366f1" aria-hidden="true"></i><span class="meta-stat-label">Starts in:</span><span class="meta-stat-val">${startsIn} days</span></div>
 								<div class="meta-divider"></div>
-								<div class="meta-stat"><i class="ti ti-list meta-stat-icon" style="color:#6366f1" aria-hidden="true"></i><span class="meta-stat-label">Tasks planned:</span><span class="meta-stat-val">3</span></div>
+								<div class="meta-stat"><i class="ti ti-list meta-stat-icon" style="color:#6366f1" aria-hidden="true"></i><span class="meta-stat-label">Tasks planned:</span><span class="meta-stat-val"> ${sprint.taskStatusCount.all}</span></div>
 								<div class="meta-divider"></div>
-								<div class="meta-stat"><i class="ti ti-chart-dots meta-stat-icon" style="color:#6366f1" aria-hidden="true"></i><span class="meta-stat-label">Estimated:</span><span class="meta-stat-val">14 pts</span></div>
+								<div class="meta-stat"><i class="ti ti-users meta-stat-icon" style="color:#6366f1" aria-hidden="true"></i><span class="meta-stat-label">Members:</span><span class="meta-stat-val">${totalMember}</span></div>
 							  </div>
 							  <div class="progress-row">
 								<span class="prog-label">Task progress</span>
-								<div class="progress-bar"><div class="progress-fill pf-planned" style="width:0%"></div></div>
-								<span class="prog-pct pct-planned">0%</span>
+								<div class="progress-bar"><div class="progress-fill pf-planned" style="width:${progressPercentage}%"></div></div>
+								<span class="prog-pct pct-planned">${progressPercentage}%</span>
 							  </div>
 							  <div class="workload-row">
 								<span class="wl-title">Planned workload</span>
-								<div class="wl-item"><span class="wl-av wl-av-mn">MN</span><span class="wl-name">M. Nauman</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:60%;background:#6366f1"></div></div><span class="wl-count" style="color:#6366f1">2t</span></div>
-								<div class="wl-item"><span class="wl-av wl-av-sa">SA</span><span class="wl-name">S. Ali</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:30%;background:#6366f1"></div></div><span class="wl-count" style="color:#6366f1">1t</span></div>
+									${workloadHtml}
 							  </div>
 							</div>
 							<div class="tbl-wrap">
@@ -1376,6 +1335,17 @@
 				`;
 			}
 			else if (sprint.status.description === "Active") {
+
+					let workloadHtml = '';
+					let totalMember = sprint.assigneeCount.length;
+				$.each(sprint.assigneeCount, function(index, item) {
+
+					workloadHtml += `
+						<div class="wl-item"><span class="wl-av wl-av-mn">${getInitials(item.name)}</span><span class="wl-name">${item.name}</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:${item.workLoad}%"></div></div><span class="wl-count">${item.count}t</span></div>
+						
+					`;
+				});
+
 			  sprintHtmlBaseOnStatus = `
 					<div class="section mt-2">
 					  <div class="sprint-hd active-sprint" onclick="toggle(this,'${sprint.name}-body','chev-${sprint.id}')">
@@ -1384,8 +1354,8 @@
 						  <span class="sprint-name active-col">${sprint.name}</span>
 						  <span class="pill pill-date"><i class="ti ti-calendar" aria-hidden="true" style="font-size:10px"></i>${sprint.startDate} - ${sprint.endDate}</span>
 						  <span class="pill pill-active"><i class="ti ti-circle-filled" aria-hidden="true" style="font-size:8px"></i>${sprint.status.description}</span>
-						  <span class="pill pill-days"><i class="ti ti-clock" aria-hidden="true" style="font-size:10px"></i><span id="days-left">24</span> days left</span>
-						  <span class="pill pill-tasks"><i class="ti ti-list-check" aria-hidden="true" style="font-size:10px"></i>2/3 done</span>
+						  <span class="pill pill-days"><i class="ti ti-clock" aria-hidden="true" style="font-size:10px"></i><span id="days-left">${daysLeft}</span> days left</span>
+						  <span class="pill pill-tasks"><i class="ti ti-list-check" aria-hidden="true" style="font-size:10px"></i>${sprint.taskStatusCount.done} / ${sprint.taskStatusCount.all} done</span>
 						</div>
 						<div class="hd-right" >
 						  <button class="btn-action btn-complete complete-sprint-btn" data-sprint-id="${sprint.id}"><i class="ti ti-circle-check" aria-hidden="true" style="font-size:13px"></i>Complete</button>
@@ -1394,22 +1364,21 @@
 					  <div id="${sprint.name}-body" style="display:none">
 						<div class="meta-strip">
 						  <div class="meta-row">
-							<div class="meta-stat"><i class="ti ti-clock meta-stat-icon" aria-hidden="true"></i><span class="meta-stat-label">Days left:</span><span class="meta-stat-val" id="days-val">24 of 31</span></div>
+							<div class="meta-stat"><i class="ti ti-clock meta-stat-icon" aria-hidden="true"></i><span class="meta-stat-label">Days left:</span><span class="meta-stat-val" id="days-val">${daysLeft} of ${durationDays}</span></div>
 							<div class="meta-divider"></div>
-							<div class="meta-stat"><i class="ti ti-list-check meta-stat-icon" aria-hidden="true"></i><span class="meta-stat-label">Tasks:</span><span class="meta-stat-val">2 of 3 done</span></div>
+							<div class="meta-stat"><i class="ti ti-list-check meta-stat-icon" aria-hidden="true"></i><span class="meta-stat-label">Tasks:</span><span class="meta-stat-val">${sprint.taskStatusCount.done} of ${sprint.taskStatusCount.all} done</span></div>
 							<div class="meta-divider"></div>
 							<div class="meta-divider"></div>
-							<div class="meta-stat"><i class="ti ti-users meta-stat-icon" aria-hidden="true"></i><span class="meta-stat-label">Members:</span><span class="meta-stat-val">2</span></div>
+							<div class="meta-stat"><i class="ti ti-users meta-stat-icon" aria-hidden="true"></i><span class="meta-stat-label">Members:</span><span class="meta-stat-val">${totalMember}</span></div>
 						  </div>
 						  <div class="progress-row">
 							<span class="prog-label">Task progress</span>
-							<div class="progress-bar"><div class="progress-fill pf-active" style="width:85%"></div></div>
-							<span class="prog-pct pct-active">67%</span>
+							<div class="progress-bar"><div class="progress-fill pf-active" style="width:${progressPercentage}%"></div></div>
+							<span class="prog-pct pct-active">${progressPercentage}%</span>
 						  </div>
 						  <div class="workload-row">
 							<span class="wl-title">Workload</span>
-							<div class="wl-item"><span class="wl-av wl-av-mn">MN</span><span class="wl-name">M. Nauman</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:75%"></div></div><span class="wl-count">2t</span></div>
-							<div class="wl-item"><span class="wl-av wl-av-ia">IA</span><span class="wl-name">Israr Ahmad</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:35%"></div></div><span class="wl-count">1t</span></div>
+								  ${workloadHtml}
 						  </div>
 						</div>
 						<div class="tbl-wrap">
@@ -1430,6 +1399,14 @@
 				`;
 			}
 			else if (sprint.status.description === "Completed") {
+				let workloadHtml = '';
+				let totalMember = sprint.assigneeCount.length;
+				$.each(sprint.assigneeCount, function(index, item) {
+
+					workloadHtml += `
+					   <div class="wl-item"><span class="wl-av wl-av-mn">${getInitials(item.name)}</span><span class="wl-name">${item.name}</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:${item.workLoad}%;background:#10b981"></div></div><span class="wl-count" style="color:#10b981">${item.count}t</span></div>
+					`;
+				});
 				sprintHtmlBaseOnStatus = `
 				 <div class="section completed mt-3">
 					  <div class="sprint-hd completed-sprint" onclick="toggle(this,'${sprint.name}-body','chev-${sprint.id}')">
@@ -1438,7 +1415,7 @@
 						  <span class="sprint-name completed-col">${sprint.name}</span>
 						  <span class="pill pill-date-c"><i class="ti ti-calendar" aria-hidden="true" style="font-size:10px"></i>${sprint.startDate} - ${sprint.endDate}</span>
 						  <span class="pill pill-completed"><i class="ti ti-circle-check" aria-hidden="true" style="font-size:10px"></i>${sprint.status.description}</span>
-						  <span class="pill pill-tasks"><i class="ti ti-list-check" aria-hidden="true" style="font-size:10px"></i>5/5 tasks</span>
+						  <span class="pill pill-tasks"><i class="ti ti-list-check" aria-hidden="true" style="font-size:10px"></i>${sprint.taskStatusCount.done} / ${sprint.taskStatusCount.all} tasks</span>
 						</div>
 						<div class="hd-right" onclick="event.stopPropagation()">
 						  <button class="btn-action btn-reopen"><i class="ti ti-refresh" aria-hidden="true" style="font-size:13px"></i>Reopen</button>
@@ -1447,25 +1424,24 @@
 					  <div id="${sprint.name}-body" style="display:none">
 						<div class="completed-banner">
 						  <i class="ti ti-circle-check" aria-hidden="true" style="font-size:15px"></i>
-						  Sprint completed on Apr 30, 2026 — All 5 tasks done ·
+						  Sprint completed on  ${sprint.endDate} — ${sprint.taskStatusCount.done} / ${sprint.taskStatusCount.all} tasks done ·
 						</div>
 						<div class="meta-strip">
 						  <div class="meta-row">
-							<div class="meta-stat"><i class="ti ti-calendar-check meta-stat-icon" style="color:#10b981" aria-hidden="true"></i><span class="meta-stat-label">Duration:</span><span class="meta-stat-val">30 days</span></div>
+							<div class="meta-stat"><i class="ti ti-calendar-check meta-stat-icon" style="color:#10b981" aria-hidden="true"></i><span class="meta-stat-label">Duration:</span><span class="meta-stat-val"> ${durationDays} days</span></div>
 							<div class="meta-divider"></div>
-							<div class="meta-stat"><i class="ti ti-list-check meta-stat-icon" style="color:#10b981" aria-hidden="true"></i><span class="meta-stat-label">Tasks:</span><span class="meta-stat-val">5 of 5 done</span></div>
+							<div class="meta-stat"><i class="ti ti-list-check meta-stat-icon" style="color:#10b981" aria-hidden="true"></i><span class="meta-stat-label">Tasks:</span><span class="meta-stat-val">${sprint.taskStatusCount.done} of ${sprint.taskStatusCount.all} done</span></div>
 							<div class="meta-divider"></div>
-							<div class="meta-stat"><i class="ti ti-chart-dots meta-stat-icon" style="color:#10b981" aria-hidden="true"></i><span class="meta-stat-label">Velocity:</span><span class="meta-stat-val">18 pts</span></div>
+							<div class="meta-stat"><i class="ti ti-users meta-stat-icon" style="color:#10b981" aria-hidden="true"></i><span class="meta-stat-label">Members:</span><span class="meta-stat-val">  ${totalMember}</span></div>
 						  </div>
 						  <div class="progress-row">
 							<span class="prog-label">Completion</span>
-							<div class="progress-bar"><div class="progress-fill pf-completed" style="width:100%"></div></div>
-							<span class="prog-pct pct-completed">100%</span>
+							<div class="progress-bar"><div class="progress-fill pf-completed" style="width:${progressPercentage}%"></div></div>
+							<span class="prog-pct pct-completed">${progressPercentage}%</span>
 						  </div>
 						  <div class="workload-row">
 							<span class="wl-title">Workload</span>
-							<div class="wl-item"><span class="wl-av wl-av-mn">MN</span><span class="wl-name">M. Nauman</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:100%;background:#10b981"></div></div><span class="wl-count" style="color:#10b981">3t</span></div>
-							<div class="wl-item"><span class="wl-av wl-av-ia">IA</span><span class="wl-name">Israr Ahmad</span><div class="wl-bar-wrap"><div class="wl-bar" style="width:100%;background:#10b981"></div></div><span class="wl-count" style="color:#10b981">2t</span></div>
+							  ${workloadHtml}
 						  </div>
 						</div>
 						<div class="tbl-wrap">
@@ -1499,7 +1475,7 @@
 			//debugger;
 		  var tr = `
 					<tr>
-						<td><div class="task-cell"><i class="${task.type.icon}"${task.type.iconCSS} aria-hidden="true"></i><span class="task-code">TSK-${task.id}</span><span class="task-name">${task.title}</span></div></td>
+						<td><div class="task-cell"><i class="${task.type.icon}"${task.type.iconCSS} aria-hidden="true"></i><span class="task-code">${task.code}</span><span class="task-name">${task.title}</span></div></td>
 						<td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td>
 						<td><div class="assign-cell"><span class="av av-mn">${getInitials(task.assignee)}</span>	${task.assignee}</div></td>
 						<td><span class="badge b-review"><i class="ti ti-eye" aria-hidden="true" style="font-size:10px"></i>${task.status}</span></td>
@@ -1518,7 +1494,10 @@
 		// Get backlog tbody
 	  var $backlogTbody = $("#backlogTableTbody");
 		$backlogTbody.empty();
-
+		let totalItemInBacklog = backlogArray.length;
+		$('#bl-count').text(totalItemInBacklog + ' items');
+		$('#bl-notsprint').text(totalItemInBacklog);
+		console.log(totalItemInBacklog);
 		var sprintList = "";
 		$.each(_projectSprintArray, function (i, sprint) {
 			sprintList += `
@@ -1541,7 +1520,7 @@
 		   }
 		  var tr = `
 			<tr>
-							<td><div class="task-cell"><i class="ti ti-layout-list t-icon" aria-hidden="true"></i><span class="task-code">TSK-${task.id}</span><span class="task-name">${task.title}</span></div></td>
+							<td><div class="task-cell"><i class="${task.type.icon}"${task.type.iconCSS} aria-hidden="true"></i><span class="task-code">${task.code}</span><span class="task-name">${task.title}</span></div></td>
 							<td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td>
 							<td><div class="assign-cell"><span class="av av-mn">${getInitials(task.assignee)}</span>${task.assignee}</div></td>
 							<td>${statusHtml}</td>
@@ -1608,6 +1587,42 @@
 	var completeSprintCallBack = function (response) {
 		if (response.request.status === 204) {
 			successToastr("Completed successfully", 'Sprint');
+			getSprintBacklog();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+
+	function addTask() {
+
+		if (!customValidateForm('createTaskBacklogForm')) {
+		   return; // stop execution
+		}
+		var inputJSON = {
+			"title": $('#taskInput').val(),
+			"assigneeId": loginUserID,
+			"reporterId": loginUserID,
+			"reviewerId": loginUserID,
+			"statusId": 1,
+			"typeId": $('#tasktypeId').val(),
+			"parentId": null
+		};
+
+		let url = `flowtick/project/${projectId}/tasks`;
+		apiRequest({
+			url: url,
+			type: 'POST',
+			data: inputJSON,
+			callBack: createTaskCallBack
+			
+		});
+	}
+	var createTaskCallBack = function (response) {
+		if (response.request.status === 201) {
+			successToastr($("#taskInput").val(), 'Task');
+			$('#taskInput').val('');
+		    $('#tasktypeId').val(3);
 			getSprintBacklog();
 		}
 		else {
