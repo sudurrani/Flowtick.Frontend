@@ -728,7 +728,10 @@ var getProjectTasksCallBack = function (response) {
     }
 };
 // Render Task Card
-function renderTaskCard(task) {
+function renderTaskCard(task) {    
+    var doneCount = $.grep(task.child || [], function (item) {
+        return item.status && item.status.name === "Done";
+    }).length;    
 
     const labels = task.labels && task.labels.length > 0
         ? `<div class="task-labels">${task.labels.map(label =>
@@ -744,7 +747,7 @@ function renderTaskCard(task) {
     const subtasks = task.child
         ? `<div class="subtask-info">
                                                           <i class="bi bi-check-circle"></i>
-                                                              <span>${0}/${task.child.length}</span>
+                                                              <span>${doneCount}/${task.child.length}</span>
                                                         </div>`
         : '';
 
