@@ -1,5 +1,5 @@
 ﻿@{
-	ViewBag.Title = "NewBacklog";
+	ViewBag.Title = "Backlog";
 	Layout = "~/Views/Shared/_FlowtickLayout.cshtml";
 }
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
@@ -990,11 +990,8 @@
 				</table>
 			</div>
 			<div class="add-row" id="add-row">
-				<select class="type-sel" id="task-type">
-					<option>Task</option>
-					<option>Bug</option>
-					<option>Story</option>
-					<option>Epic</option>
+				<select class="type-sel" id="tasktypeId">
+					<option value="">Select Task Type</option>
 				</select>
 				<input class="add-input" id="task-input" placeholder="What needs to be done?" onkeydown="if(event.key==='Enter')addTask();if(event.key==='Escape')toggleAddRow()" />
 				<button class="btn-add" onclick="addTask()"><i class="ti ti-circle-plus" aria-hidden="true" style="font-size:14px"></i>Add task</button>
@@ -1244,12 +1241,34 @@
 		if (response.request.status === 200) {
 
 			_taskTypes = response.data; // your array
-			// loadTaskTypeDropdown();
+			 loadTaskTypeDropdown();
 		}
 		else {
 			errorExtractor(response);
 		}
 	};
+	function loadTaskTypeDropdown() {
+
+		var $taskTypeSelect = $('#tasktypeId');
+
+		$taskTypeSelect.empty(); // Clear existing options
+
+		// Optional default option
+		$taskTypeSelect.append(
+			`<option value="">Select Task Type</option>`
+		);
+
+		$.each(_taskTypes, function (index, item) {
+
+			var option = `
+				<option value="${item.id}">
+					${item.description}
+				</option>
+			`;
+
+			$taskTypeSelect.append(option);
+		});
+	}
 	function getProjectSprints() {
 			let url = `flowtick/project/${projectId}/sprints`;
 		apiRequest({
@@ -1301,6 +1320,7 @@
 	 // console.log(backlogArray);
 
 	  $.each(sprintArray, function (sIndex, sprint) {
+
 
 		   var sprintHtmlBaseOnStatus = "";
 		   if (sprint.status.description === "Planned") {
@@ -1393,14 +1413,17 @@
 						  </div>
 						</div>
 						<div class="tbl-wrap">
-						  <table>
-							<thead><tr><th style="width:44%">Title</th><th>Priority</th><th>Assignee</th><th>Status</th></tr></thead>
-							<tbody>
-							  <tr><td><div class="task-cell"><i class="ti ti-layout-list t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-1 create task from backlog</span></div></td><td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td><td><div class="assign-cell"><span class="av av-mn">MN</span>M. Nauman</div></td><td><span class="badge b-review"><i class="ti ti-eye" aria-hidden="true" style="font-size:10px"></i>Review</span></td></tr>
-							  <tr><td><div class="task-cell"><i class="ti ti-layout-list t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-2 Create subtask</span></div></td><td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td><td><div class="assign-cell"><span class="av av-ia">IA</span>Israr Ahmad</div></td><td><span class="badge b-done"><i class="ti ti-check" aria-hidden="true" style="font-size:10px"></i>Done</span></td></tr>
-							  <tr><td><div class="task-cell"><i class="ti ti-bolt t-icon" aria-hidden="true"></i><span class="task-code">TSK-101</span><span class="task-name">TI-3 create epic</span></div></td><td><div class="prio-cell"><span class="prio-dot high"></span><span class="prio-text">High</span></div></td><td><div class="assign-cell"><span class="av av-mn">MN</span>M. Nauman</div></td><td><span class="badge b-done"><i class="ti ti-check" aria-hidden="true" style="font-size:10px"></i>Done</span></td></tr>
-							</tbody>
-						  </table>
+							<table>
+								<thead>
+								<tr>
+								<th style="width:44%">Title</th>
+								<th>Priority</th>
+								<th>Assignee</th>
+								<th>Status</th></tr></thead>
+								<tbody class="sprint-task-tbody">
+
+								</tbody>
+							</table>
 						</div>
 					  </div>
 					</div>
@@ -1411,7 +1434,7 @@
 				 <div class="section completed mt-3">
 					  <div class="sprint-hd completed-sprint" onclick="toggle(this,'${sprint.name}-body','chev-${sprint.id}')">
 						<div class="hd-left">
-						  <i class="ti ti-chevron-down chevron" id="${sprint.id}-chev" aria-hidden="true"></i>
+						  <i class="ti ti-chevron-down chevron" id="chev-${sprint.id}" aria-hidden="true"></i>
 						  <span class="sprint-name completed-col">${sprint.name}</span>
 						  <span class="pill pill-date-c"><i class="ti ti-calendar" aria-hidden="true" style="font-size:10px"></i>${sprint.startDate} - ${sprint.endDate}</span>
 						  <span class="pill pill-completed"><i class="ti ti-circle-check" aria-hidden="true" style="font-size:10px"></i>${sprint.status.description}</span>
@@ -1476,7 +1499,7 @@
 			//debugger;
 		  var tr = `
 					<tr>
-						<td><div class="task-cell"><i class="ti ti-layout-list t-icon" aria-hidden="true"></i><span class="task-code">TSK-${task.id}</span><span class="task-name">${task.title}</span></div></td>
+						<td><div class="task-cell"><i class="${task.type.icon}"${task.type.iconCSS} aria-hidden="true"></i><span class="task-code">TSK-${task.id}</span><span class="task-name">${task.title}</span></div></td>
 						<td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td>
 						<td><div class="assign-cell"><span class="av av-mn">${getInitials(task.assignee)}</span>	${task.assignee}</div></td>
 						<td><span class="badge b-review"><i class="ti ti-eye" aria-hidden="true" style="font-size:10px"></i>${task.status}</span></td>
