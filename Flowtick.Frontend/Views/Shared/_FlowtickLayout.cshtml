@@ -32,7 +32,7 @@
 
 
     <link href="~/layout/css/flowtick-layout.css" rel="stylesheet" />
-
+	<link href="~/css/dashboard/flowtick-header.css" rel="stylesheet" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -107,28 +107,144 @@
     <!-- Sidebar -->
 
     <div class="main-content" id="mainContent">
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <h1 class="page-title"><span id="ProjectName" class="green"></span> / Board</h1>
-            <div class="top-bar-right">
-                <div class="search-box">
-                    <i class="bi bi-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search tasks...">
+        <!-- ============================================================
+             FLOWTICK — BOARD HEADER ROW
+             Standalone component. Include board-header.css + board-header.js
+             ============================================================ -->
+
+        <header class="ft-header" id="ft-header">
+
+            <!-- LEFT: Breadcrumb navigation -->
+            <div class="ft-header__left" id="ft-header-left">
+                <nav class="ft-breadcrumb" id="ft-breadcrumb" aria-label="Breadcrumb">
+                    <span class="ft-breadcrumb__link" id="ft-bc-projects">
+                        <i class="bi bi-grid-3x3-gap"></i> Projects
+                    </span>
+                    <span class="ft-breadcrumb__sep">/</span>
+                    <span class="ft-breadcrumb__project" id="ft-bc-project-name">Fophex-ERP</span>
+                    <span class="ft-breadcrumb__sep">/</span>
+                    <span class="ft-breadcrumb__current" id="ft-bc-current-page">Board</span>
+                </nav>
+                <span class="ft-header__board-badge" id="ft-board-badge">
+                    <i class="bi bi-kanban"></i> Sprint Board
+                </span>
+            </div>
+
+            <!-- RIGHT: Actions -->
+            <div class="ft-header__right" id="ft-header-right">
+
+                <!-- Search -->
+                <div class="ft-search" id="ft-search-wrap">
+                    <i class="bi bi-search ft-search__icon"></i>
+                    <input type="text"
+                           class="ft-search__input"
+                           id="ft-search-input"
+                           placeholder="Search tasks…"
+                           autocomplete="off" />
                 </div>
-@*                 <button class="btn-create ms-auto" id="btnCreateProject">
-                    <i class="bi bi-plus-lg"></i>
-                    Create Project
-                </button> *@
-                <button class="icon-btn">
+
+                <!-- View Toggle: Board / List / Backlog -->
+                <div class="ft-view-toggle" id="ft-view-toggle" role="group" aria-label="View mode">
+                    <button class="ft-view-toggle__btn ft-view-toggle__btn--active" id="ft-view-board" data-view="board" title="Board view" aria-label="Board view">
+                        <i class="bi bi-kanban"></i>
+                    </button>
+                    <button class="ft-view-toggle__btn" id="ft-view-list" data-view="list" title="List view" aria-label="List view">
+                        <i class="bi bi-list-ul"></i>
+                    </button>
+                    <button class="ft-view-toggle__btn" id="ft-view-backlog" data-view="backlog" title="Backlog view" aria-label="Backlog view">
+                        <i class="bi bi-layout-text-sidebar"></i>
+                    </button>
+                </div>
+
+                <!-- Notifications -->
+                <button class="ft-header__icon-btn" id="ft-btn-notifications" title="Notifications" aria-label="Notifications">
                     <i class="bi bi-bell"></i>
+                    <span class="ft-notification-dot" id="ft-notification-dot"></span>
                 </button>
-                <button class="icon-btn">
+
+                <!-- Settings -->
+                <button class="ft-header__icon-btn" id="ft-btn-settings" title="Settings" aria-label="Settings">
                     <i class="bi bi-gear"></i>
                 </button>
-                <div class="user-avatar" id="userAvatar">SU</div>
-            </div>
-        </div>
 
+                <!-- Help -->
+                <button class="ft-header__icon-btn" id="ft-btn-help" title="Help" aria-label="Help">
+                    <i class="bi bi-question-circle"></i>
+                </button>
+
+                <!-- User Avatar + Dropdown -->
+                <div class="ft-user" id="ft-user-wrap">
+                    <div class="ft-user__avatar" id="ft-user-avatar" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Account menu">
+             
+                    </div>
+
+                    <!-- User dropdown menu -->
+                    <div class="ft-user__menu ft-dropdown--hidden" id="ft-user-menu" role="menu">
+
+                        <!-- Hero section -->
+                        <div class="ft-user__menu-hero" id="ft-user-menu-hero">
+                            <div class="ft-user__menu-hero-top">
+                                <div class="ft-user__menu-avatar-lg" id="ft-user-menu-avatar"></div>
+                                <div class="ft-user__menu-info">
+                                    <div class="ft-user__menu-name" id="ft-user-menu-name"></div>
+                                    <div class="ft-user__menu-role" id="ft-user-menu-role">Project Manager</div>
+                                    <div class="ft-user__menu-email" id="ft-user-menu-email">
+                                        <i class="bi bi-envelope-fill"></i> m.nauman@fophex.com
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Quick stats -->
+                            <div class="ft-user__menu-stats" id="ft-user-menu-stats">
+                                <div class="ft-user__menu-stat">
+                                    <div class="ft-user__menu-stat-val" id="ft-stat-tasks">12</div>
+                                    <div class="ft-user__menu-stat-lbl">My Tasks</div>
+                                </div>
+                                <div class="ft-user__menu-stat">
+                                    <div class="ft-user__menu-stat-val" id="ft-stat-review">3</div>
+                                    <div class="ft-user__menu-stat-lbl">In Review</div>
+                                </div>
+                                <div class="ft-user__menu-stat">
+                                    <div class="ft-user__menu-stat-val" id="ft-stat-overdue">2</div>
+                                    <div class="ft-user__menu-stat-lbl">Overdue</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Menu items -->
+                        <div class="ft-user__menu-body">
+                            <div class="ft-user__menu-item" id="ft-menu-profile" role="menuitem">
+                                <i class="bi bi-person-circle"></i> My Profile
+                            </div>
+                            <div class="ft-user__menu-item" id="ft-menu-my-tasks" role="menuitem">
+                                <i class="bi bi-check2-square"></i> My Tasks
+                                <span class="ft-user__menu-item-badge ft-badge--teal" id="ft-my-tasks-count">12 open</span>
+                            </div>
+                            <div class="ft-user__menu-item" id="ft-menu-notifications" role="menuitem">
+                                <i class="bi bi-bell"></i> Notifications
+                                <span class="ft-user__menu-item-badge ft-badge--red" id="ft-notif-count">3</span>
+                            </div>
+                            <div class="ft-user__menu-separator"></div>
+                            <div class="ft-user__menu-item" id="ft-menu-settings" role="menuitem">
+                                <i class="bi bi-gear"></i> Settings
+                            </div>
+                            <div class="ft-user__menu-item" id="ft-menu-permissions" role="menuitem">
+                                <i class="bi bi-shield-check"></i> Permissions
+                            </div>
+                            <div class="ft-user__menu-item" id="ft-menu-appearance" role="menuitem">
+                                <i class="bi bi-palette"></i> Appearance
+                            </div>
+                            <div class="ft-user__menu-separator"></div>
+                            <div class="ft-user__menu-item ft-user__menu-item--danger" id="ft-menu-signout" role="menuitem">
+                                <i class="bi bi-box-arrow-right"></i> Sign out
+                            </div>
+                        </div>
+
+                    </div><!-- /ft-user__menu -->
+                </div><!-- /ft-user -->
+
+            </div><!-- /ft-header__right -->
+
+        </header><!-- /ft-header -->
         @RenderBody()
     </div>
     @* add people modal  *@
@@ -241,7 +357,7 @@
     </div>
     <script src="~/layout/js/select2.min.js"></script>
     <script src="~/js/functionalityjs/common-script.js"></script>
-
+	<script src="~/js/functionalityjs/dashboard/flowtick-header.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
@@ -257,7 +373,9 @@
             const userName = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];       
             */
             let user = getLoggedInUser();
-            $('#userAvatar').text(getInitials(user.name));
+            $('#ft-user-avatar').text(getInitials(user.name));
+            $('#ft-user-menu-avatar').text(getInitials(user.name));
+            $('#ft-user-menu-name').text(user.name);
 
             //end
 
@@ -273,7 +391,7 @@
 
             var urlParameters = new URLSearchParams(window.location.search);
             let project = urlParameters.get('project');                  
-            $('#ProjectName').text(project);
+            $('#ft-bc-project-name').text(project);
 
 
             getMyProjects();
@@ -302,6 +420,12 @@
             $("#saveProject").click(function () {
                 createProject()
             }); 
+            $("#ft-menu-signout").click( function(){
+                redirectToAction('/Auth/Login?key=', 10);
+            });
+            $("#ft-menu-profile").click( function(){
+                redirectToAction('/User/Profile?id=',1);
+            });
 
          $("#userAvatar").on("click", function (e) {
             e.stopPropagation();

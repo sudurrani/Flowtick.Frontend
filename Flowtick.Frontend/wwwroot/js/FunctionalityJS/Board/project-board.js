@@ -110,15 +110,15 @@ $(function () {
         });
     });
 
-    $('#btnFilterOnlyTitle').on('click', function (e) {        
-        const checkbox = $("#cbFilterOnlyTitle");
-        checkbox.prop("checked", !checkbox.prop("checked"));
+    $('#ft-toggle-only-title').on('click', function (e) {        
+        //const checkbox = $("#cbFilterOnlyTitle");
+        //checkbox.prop("checked", !checkbox.prop("checked"));
 
         $('.task-card-header').toggleClass('d-none');
         $('.task-labels').toggleClass('d-none');
         $('.task-footer').toggleClass('d-none');
     });
-    $('#btnMyReview').on('click', function (e) {
+    $('#ft-toggle-my-review').on('click', function (e) {
 
         const checkbox = $("#cbMyReview");
         checkbox.prop("checked", !checkbox.prop("checked"));
@@ -158,27 +158,25 @@ function getSetFilters() {
 function loadFilterTaskTypeDropdown() {
 
 
-    var $filterTaskTypeMenu = $('.filter-task-type-menu');
+    var $filterTaskTypeMenu = $('#ft-filter-type-panel');
 
     $filterTaskTypeMenu.empty();
+    $filterTaskTypeMenu.append(`<div class="ft-dropdown-panel__label">Task type</div> `);
     $.each(_taskTypes, function (index, item) {
         var li = `
-							  <li>
-								  <a class="dropdown-item" href="#" data-id="${item.id}" onclick="filterTaskTypeSelection(event,${item.id},'${item.description}');">
-                                    <input type="checkbox" class="fs-5 me-1 task-type-checkbox" />
-									  <i class="${item.icon} " ${item.iconCSS}></i>
-									  ${item.description}
-								  </a>
-							  </li>
-						  `;
+                    <div class="ft-dropdown-panel__item" data-id="${item.id}"  id="ft-type-task"  role="option" aria-selected="false">
+                           <i class="${item.icon} "${item.iconCSS}></i>   ${item.description}
+                      </div>
+				`;
 
         $filterTaskTypeMenu.append(li);
     });
 }
 function loadFilterTaskAssigneeDropdown() {
 
-    var $filterTaskAssigneeMenu = $('.filter-task-assignee-menu');
+    var $filterTaskAssigneeMenu = $('#ft-filter-assignee-panel');
     $filterTaskAssigneeMenu.empty();
+    $filterTaskAssigneeMenu.append(`<div class="ft-dropdown-panel__label">Team members  </div> `);
     let loggedInUser = getLoggedInUser();
     
     let loggedInUserDetail = _projectMember.find(row => row.userId == loggedInUser.id);
@@ -197,14 +195,12 @@ function loadFilterTaskAssigneeDropdown() {
         */
     $.each(_projectMember, function (index, user) {
         li = `
-							 
-                           <li>
-                               <a class="dropdown-item" href="#" data-id="${user.userId}" onclick="filterTaskAssigneeSelection(event,${user.userId},'${user.user}');">
-                                    <input type="checkbox" class="fs-5 task-assignee-checkbox" />
-									 <div class="assignee-avatar-sm profile-image"style="background:${user.colorCode}">${getInitials(user.user)}</div>
-									 <span class="user-name me-2">${user.user}</span>
-                               </a>
-							</li>
+                            <div class="ft-dropdown-panel__item" id="ft-assignee-au" data-id="${user.userId}" data-assignee="AU" role="option" aria-selected="false" onclick="filterTaskAssigneeSelection(event,${user.userId},'${user.user}');">
+                             <input type="checkbox" class="fs-5 task-assignee-checkbox" />
+
+                            <span class="ft-member-avatar" style="background:${user.colorCode}">${getInitials(user.user)}</span>
+                                ${user.user}
+                            </div>
 						  `;
 
         $filterTaskAssigneeMenu.append(li);
@@ -261,8 +257,9 @@ function filterTaskTypeSelection(event, id = 0, text = null) {
 
 }
 function filterTaskAssigneeSelection(event, id = 0, text = null) {
+    debugger;
     //event.preventDefault();
-    event.stopPropagation();
+   // event.stopPropagation();
     //| Uncheck My Review Checkbox
     const cbMyReview = $("#cbMyReview");
     if (cbMyReview.prop("checked")) {
@@ -304,6 +301,7 @@ function filterTaskAssigneeSelection(event, id = 0, text = null) {
 
 }
 function filterTasks() {
+    debugger;
     $('.task-card').each(function () {
         let reviewerId = $(this).find('.reviewer-id').text();
         const cbMyReview = $("#cbMyReview");

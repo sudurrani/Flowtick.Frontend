@@ -9,7 +9,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		z-index: 2;
+		z-index: 999;
 		overflow: auto;
 		padding: 20px;
 	}
@@ -219,7 +219,6 @@
 	});
 
 	function openCreateTaskModal(){
-
 		$(".create-task-modal").fadeIn(500);
 
 		loadProjectUserDropdown("create-task-asignee-user-list", "create-task-selected-assignee",loginUserID)

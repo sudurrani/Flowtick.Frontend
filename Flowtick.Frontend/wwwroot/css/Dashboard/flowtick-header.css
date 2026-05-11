@@ -1,0 +1,433 @@
+﻿
+/* ============================================================
+           FLOWTICK — BOARD HEADER ROW STYLES
+           ============================================================ */
+/* ── Variables (merge into your global :root) ── */
+:root {
+    --ft-primary: #0d9488;
+    --ft-primary-hover: #0f766e;
+    --ft-primary-light: #f0fdfa;
+    --ft-primary-mid: #ccfbf1;
+    --ft-primary-border: #5eead4;
+    --ft-border: rgba(0, 0, 0, 0.07);
+    --ft-border-md: rgba(0, 0, 0, 0.12);
+    --ft-bg: #ffffff;
+    --ft-bg-2: #f1f5f9;
+    --ft-text: #111827;
+    --ft-text-muted: #6b7280;
+    --ft-radius: 6px;
+    --ft-radius-lg: 10px;
+    --ft-danger: #ef4444;
+}
+
+/* ── Header shell ── */
+.ft-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    border-bottom: 0.5px solid var(--ft-border);
+    background: var(--ft-bg);
+    gap: 12px;
+    position: relative;
+ /*   z-index: 100;*/
+}
+
+/* ── Left side ── */
+.ft-header__left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ── Breadcrumb ── */
+.ft-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ft-breadcrumb__link {
+    font-size: 13px;
+    color: var(--ft-text-muted);
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+    .ft-breadcrumb__link:hover {
+        color: var(--ft-primary);
+    }
+
+.ft-breadcrumb__sep {
+    color: var(--ft-border-md);
+    font-size: 13px;
+    font-weight: 300;
+    user-select: none;
+}
+
+.ft-breadcrumb__project {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ft-primary);
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+    .ft-breadcrumb__project:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+.ft-breadcrumb__current {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ft-text);
+}
+
+/* ── Board badge ── */
+.ft-header__board-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ft-primary);
+    background: var(--ft-primary-light);
+    border: 0.5px solid var(--ft-primary-border);
+    border-radius: var(--ft-radius);
+    padding: 3px 9px;
+    margin-left: 2px;
+}
+
+/* ── Right side ── */
+.ft-header__right {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+}
+
+/* ── Search ── */
+.ft-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.ft-search__icon {
+    position: absolute;
+    left: 9px;
+    font-size: 13px;
+    color: var(--ft-text-muted);
+    pointer-events: none;
+}
+
+.ft-search__input {
+    border: 0.5px solid var(--ft-border-md);
+    border-radius: var(--ft-radius);
+    background: var(--ft-bg-2);
+    color: var(--ft-text);
+    font-size: 12px;
+    padding: 6px 12px 6px 29px;
+    outline: none;
+    width: 180px;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+    .ft-search__input::placeholder {
+        color: var(--ft-text-muted);
+    }
+
+    .ft-search__input:focus {
+        border-color: var(--ft-primary);
+        background: var(--ft-bg);
+        width: 210px;
+        box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.1);
+    }
+
+/* ── View toggle ── */
+.ft-view-toggle {
+    display: flex;
+    border: 0.5px solid var(--ft-border-md);
+    border-radius: var(--ft-radius);
+    overflow: hidden;
+}
+
+.ft-view-toggle__btn {
+    width: 29px;
+    height: 29px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-right: 0.5px solid var(--ft-border);
+    cursor: pointer;
+    color: var(--ft-text-muted);
+    font-size: 14px;
+    transition: all 0.15s;
+}
+
+    .ft-view-toggle__btn:last-child {
+        border-right: none;
+    }
+
+    .ft-view-toggle__btn:hover {
+        background: var(--ft-bg-2);
+        color: var(--ft-text);
+    }
+
+.ft-view-toggle__btn--active {
+    background: var(--ft-primary);
+    color: #fff;
+}
+
+    .ft-view-toggle__btn--active:hover {
+        background: var(--ft-primary-hover);
+        color: #fff;
+    }
+
+/* ── Icon buttons ── */
+.ft-header__icon-btn {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0.5px solid var(--ft-border);
+    border-radius: var(--ft-radius);
+    background: transparent;
+    cursor: pointer;
+    color: var(--ft-text-muted);
+    font-size: 15px;
+    transition: all 0.15s;
+    position: relative;
+    flex-shrink: 0;
+}
+
+    .ft-header__icon-btn:hover {
+        background: var(--ft-primary-light);
+        color: var(--ft-primary);
+        border-color: var(--ft-primary-border);
+    }
+
+/* ── Notification dot ── */
+.ft-notification-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ft-danger);
+    border: 1.5px solid var(--ft-bg);
+}
+
+/* ── User avatar ── */
+.ft-user {
+    position: relative;
+}
+
+.ft-user__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--ft-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    border: 2px solid var(--ft-primary-border);
+    transition: all 0.15s;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+    .ft-user__avatar:hover {
+        box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2);
+    }
+
+/* ── User dropdown menu ── */
+.ft-user__menu {
+    position: absolute;
+    top: calc(100% + 9px);
+    right: 0;
+    width: 230px;
+    background: var(--ft-bg);
+    border: 0.5px solid var(--ft-border-md);
+    border-radius: var(--ft-radius-lg);
+    overflow: hidden;
+    z-index: 300;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Hero */
+.ft-user__menu-hero {
+    background: var(--ft-primary);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ft-user__menu-hero-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ft-user__menu-avatar-lg {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.ft-user__menu-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.ft-user__menu-role {
+    font-size: 11px;
+    color: rgba(255,255,255,0.75);
+}
+
+.ft-user__menu-email {
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.65);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 2px;
+}
+
+/* Stats row */
+.ft-user__menu-stats {
+    display: flex;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 10px;
+}
+
+.ft-user__menu-stat {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.15);
+}
+
+    .ft-user__menu-stat:last-child {
+        border-right: none;
+    }
+
+.ft-user__menu-stat-val {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.ft-user__menu-stat-lbl {
+    font-size: 10px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 1px;
+}
+
+/* Menu items */
+.ft-user__menu-body {
+    padding: 4px 0;
+}
+
+.ft-user__menu-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 14px;
+    font-size: 12.5px;
+    color: var(--ft-text);
+    cursor: pointer;
+    transition: background 0.12s;
+    user-select: none;
+}
+
+    .ft-user__menu-item i {
+        font-size: 14px;
+        color: var(--ft-text-muted);
+        flex-shrink: 0;
+        width: 16px;
+        text-align: center;
+        transition: color 0.12s;
+    }
+
+    .ft-user__menu-item:hover {
+        background: var(--ft-bg-2);
+    }
+
+        .ft-user__menu-item:hover i {
+            color: var(--ft-primary);
+        }
+
+.ft-user__menu-item--danger {
+    color: var(--ft-danger);
+}
+
+    .ft-user__menu-item--danger i {
+        color: var(--ft-danger);
+    }
+
+    .ft-user__menu-item--danger:hover {
+        background: #fff5f5;
+    }
+
+        .ft-user__menu-item--danger:hover i {
+            color: var(--ft-danger);
+        }
+
+.ft-user__menu-separator {
+    height: 0.5px;
+    background: var(--ft-border);
+    margin: 3px 0;
+}
+
+/* Inline badges inside menu items */
+.ft-user__menu-item-badge {
+    margin-left: auto;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 7px;
+    line-height: 16px;
+}
+
+.ft-badge--teal {
+    background: var(--ft-primary-light);
+    color: var(--ft-primary);
+    border: 0.5px solid var(--ft-primary-border);
+}
+
+.ft-badge--red {
+    background: var(--ft-danger);
+    color: #fff;
+}
+
+/* ── Shared hidden utility ── */
+.ft-dropdown--hidden {
+    display: none !important;
+}
+
