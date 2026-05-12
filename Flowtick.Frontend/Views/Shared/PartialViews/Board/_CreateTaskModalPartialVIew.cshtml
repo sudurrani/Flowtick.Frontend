@@ -18,7 +18,7 @@
 <div class="create-task-modal" style="display:none" id="openCreateTaskModal">
 	@* 	<input type="hidden" id="modalTaskID" />
 	<input type="hidden" id="modalSubTaskID" /> *@
-	<div class="task-modal-box">
+	<div class="task-modal-box" style="width:990px !important">
 
 		<!-- HEADER -->
 		<div class="task-modal-header">
@@ -305,6 +305,122 @@
 		}
 
 		let url = `flowtick/project/${projectId}/tasks`;
+
+		if (projectType.toLowerCase() === 'scrum') {
+			debugger;
+			let sprintId = parseInt($('#ft-filter-sprint-btn').attr('data-sprint-id'));
+			let sprintStatus = $('#ft-filter-sprint-btn').attr('data-sprint-status');
+
+			// No sprint selected
+			if (sprintId <= 0) {
+
+				swal.fire({
+					title: "No Sprint Selected",
+					text: 'No sprint is selected. Task will be moved to backlog. Continue?',
+					type: 'info',
+					showCancelButton: true,
+					confirmButtonText: 'Yes',
+					cancelButtonText: 'No',
+					allowOutsideClick: false,
+				}).then(function (res) {
+
+					if (res.value == true) {
+
+						inputJSON['sprintId'] = null;
+
+						apiRequest({
+							url: url,
+							type: 'POST',
+							data: inputJSON,
+							callBack: createTaskFromModalCallBack
+						});
+					}
+
+					return;
+				});
+
+				return;
+			}
+
+			// Active sprint
+			if (sprintStatus === 'Active') {
+
+				inputJSON['sprintId'] = sprintId;
+
+				swal.fire({
+					title: "Sprint - ABC",
+					text: 'This will affect active sprint scope. Click yes to continue',
+					type: 'warning',
+					showCancelButton: true,
+					confirmButtonText: 'Yes',
+					cancelButtonText: 'No',
+					allowOutsideClick: false,
+				}).then(function (res) {
+
+					if (res.value == true) {
+
+					    apiRequest({
+							url: url,
+							type: 'POST',
+							data: inputJSON,
+							callBack: createTaskFromModalCallBack
+						});
+					}
+
+					return;
+				});
+
+				return;
+			}
+
+			// Planned sprint
+			if (sprintStatus === 'Planned') {
+
+				inputJSON['sprintId'] = sprintId;
+
+				swal.fire({
+					title: "Sprint - ABC",
+					text: 'Sprint not started yet. Click yes to  Continue?',
+					type: 'info',
+					showCancelButton: true,
+					confirmButtonText: 'Yes',
+					cancelButtonText: 'No',
+					allowOutsideClick: false,
+				}).then(function (res) {
+
+					if (res.value == true) {
+
+						apiRequest({
+							url: url,
+							type: 'POST',
+							data: inputJSON,
+							callBack: createTaskFromModalCallBack
+						});
+					}
+
+					return;
+				});
+
+				return;
+			}
+
+			// Completed sprint
+			if (sprintStatus === 'Completed') {
+
+				swal.fire({
+					title: "Completed Sprint",
+					text: 'You cannot create tasks in a completed sprint.',
+					type: 'warning',
+					confirmButtonText: 'OK',
+					allowOutsideClick: false,
+				});
+
+				return;
+			}
+		}
+		else {
+			inputJSON['sprintId'] = null;
+		}
 		//console.log(inputJSON);
 		apiRequest({
 			url: url,

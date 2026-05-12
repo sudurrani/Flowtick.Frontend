@@ -143,18 +143,18 @@
 
         <!-- Sprint selector -->
         <div class="ft-filter-dropdown" id="ft-filter-sprint-wrap">
-            <button class="ft-filter-sprint-btn" id="ft-filter-sprint-btn" aria-haspopup="listbox" aria-expanded="false">
+            <button class="ft-filter-sprint-btn" id="ft-filter-sprint-btn" data-sprint-id="0"  aria-haspopup="listbox" aria-expanded="false" role="option">
                 <i class="bi bi-collection"></i>
-                <span id="ft-sprint-label">Sprint — 2</span>
+                <span id="ft-sprint-label">Select Sprint</span>
                 <i class="bi bi-chevron-down" style="font-size:11px;opacity:.7"></i>
             </button>
             <div class="ft-dropdown-panel ft-dropdown--hidden" id="ft-filter-sprint-panel" role="listbox">
                 <div class="ft-dropdown-panel__label">Sprint</div>
-                <div class="ft-dropdown-panel__item" id="ft-sprint-all" data-sprint="all" role="option">
+@*                 <div class="ft-dropdown-panel__item" id="ft-sprint-all" role="option" data-sprint-id="0" data-sprint-status="all">
                     <i class="bi bi-grid-3x3-gap"></i> All sprints
                 </div>
-                <div class="ft-dropdown-panel__separator"></div>
-                <div class="ft-dropdown-panel__item" id="ft-sprint-1" data-sprint="sprint-1" role="option">
+                <div class="ft-dropdown-panel__separator"></div> *@
+               @*  <div class="ft-dropdown-panel__item" id="ft-sprint-1" data-sprint="sprint-1" role="option">
                     <i class="bi bi-check-circle-fill" style="color:#10b981"></i>
                     Sprint — 1
                     <span class="ft-sprint-status ft-sprint-status--done">Done</span>
@@ -169,7 +169,7 @@
                     <i class="bi bi-clock" style="color:#6366f1"></i>
                     Sprint — 3
                     <span class="ft-sprint-status ft-sprint-status--planned">Planned</span>
-                </div>
+                </div> *@
             </div>
         </div><!-- /ft-filter-sprint-wrap -->
         <!-- Clear all filters -->
