@@ -242,6 +242,8 @@ $(function () {
         /* Hide clear button */
         //  $('#ft-filter-clear-btn').addClass('ft-dropdown--hidden');
 
+        $('#cbMyReview').prop('checked', false);
+
         _filterTypeIdsArray = [];
         _filterTypeTextArray = [];
         _filterAssigeeIdsArray = [];
@@ -253,7 +255,9 @@ $(function () {
         filterTasks();
         getSetFilters();
 
-
+        $('.task-card-header').removeClass('d-none');
+        $('.task-labels').removeClass('d-none');
+        $('.task-footer').removeClass('d-none');
 
     });
 
