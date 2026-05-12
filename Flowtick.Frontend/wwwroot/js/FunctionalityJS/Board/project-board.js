@@ -25,7 +25,223 @@ var loginUserID;
 
 $(function () {
     getSetFilters();
-    $('#btnClearFilter').on('click', function () {
+
+
+    /* ─────────────────────────────────────────────
+       Filter Row js start
+    ───────────────────────────────────────────── */
+    var FILTER_PANELS = [
+        '#ft-filter-assignee-panel',
+        '#ft-filter-type-panel',
+        '#ft-filter-priority-panel',
+        '#ft-filter-sprint-panel',
+        '#ft-add-panel'
+    ];
+
+    var FILTER_BTNS = [
+        '#ft-filter-assignee-btn',
+        '#ft-filter-type-btn',
+        '#ft-filter-priority-btn',
+        '#ft-filter-sprint-btn',
+        '#ft-add-btn'
+    ];
+
+    /* ─────────────────────────────────────────────
+       HELPERS
+    ───────────────────────────────────────────── */
+
+    /* Close every open filter panel */
+    function ftFilterCloseAll() {
+        $(FILTER_PANELS.join(',')).addClass('ft-dropdown--hidden');
+        $(FILTER_BTNS.join(',')).removeClass('ft-filter-btn--active').attr('aria-expanded', 'false');
+        $('.ft-filter-btn__chevron').css('transform', '');
+    }
+
+    /* Open a specific panel and mark its button active */
+    function ftFilterOpenPanel($panel, $btn) {
+        ftFilterCloseAll();
+        $panel.removeClass('ft-dropdown--hidden');
+        if ($btn && $btn.length) {
+            $btn.addClass('ft-filter-btn--active').attr('aria-expanded', 'true');
+            $btn.find('.ft-filter-btn__chevron').css('transform', 'rotate(180deg)');
+        }
+    }
+    /* ─────────────────────────────────────────────
+       ASSIGNEE DROPDOWN
+    ───────────────────────────────────────────── */
+    $('#ft-filter-assignee-btn').on('click', function (e) {
+        e.stopPropagation();
+        var $panel = $('#ft-filter-assignee-panel');
+        if ($panel.hasClass('ft-dropdown--hidden')) {
+            ftFilterOpenPanel($panel, $(this));
+        } else {
+            ftFilterCloseAll();
+        }
+    });
+
+    $('#ft-filter-assignee-panel').on('click', '.ft-dropdown-panel__item', function () {
+        debugger;
+        //$(this).toggleClass('ft-dropdown-panel__item--selected');
+        //var isSelected = $(this).hasClass('ft-dropdown-panel__item--selected');
+        //$(this).attr('aria-selected', isSelected ? 'true' : 'false');
+
+        ///* Add or remove checkmark icon */
+        //$(this).find('.ft-dropdown-panel__checkmark').remove();
+        //if (isSelected) {
+        //    $(this).append('<i class="bi bi-check ft-dropdown-panel__checkmark"></i>');
+        //}
+
+        ftRefreshCount(
+            $('#ft-filter-assignee-panel'),
+            $('#ft-filter-assignee-count'),
+            $('#ft-filter-assignee-btn')
+        );
+    });
+
+    /* ─────────────────────────────────────────────
+       TASK TYPE DROPDOWN
+    ───────────────────────────────────────────── */
+    $('#ft-filter-type-btn').on('click', function (e) {
+        e.stopPropagation();
+        var $panel = $('#ft-filter-type-panel');
+        if ($panel.hasClass('ft-dropdown--hidden')) {
+            ftFilterOpenPanel($panel, $(this));
+        } else {
+            ftFilterCloseAll();
+        }
+    });
+
+    $('#ft-filter-type-panel').on('click', '.ft-dropdown-panel__item', function () {
+      
+        // $(this).toggleClass('ft-dropdown-panel__item--selected');
+        // var isSelected = $(this).hasClass('ft-dropdown-panel__item--selected');
+        // $(this).attr('aria-selected', isSelected ? 'true' : 'false');
+
+        // $(this).find('.ft-dropdown-panel__checkmark').remove();
+        // if (isSelected) {
+        //   $(this).append('<i class="bi bi-check ft-dropdown-panel__checkmark"></i>');
+        // }
+
+        ftRefreshCount(
+            $('#ft-filter-type-panel'),
+            $('#ft-filter-type-count'),
+            $('#ft-filter-type-btn')
+        );
+    });
+
+    /* ─────────────────────────────────────────────
+       PRIORITY DROPDOWN
+    ───────────────────────────────────────────── */
+    $('#ft-filter-priority-btn').on('click', function (e) {
+        e.stopPropagation();
+        var $panel = $('#ft-filter-priority-panel');
+        if ($panel.hasClass('ft-dropdown--hidden')) {
+            ftFilterOpenPanel($panel, $(this));
+        } else {
+            ftFilterCloseAll();
+        }
+    });
+
+    $('#ft-filter-priority-panel').on('click', '.ft-dropdown-panel__item', function () {
+        $(this).toggleClass('ft-dropdown-panel__item--selected');
+        var isSelected = $(this).hasClass('ft-dropdown-panel__item--selected');
+        $(this).attr('aria-selected', isSelected ? 'true' : 'false');
+
+        $(this).find('.ft-dropdown-panel__checkmark').remove();
+        if (isSelected) {
+            $(this).append('<i class="bi bi-check ft-dropdown-panel__checkmark"></i>');
+        }
+
+        ftRefreshCount(
+            $('#ft-filter-priority-panel'),
+            $('#ft-filter-priority-count'),
+            $('#ft-filter-priority-btn')
+        );
+    });
+
+    /* ─────────────────────────────────────────────
+       SPRINT DROPDOWN (single select)
+    ───────────────────────────────────────────── */
+    $('#ft-filter-sprint-btn').on('click', function (e) {
+        e.stopPropagation();
+        var $panel = $('#ft-filter-sprint-panel');
+        if ($panel.hasClass('ft-dropdown--hidden')) {
+            ftFilterOpenPanel($panel, null);
+        } else {
+            ftFilterCloseAll();
+        }
+    });
+
+    $('#ft-filter-sprint-panel').on('click', '.ft-dropdown-panel__item', function () {
+        /* Single-select: deselect all others */
+        $('#ft-filter-sprint-panel .ft-dropdown-panel__item')
+            .removeClass('ft-dropdown-panel__item--selected')
+            .attr('aria-selected', 'false')
+            .find('.ft-dropdown-panel__checkmark').remove();
+
+        $(this).addClass('ft-dropdown-panel__item--selected').attr('aria-selected', 'true');
+        $(this).append('<i class="bi bi-check ft-dropdown-panel__checkmark"></i>');
+
+        /* Update sprint label text (strip any HTML tags for text) */
+        var labelText = $(this).clone().children().remove().end().text().trim();
+        $('#ft-sprint-label').text(labelText);
+
+        ftFilterCloseAll();
+    });
+
+    /* ─────────────────────────────────────────────
+       TOGGLE: Only Title
+    ───────────────────────────────────────────── */
+    $('#ft-toggle-only-title').on('click keydown', function (e) {
+        if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        $(this).toggleClass('ft-filter-toggle--checked');
+        var checked = $(this).hasClass('ft-filter-toggle--checked');
+        $(this).attr('aria-checked', checked ? 'true' : 'false');
+        $(this).find('.ft-filter-toggle__box').text(checked ? '✓' : '');
+    });
+
+    /* ─────────────────────────────────────────────
+       TOGGLE: My Review
+    ───────────────────────────────────────────── */
+    $('#ft-toggle-my-review').on('click keydown', function (e) {
+        if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        $(this).toggleClass('ft-filter-toggle--checked');
+        var checked = $(this).hasClass('ft-filter-toggle--checked');
+        $(this).attr('aria-checked', checked ? 'true' : 'false');
+        $(this).find('.ft-filter-toggle__box').text(checked ? '✓' : '');
+    });
+
+    /* ─────────────────────────────────────────────
+       CLEAR ALL FILTERS
+    ───────────────────────────────────────────── */
+    $('#ft-filter-clear-btn').on('click', function () {
+        /* Deselect all multi-select items */
+        ['#ft-filter-assignee-panel', '#ft-filter-type-panel', '#ft-filter-priority-panel'].forEach(function (id) {
+            $(id + ' .ft-dropdown-panel__item')
+                .removeClass('ft-dropdown-panel__item--selected')
+                .attr('aria-selected', 'false')
+                .find('.ft-dropdown-panel__checkmark').remove();
+        });
+
+        /* Reset count badges */
+        $('#ft-filter-assignee-count, #ft-filter-type-count, #ft-filter-priority-count')
+            .addClass('ft-dropdown--hidden').text('');
+
+        /* Reset filter buttons */
+        $('#ft-filter-assignee-btn, #ft-filter-type-btn, #ft-filter-priority-btn')
+            .removeClass('ft-filter-btn--active');
+
+        /* Reset toggles */
+        $('#ft-toggle-only-title, #ft-toggle-my-review')
+            .removeClass('ft-filter-toggle--checked')
+            .attr('aria-checked', 'false')
+            .find('.ft-filter-toggle__box').text('');
+
+        /* Hide clear button */
+        //  $('#ft-filter-clear-btn').addClass('ft-dropdown--hidden');
+
         _filterTypeIdsArray = [];
         _filterTypeTextArray = [];
         _filterAssigeeIdsArray = [];
@@ -37,7 +253,58 @@ $(function () {
         filterTasks();
         getSetFilters();
 
+
+
     });
+
+    /* ─────────────────────────────────────────────
+       ADD DROPDOWN
+    ───────────────────────────────────────────── */
+    $('#ft-add-btn').on('click', function (e) {
+        e.stopPropagation();
+        var $panel = $('#ft-add-panel');
+        if ($panel.hasClass('ft-dropdown--hidden')) {
+            ftFilterCloseAll();
+            $panel.removeClass('ft-dropdown--hidden');
+            $(this).attr('aria-expanded', 'true');
+        } else {
+            ftFilterCloseAll();
+        }
+    });
+
+    /* ─────────────────────────────────────────────
+       CLOSE ON OUTSIDE CLICK
+    ───────────────────────────────────────────── */
+    $(document).on('click.ft-filter', function (e) {
+        if (!$(e.target).closest('.ft-filter-dropdown').length) {
+            ftFilterCloseAll();
+        }
+    });
+
+    /* ─────────────────────────────────────────────
+       CLOSE ON ESCAPE KEY
+    ───────────────────────────────────────────── */
+    $(document).on('keydown.ft-filter', function (e) {
+        if (e.key === 'Escape') ftFilterCloseAll();
+    });
+
+    /* ─────────────────────────────────────────────
+   Filter Row js  End
+───────────────────────────────────────────── */
+
+    //$('#btnClearFilter').on('click', function () {
+    //    _filterTypeIdsArray = [];
+    //    _filterTypeTextArray = [];
+    //    _filterAssigeeIdsArray = [];
+    //    _filterAssigneeNameArray = [];
+    //    localStorage.removeItem(localStorageKeyFilterTypeIds);
+    //    localStorage.removeItem(localStorageKeyFilterTypeText);
+    //    localStorage.removeItem(localStorageKeyFilterAssigneeIds);
+    //    localStorage.removeItem(localStorageKeyFilterAssigneeText);
+    //    filterTasks();
+    //    getSetFilters();
+
+    //});
 
     //take data from access token
     const token = localStorage.getItem("accessToken");
@@ -164,7 +431,8 @@ function loadFilterTaskTypeDropdown() {
     $filterTaskTypeMenu.append(`<div class="ft-dropdown-panel__label">Task type</div> `);
     $.each(_taskTypes, function (index, item) {
         var li = `
-                    <div class="ft-dropdown-panel__item" data-id="${item.id}"  id="ft-type-task"  role="option" aria-selected="false">
+                    <div class="ft-dropdown-panel__item" data-id="${item.id}"  id="ft-type-task"  role="option" aria-selected="false"onclick="filterTaskTypeSelection(event,${item.id},'${item.description}');">
+                        <input type="checkbox" class="fs-5 me-1 task-type-checkbox" hidden/>
                            <i class="${item.icon} "${item.iconCSS}></i>   ${item.description}
                       </div>
 				`;
@@ -196,7 +464,7 @@ function loadFilterTaskAssigneeDropdown() {
     $.each(_projectMember, function (index, user) {
         li = `
                             <div class="ft-dropdown-panel__item" id="ft-assignee-au" data-id="${user.userId}" data-assignee="AU" role="option" aria-selected="false" onclick="filterTaskAssigneeSelection(event,${user.userId},'${user.user}');">
-                             <input type="checkbox" class="fs-5 task-assignee-checkbox" />
+                             <input type="checkbox" class="fs-5 task-assignee-checkbox" hidden/>
 
                             <span class="ft-member-avatar" style="background:${user.colorCode}">${getInitials(user.user)}</span>
                                 ${user.user}
@@ -208,8 +476,8 @@ function loadFilterTaskAssigneeDropdown() {
     });
 }
 function filterTaskTypeSelection(event, id = 0, text = null) {
-    event.preventDefault();
-    event.stopPropagation();
+    //event.preventDefault();
+    //event.stopPropagation();
     //| Uncheck My Review Checkbox
     const cbMyReview = $("#cbMyReview");
     if (cbMyReview.prop("checked")) {
@@ -257,7 +525,7 @@ function filterTaskTypeSelection(event, id = 0, text = null) {
 
 }
 function filterTaskAssigneeSelection(event, id = 0, text = null) {
-    debugger;
+  // debugger;
     //event.preventDefault();
    // event.stopPropagation();
     //| Uncheck My Review Checkbox
@@ -301,7 +569,7 @@ function filterTaskAssigneeSelection(event, id = 0, text = null) {
 
 }
 function filterTasks() {
-    debugger;
+    //debugger;
     $('.task-card').each(function () {
         let reviewerId = $(this).find('.reviewer-id').text();
         const cbMyReview = $("#cbMyReview");
@@ -362,23 +630,55 @@ function filterTasks() {
         }
     });
 
-    $('.filter-task-assignee-menu li').each(function () {
-        let assigneeId = $(this).find('a').data('id');
-        var $checkbox = $(this).find('a').find('.task-assignee-checkbox');
+    $('#ft-filter-assignee-panel div.ft-dropdown-panel__item').each(function () {
+        let assigneeId = $(this).data('id');
+        var $checkbox = $(this).find('.task-assignee-checkbox');
+
         if (_filterAssigeeIdsArray.includes(assigneeId)) {
             $checkbox.prop('checked', true);
+            $(this).addClass('ft-dropdown-panel__item--selected');
+            $(this).attr('aria-selected', 'true');
+            $(this).find('.ft-dropdown-panel__checkmark').remove();
+            $(this).append('<i class="bi bi-check ft-dropdown-panel__checkmark"></i>');
+           
         } else {
             $checkbox.prop('checked', false);
+            $(this).removeClass('ft-dropdown-panel__item--selected');
+            $(this).attr('aria-selected', 'false');
+            $(this).find('.ft-dropdown-panel__checkmark').remove();
+
         }
+        ftRefreshCount(
+            $('#ft-filter-assignee-panel'),
+            $('#ft-filter-assignee-count'),
+            $('#ft-filter-assignee-btn')
+        );
+
     })
-    $('.filter-task-type-menu li').each(function () {
-        let typeId = $(this).find('a').data('id');
-        var $checkbox = $(this).find('a').find('.task-type-checkbox');
+    $('#ft-filter-type-panel div.ft-dropdown-panel__item').each(function () {
+        debugger;
+        let typeId = $(this).data('id');
+        var $checkbox = $(this).find('.task-type-checkbox');
         if (_filterTypeIdsArray.includes(typeId)) {
             $checkbox.prop('checked', true);
+            $(this).addClass('ft-dropdown-panel__item--selected');
+            $(this).attr('aria-selected', 'true');
+            $(this).find('.ft-dropdown-panel__checkmark').remove();
+            $(this).append('<i class="bi bi-check ft-dropdown-panel__checkmark"></i>');
+
         } else {
             $checkbox.prop('checked', false);
+            $(this).removeClass('ft-dropdown-panel__item--selected');
+            $(this).attr('aria-selected', 'false');
+            $(this).find('.ft-dropdown-panel__checkmark').remove();
+          
         }
+        ftRefreshCount(
+            $('#ft-filter-type-panel'),
+            $('#ft-filter-type-count'),
+            $('#ft-filter-type-btn')
+        );
+
     })
     // Update column counts
     $('.board-column').each(function () {
@@ -990,3 +1290,29 @@ var updateTaskAssigneeCallBack = function (response) {
         errorExtractor(response);
     }
 };
+/* Refresh the count badge on a filter button */
+function ftRefreshCount($panel, $countBadge, $btn) {
+    var selected = $panel.find('.ft-dropdown-panel__item--selected').length;
+    if (selected > 0) {
+        $countBadge.text(selected).removeClass('ft-dropdown--hidden');
+        $btn.addClass('ft-filter-btn--active');
+    } else {
+        $countBadge.addClass('ft-dropdown--hidden').text('');
+        $btn.removeClass('ft-filter-btn--active');
+    }
+    ftUpdateClearBtn();
+}
+
+/* Show / hide the "Clear" button based on active filters */
+function ftUpdateClearBtn() {
+    var hasFilters =
+        $('#ft-filter-assignee-panel .ft-dropdown-panel__item--selected').length > 0 ||
+        $('#ft-filter-type-panel .ft-dropdown-panel__item--selected').length > 0 ||
+        $('#ft-filter-priority-panel .ft-dropdown-panel__item--selected').length > 0;
+
+    // if (hasFilters) {
+    //   $('#ft-filter-clear-btn').removeClass('ft-dropdown--hidden');
+    // } else {
+    //   $('#ft-filter-clear-btn').addClass('ft-dropdown--hidden');
+    // }
+}
