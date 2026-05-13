@@ -390,9 +390,11 @@
 
 
             var urlParameters = new URLSearchParams(window.location.search);
-            let project = urlParameters.get('project');                  
+            let project = urlParameters.get('project'); 
+            var  projectType = urlParameters.get('type');
             $('#ft-bc-project-name').text(project);
-
+                    //set board name scrum / board
+            $('#ft-board-badge').text(projectType + ' Board');
 
             getMyProjects();
             $('#toggleSidebar').on('click', function () {

@@ -1486,12 +1486,25 @@
 		//  LOOP 2: TASK LOOP (INSIDE TBODY)
 		$.each(sprint.tasks, function (tIndex, task) {
 			//debugger;
+			var statusHtml = "";
+		   if (task.status === "ToDo") {
+				statusHtml = `<span class="badge b-todo"> <i class="ti ti-clock-hour-4" aria-hidden="true" style="font-size:10px"></i>${task.status}</span>`
+		   }
+		   else if (task.status === "In Progress") {
+			   statusHtml = `<span class="badge b-prog"> <i class="ti ti-progress" aria-hidden="true" style="font-size:10px"></i>${task.status}</span>`
+		   }
+		   else if (task.status === "Review") {
+			   statusHtml = `<span class="badge b-review"><i class="ti ti-eye" aria-hidden="true" style="font-size:10px"></i>${task.status}</span>`
+		   }
+		   else{
+			statusHtml = `<span class="badge b-done"><i class="ti ti-check" aria-hidden="true" style="font-size:10px"></i>${task.status}</span>`
+		   }
 		  var tr = `
 					<tr>
 						<td><div class="task-cell"><i class="${task.type.icon}"${task.type.iconCSS} aria-hidden="true"></i><span class="task-code">${task.code}</span><span class="task-name">${task.title}</span></div></td>
 						<td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td>
 						<td><div class="assign-cell"><span class="av av-mn">${getInitials(task.assignee)}</span>	${task.assignee}</div></td>
-						<td><span class="badge b-review"><i class="ti ti-eye" aria-hidden="true" style="font-size:10px"></i>${task.status}</span></td>
+						<td>${statusHtml}</td>
 					</tr>
 		  `;
 
@@ -1520,13 +1533,13 @@
 	  $.each(backlogArray, function (tIndex, task) {
 		 var statusHtml = "";
 		   if (task.status === "ToDo") {
-				statusHtml = `<span class="badge b-todo">${task.status}</span>`
+				statusHtml = `<span class="badge b-todo"> <i class="ti ti-clock-hour-4" aria-hidden="true" style="font-size:10px"></i>${task.status}</span>`
 		   }
 		   else if (task.status === "In Progress") {
-			   statusHtml = `<span class="badge b-prog">${task.status}</span>`
+			   statusHtml = `<span class="badge b-prog"> <i class="ti ti-progress" aria-hidden="true" style="font-size:10px"></i>${task.status}</span>`
 		   }
 		else if (task.status === "Review") {
-			   statusHtml = `<span class="badge b-review">${task.status}</span>`
+			   statusHtml = `<span class="badge b-review"><i class="ti ti-eye" aria-hidden="true" style="font-size:10px"></i>${task.status}</span>`
 		   }
 		   else{
 			statusHtml = `<span class="badge b-done"><i class="ti ti-check" aria-hidden="true" style="font-size:10px"></i>${task.status}</span>`

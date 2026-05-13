@@ -40,8 +40,8 @@ $(document).ready(function () {
     getAllTask();
 
 
-
-
+    // hide project name board name from header row in home 
+    $('#ft-header-left').css('visibility', 'hidden');
 });
 
 function getAllTask() {
