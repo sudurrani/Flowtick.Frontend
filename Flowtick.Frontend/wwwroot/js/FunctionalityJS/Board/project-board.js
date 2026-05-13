@@ -189,6 +189,8 @@ $(function () {
         $('#ft-filter-sprint-btn').attr('data-sprint-id', $(this).attr('data-sprint-id'));
         /* set sprint status */
         $('#ft-filter-sprint-btn').attr('data-sprint-status', $(this).attr('data-sprint-status'));
+        /* set sprint name */
+        $('#ft-filter-sprint-btn').attr('data-sprint-name', $(this).attr('data-sprint-name'));
 
         ftFilterCloseAll();
     });
@@ -1009,7 +1011,7 @@ var getProjectTasksCallBack = function (response) {
                                                                                          </div>
                                                                                      </div>
                                                                                      <div class="right-icon">
-                                                                                         <button class="icon-btn "  onclick="createTask()"  ><i class="bi bi-box-arrow-right"></i></button>
+                                                                                         <button class="icon-btn "  onclick="confirmTask()"  ><i class="bi bi-box-arrow-right"></i></button>
                                                                                      </div>
                                                                                  </div>
                                                                              </div>
@@ -1203,7 +1205,69 @@ function loadProjectUserDropdown(dropdownList, targetSelectedUser, selectedUserI
     $("." + dropdownList).html(html);
 }
 
-function createTask(taskType = null) {
+function confirmTask(taskType = null) {
+    if (taskType == 'subTask') {
+        if (!customValidateForm('subTaskForm')) {
+            return; // stop execution
+        }
+
+    }
+    else {
+        /*      cheack validation for task only*/
+        if (!customValidateForm('creatTaskForm')) {
+            return; // stop execution
+        }
+    }
+
+
+    if (projectType.toLowerCase() === 'scrum') {
+        let sprintId = parseInt($('#ft-filter-sprint-btn').attr('data-sprint-id'));
+        let sprintStatus = $('#ft-filter-sprint-btn').attr('data-sprint-status');
+        let sprintName = $('#ft-filter-sprint-btn').attr('data-sprint-name');
+        // No sprint selected
+        if (sprintId <= 0) {
+            $('#noSprintModal').addClass('active');
+            // set sprint name in CURRENT opened modal
+            $('#noSprintModal').find('.sprint-info-value').text(projectName + ' Backlog');
+            $('#noSprintModal').find('.confirm-task').attr('data-task-type', taskType);
+            $('#noSprintModal').find('.confirm-task').attr('data-task-from', 'board');
+            return;
+        }
+
+        // Active sprint
+        if (sprintStatus === 'Active') {
+            $('#activeSprintModal').addClass('active');
+            // set sprint name in CURRENT opened modal
+            $('#activeSprintModal').find('.sprint-info-value').text(sprintName + ' - Development');
+            $('#activeSprintModal').find('.confirm-task').attr('data-task-type', taskType);
+            $('#activeSprintModal').find('.confirm-task').attr('data-task-from', 'board');
+            return;
+        }
+
+        // Planned sprint
+        if (sprintStatus === 'Planned') {
+            $('#plannedSprintModal').addClass('active');
+            $('#plannedSprintModal').find('.sprint-info-value').text(sprintName + ' - Planning');
+            $('#plannedSprintModal').find('.confirm-task').attr('data-task-type', taskType);
+            $('#plannedSprintModal').find('.confirm-task').attr('data-task-from', 'board');
+            return;
+        }
+
+        // Completed sprint
+        if (sprintStatus === 'Completed') {
+            $('#completedSprintModal').addClass('active');
+            $('#completedSprintModal').find('.sprint-info-value').text(sprintName + ' - (Completed)');
+            return;
+        }
+    }
+    else {
+        createTask(taskType,null);
+    }
+
+
+
+}
+function createTask(taskType = null, sprintId) {
     var inputJSON = {
         "title": null,
         "assigneeId": loginUserID,
@@ -1211,15 +1275,13 @@ function createTask(taskType = null) {
         "reviewerId": loginUserID,
         "statusId": 1,
         "typeId": null,
-        "parentId": null   // epicId is empty
-
+        "parentId": null ,  // epicId is empty
+        "sprintId": sprintId
     };
 
 
     if (taskType == 'subTask') {
-        if (!customValidateForm('subTaskForm')) {
-            return; // stop execution
-        }
+        
         inputJSON.title = $("#childWorkTitle").val().trim();
 
         inputJSON.typeId = $("#childTaskTypeID").data("id");
@@ -1228,10 +1290,7 @@ function createTask(taskType = null) {
 
     }
     else {
-        /*      cheack validation for task only*/
-        if (!customValidateForm('creatTaskForm')) {
-            return; // stop execution
-        }
+     
         inputJSON.title = $("#taskTitle").val().trim();
 
         inputJSON.typeId = $("#createTaskTypeID").data("id");
@@ -1240,126 +1299,6 @@ function createTask(taskType = null) {
     }
 
     let url = `flowtick/project/${projectId}/tasks`;
-
-    if (projectType.toLowerCase() === 'scrum') {
-        debugger;
-        let sprintId = parseInt($('#ft-filter-sprint-btn').attr('data-sprint-id'));
-        let sprintStatus = $('#ft-filter-sprint-btn').attr('data-sprint-status');
-
-        // No sprint selected
-        if (sprintId <= 0) {
-
-            swal.fire({
-                title: "No Sprint Selected",
-                text: 'No sprint is selected. Task will be moved to backlog. Continue?',
-                type: 'info',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
-                allowOutsideClick: false,
-            }).then(function (res) {
-
-                if (res.value == true) {
-
-                    inputJSON['sprintId'] = null;
-                    apiRequest({
-                        url: url,
-                        type: 'POST',
-                        data: inputJSON,
-                        callBack: createTaskCallBack,
-                        taskType: taskType,
-                        parentId: inputJSON.parentId
-                    });
-                }
-                return;
-            });
-            return;
-        }
-
-        // Active sprint
-        if (sprintStatus === 'Active') {
-
-            inputJSON['sprintId'] = sprintId;
-
-            swal.fire({
-                title: "Active Sprint",
-                text: 'This will affect current sprint scope. Continue?',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
-                allowOutsideClick: false,
-            }).then(function (res) {
-
-                if (res.value == true) {
-
-                    apiRequest({
-                        url: url,
-                        type: 'POST',
-                        data: inputJSON,
-                        callBack: createTaskCallBack,
-                        taskType: taskType,
-                        parentId: inputJSON.parentId
-                    });
-                }
-
-                return;
-            });
-
-            return;
-        }
-
-        // Planned sprint
-        if (sprintStatus === 'Planned') {
-
-            inputJSON['sprintId'] = null;
-
-            swal.fire({
-                title: "Planned Sprint",
-                text: 'Sprint not started yet. Task will go to backlog. Continue?',
-                type: 'info',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
-                allowOutsideClick: false,
-            }).then(function (res) {
-
-                if (res.value == true) {
-
-                    apiRequest({
-                        url: url,
-                        type: 'POST',
-                        data: inputJSON,
-                        callBack: createTaskCallBack,
-                        taskType: taskType,
-                        parentId: inputJSON.parentId
-                    });
-                }
-
-                return;
-            });
-
-            return;
-        }
-
-        // Completed sprint
-        if (sprintStatus === 'Completed') {
-
-            swal.fire({
-                title: "Completed Sprint",
-                text: 'You cannot create tasks in a completed sprint.',
-                type: 'warning',
-                confirmButtonText: 'OK',
-                allowOutsideClick: false,
-            });
-
-            return;
-        }
-    }
-    else {
-        inputJSON['sprintId'] = null;
-    }
-
     apiRequest({
         url: url,
         type: 'POST',
@@ -1369,8 +1308,6 @@ function createTask(taskType = null) {
         taskType: taskType,
         parentId: inputJSON.parentId
     });
-
-
 }
 var createTaskCallBack = function (response, options) {
     if (response.request.status === 201) {
@@ -1504,7 +1441,7 @@ function loadProjectSprintDropdown() {
    
         if (sprintStatus === 'Completed') {
             sprintItems += `
-                            <div class="ft-dropdown-panel__item" id="ft-sprint-1" data-sprint-id="${sprint.id}" data-sprint-status="${sprintStatus}" role="option">
+                            <div class="ft-dropdown-panel__item" id="ft-sprint-1" data-sprint-name="${sprint.name}" data-sprint-id="${sprint.id}" data-sprint-status="${sprintStatus}" role="option">
                                 <i class="bi bi-check-circle-fill" style="color:#10b981"></i>
                                 ${sprint.name}
                                 <span class="ft-sprint-status ft-sprint-status--done">${sprint.status.description}</span>
@@ -1516,8 +1453,9 @@ function loadProjectSprintDropdown() {
             $('#ft-sprint-label').text(sprint.name);
             $('#ft-filter-sprint-btn').attr('data-sprint-id', sprint.id);
             $('#ft-filter-sprint-btn').attr('data-sprint-status', sprintStatus);
+            $('#ft-filter-sprint-btn').attr('data-sprint-name', sprint.name);
             sprintItems += `
-                            <div class="ft-dropdown-panel__item ft-dropdown-panel__item--selected" id="ft-sprint-2"  data-sprint-id="${sprint.id}" data-sprint-status="${sprintStatus}" role="option" aria-selected="true">
+                            <div class="ft-dropdown-panel__item ft-dropdown-panel__item--selected" id="ft-sprint-2" data-sprint-name="${sprint.name}"  data-sprint-id="${sprint.id}" data-sprint-status="${sprintStatus}" role="option" aria-selected="true">
                                 <i class="bi bi-circle-fill" style="color:#0d9488;font-size:9px"></i>
                                     ${sprint.name}
                                 <span class="ft-sprint-status ft-sprint-status--active">${sprint.status.description}</span>
@@ -1527,7 +1465,7 @@ function loadProjectSprintDropdown() {
         }
         else {
             sprintItems += `
-                              <div class="ft-dropdown-panel__item" id="ft-sprint-3"  data-sprint-id="${sprint.id}" data-sprint-status="${sprintStatus}" role="option">
+                              <div class="ft-dropdown-panel__item" id="ft-sprint-3"  data-sprint-id="${sprint.id}" data-sprint-name="${sprint.name}" data-sprint-status="${sprintStatus}" role="option">
                                    <i class="bi bi-clock" style="color:#6366f1"></i>
                                      ${sprint.name}
                                    <span class="ft-sprint-status ft-sprint-status--planned">${sprint.status.description}</span>

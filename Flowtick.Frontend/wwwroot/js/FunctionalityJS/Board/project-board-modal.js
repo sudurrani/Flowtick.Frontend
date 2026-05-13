@@ -403,7 +403,7 @@ $(document).on("click", "#btnAddChildWork", function (e) {
 
                                           </div>
                                   <span class="child-add-action">
-                                   <span  tabindex="0"  onclick="createTask('subTask');"  onkeypress="if(event.key==='Enter') createTask('subTask')"> <i class="bi bi-arrow-return-left"></i>  </span>
+                                   <span  tabindex="0"  onclick="confirmTask('subTask');"  onkeypress="if(event.key==='Enter') confirmTask('subTask')"> <i class="bi bi-arrow-return-left"></i>  </span>
                                   </span>
                                 </div>
                               </td>

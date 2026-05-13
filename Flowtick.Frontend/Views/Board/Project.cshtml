@@ -143,7 +143,7 @@
 
         <!-- Sprint selector -->
         <div class="ft-filter-dropdown" id="ft-filter-sprint-wrap">
-            <button class="ft-filter-sprint-btn" id="ft-filter-sprint-btn" data-sprint-id="0"  aria-haspopup="listbox" aria-expanded="false" role="option">
+            <button class="ft-filter-sprint-btn" id="ft-filter-sprint-btn" data-sprint-id="0" data-sprint-name="No Sprint" aria-haspopup="listbox" aria-expanded="false" role="option">
                 <i class="bi bi-collection"></i>
                 <span id="ft-sprint-label">Select Sprint</span>
                 <i class="bi bi-chevron-down" style="font-size:11px;opacity:.7"></i>
@@ -235,7 +235,10 @@
     </div>
 </div>
 
-
+@{
+    @await Html.PartialAsync("~/Views/Shared/PartialViews/Board/_SprintConfirmationModalPartialView.cshtml")
+    ;
+}
 @{
     @await Html.PartialAsync("~/Views/Shared/PartialViews/Board/_ProjectTaskModalPartialView.cshtml")
     ;

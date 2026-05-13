@@ -1,0 +1,548 @@
+﻿
+    <style>
+        :root {
+            --primary-color: #0d9488;
+            --primary-btn-bg: #0d9488;
+            --primary-btn-fore: #fff;
+            --primary-hover: #0f766e;
+            --border-color: #e5e7eb;
+        }
+/* 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f3f4f6;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+ */
+        /* Modal Overlay */
+        .sprint-confirmation-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            animation: fadeIn 0.2s ease;
+        }
+
+            .sprint-confirmation-modal-overlay.active {
+                display: flex;
+            }
+
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+
+        }
+
+        @@keyframes slideUp {
+            from
+
+        {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        }
+
+        /* Modal Container */
+        .sprint-confirmation-modal {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            animation: slideUp 0.3s ease;
+        }
+
+        /* Modal Header */
+        .sprint-confirmation-modal-header {
+            padding: 24px 24px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: start;
+            gap: 16px;
+        }
+
+        .sprint-confirmation-modal-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+            .sprint-confirmation-modal-icon svg {
+                width: 24px;
+                height: 24px;
+            }
+
+        .icon-warning {
+            background: #fef3c7;
+            color: #f59e0b;
+        }
+
+        .icon-info {
+            background: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .icon-error {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        .icon-success {
+            background: #d1fae5;
+            color: var(--primary-color);
+        }
+
+        .sprint-confirmation-modal-header-text {
+            flex: 1;
+        }
+
+        .sprint-confirmation-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .sprint-confirmation-modal-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* Modal Body */
+        .sprint-confirmation-modal-body {
+            padding: 24px;
+        }
+
+        .sprint-confirmation-modal-message {
+            font-size: 15px;
+            color: #374151;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .sprint-info {
+            background: #f9fafb;
+            border-left: 4px solid var(--primary-color);
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .sprint-info-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .sprint-info-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .warning-box {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .warning-icon {
+            width: 20px;
+            height: 20px;
+            color: #f59e0b;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .warning-text {
+            flex: 1;
+            font-size: 13px;
+            color: #92400e;
+            line-height: 1.5;
+        }
+
+        .error-box {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .error-icon {
+            width: 20px;
+            height: 20px;
+            color: #ef4444;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .error-text {
+            flex: 1;
+            font-size: 13px;
+            color: #7f1d1d;
+            line-height: 1.5;
+        }
+
+        /* Modal Footer */
+        .sprint-confirmation-modal-footer {
+            padding: 16px 24px 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+            .sprint-confirmation-modal-footer.single-button {
+                justify-content: center;
+            }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            min-width: 100px;
+        }
+
+        .btn-primary {
+            background: var(--primary-btn-bg);
+            color: var(--primary-btn-fore);
+        }
+
+            .btn-primary:hover {
+                background: var(--primary-hover);
+            }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 2px solid var(--border-color);
+        }
+
+            .btn-secondary:hover {
+                background: #f9fafb;
+                border-color: #d1d5db;
+            }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+            .btn-danger:hover {
+                background: #dc2626;
+            }
+
+
+/*         @@keyframes slideIn {
+            from
+
+        {
+            transform: translateX(400px);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+
+        } */
+
+ 
+        @@media (max-width: 480px) {
+            .sprint-confirmation-modal
+
+        {
+            margin: 20px;
+        }
+
+        .sprint-confirmation-modal-footer {
+            flex-direction: column-reverse;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+      
+
+        }
+    </style>
+
+    <!-- Modal 1 -->
+    <div class="sprint-confirmation-modal-overlay" id="activeSprintModal">
+        <div class="sprint-confirmation-modal">
+            <div class="sprint-confirmation-modal-header">
+                <div class="sprint-confirmation-modal-icon icon-warning">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+
+                <div class="sprint-confirmation-modal-header-text">
+                    <div class="sprint-confirmation-modal-title">Active Sprint Warning</div>
+                    <div class="sprint-confirmation-modal-subtitle"> This action will affect the current sprint  </div>
+                </div>
+            </div>
+
+            <div class="sprint-confirmation-modal-body">
+                <p class="sprint-confirmation-modal-message">
+                    This task will affect the scope of the active sprint. Adding tasks to an active sprint may impact your team's capacity and sprint goals.
+                </p>
+                <div class="warning-box">
+                    <svg class="warning-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div class="warning-text">
+                        <strong>Note:</strong> Consider the impact on your sprint commitments before proceeding.
+                    </div>
+                </div>
+
+                <div class="sprint-info">
+                    <div class="sprint-info-label">Current Sprint</div>
+                    <div class="sprint-info-value">Sprint 12 - Q1 Development</div>
+                </div>
+            </div>
+
+            <div class="sprint-confirmation-modal-footer">
+                <button class="btn btn-secondary close-modal">
+                    No, Cancel
+                </button>
+
+                <button class="btn btn-primary confirm-task"
+                        data-modal="activeSprintModal"
+                    data-sprint="Active Sprint" >
+                    Yes, Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2 -->
+    <div class="sprint-confirmation-modal-overlay" id="plannedSprintModal">
+        <div class="sprint-confirmation-modal">
+            <div class="sprint-confirmation-modal-header">
+                <div class="sprint-confirmation-modal-icon icon-info">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+
+                <div class="sprint-confirmation-modal-header-text">
+                    <div class="sprint-confirmation-modal-title">
+                        Planned Sprint Confirmation
+                    </div>
+
+                    <div class="sprint-confirmation-modal-subtitle">
+                        Task will be added to future sprint
+                    </div>
+                </div>
+            </div>
+
+            <div class="sprint-confirmation-modal-body">
+                <p class="sprint-confirmation-modal-message">
+                    This task will be created in the planned sprint and will be available when the sprint starts.
+                </p>
+                <div class="sprint-info">
+                    <div class="sprint-info-label">Target Sprint</div>
+                    <div class="sprint-info-value">Sprint 13 - Q2 Planning</div>
+                </div>
+
+                <p class="sprint-confirmation-modal-message" style="font-size: 14px; color: #6b7280; margin-bottom: 0;">
+                    You can modify or move this task before the sprint begins.
+                </p>
+            </div>
+
+            <div class="sprint-confirmation-modal-footer">
+                <button class="btn btn-secondary close-modal">
+                    Cancel
+                </button>
+
+                <button class="btn btn-primary confirm-task"
+                        data-modal="plannedSprintModal"
+                    data-sprint="Planned Sprint" >
+                    Create Task
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3 -->
+    <div class="sprint-confirmation-modal-overlay" id="completedSprintModal">
+        <div class="sprint-confirmation-modal">
+            <div class="sprint-confirmation-modal-header">
+                <div class="sprint-confirmation-modal-icon icon-error">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+
+                <div class="sprint-confirmation-modal-header-text">
+                    <div class="sprint-confirmation-modal-title">
+                        Cannot Create Task
+                    </div>
+
+                    <div class="sprint-confirmation-modal-subtitle">
+                        Sprint is already completed
+                    </div>
+                </div>
+            </div>
+
+            <div class="sprint-confirmation-modal-body">
+                <p class="sprint-confirmation-modal-message">
+                    Cannot create task in a completed sprint. Completed sprints are locked and cannot be modified.
+                </p>
+                <div class="error-box">
+                    <svg class="error-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <div class="error-text">
+                        <strong>Action Blocked:</strong> Please select an active or planned sprint, or create the task in the backlog.
+                    </div>
+                </div>
+
+                <div class="sprint-info">
+                    <div class="sprint-info-label">Selected Sprint</div>
+                    <div class="sprint-info-value">Sprint 11 - December Release (Completed)</div>
+                </div>
+            </div>
+
+            <div class="sprint-confirmation-modal-footer single-button">
+                <button class="btn btn-primary close-modal">
+                    Got it
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4 -->
+    <div class="sprint-confirmation-modal-overlay" id="noSprintModal">
+        <div class="sprint-confirmation-modal">
+            <div class="sprint-confirmation-modal-header">
+                <div class="sprint-confirmation-modal-icon icon-success">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                </div>
+
+                <div class="sprint-confirmation-modal-header-text">
+                    <div class="sprint-confirmation-modal-title">
+                        Create Task in Backlog
+                    </div>
+
+                    <div class="sprint-confirmation-modal-subtitle">
+                        No sprint selected
+                    </div>
+                </div>
+            </div>
+
+            <div class="sprint-confirmation-modal-body">
+                <p class="sprint-confirmation-modal-message">
+                    Task without a sprint will be created under the backlog. You can assign it to a sprint later during sprint planning.
+
+                </p>
+                <div class="sprint-info">
+                    <div class="sprint-info-label">Destination</div>
+                    <div class="sprint-info-value">Product Backlog</div>
+                </div>
+
+                <p class="sprint-confirmation-modal-message" style="font-size: 14px; color: #6b7280; margin-bottom: 0;">
+                    <strong>Tip:</strong> Tasks in the backlog can be prioritized and moved to sprints anytime.
+                </p>
+            </div>
+
+            <div class="sprint-confirmation-modal-footer">
+                <button class="btn btn-secondary close-modal">
+                    No, Cancel
+                </button>
+
+                <button class="btn btn-primary confirm-task"
+                        data-modal="noSprintModal"
+                    data-sprint="Backlog" >
+                    Yes, Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            // Close Modal
+            $('.close-modal').click(function () {
+                $('.sprint-confirmation-modal-overlay').removeClass('active');
+            });
+
+            // Click Outside Modal
+            $('.sprint-confirmation-modal-overlay').click(function (e) {
+                if ($(e.target).hasClass('sprint-confirmation-modal-overlay')) {
+                    $(this).removeClass('active');
+                }
+            });
+
+            // Confirm Task
+            $('.confirm-task').click(function () {
+                const modalId = $(this).data('modal');
+                const sprintType = $(this).data('sprint');
+                const taskFrom = $(this).attr('data-task-from');
+                $('#' + modalId).removeClass('active');
+                let sprintId = parseInt($('#ft-filter-sprint-btn').attr('data-sprint-id'));
+
+                // convert invalid / 0 / NaN to null
+                if (!sprintId || sprintId <= 0) {
+                    sprintId = null;
+                }
+             
+                if (taskFrom === 'board') {
+
+                    const taskType = $(this).attr('data-task-type') || null;
+
+                    createTask(taskType, sprintId);
+
+                } else {
+
+                    createTaskFromModal(sprintId);
+                }
+
+            });
+
+        });
+    </script>
