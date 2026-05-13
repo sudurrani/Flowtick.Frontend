@@ -173,7 +173,7 @@
             </div>
         </div><!-- /ft-filter-sprint-wrap -->
         <!-- Clear all filters -->
-        <button class="ft-filter-clear-btn " id="ft-filter-clear-btn">
+        <button class="ft-filter-clear-btn ft-dropdown--hidden" id="ft-filter-clear-btn">
             <i class="bi bi-x-circle"></i> Clear
         </button>
 
@@ -193,18 +193,18 @@
                 <div class="ft-dropdown-panel__section-label" >
                     <i class="bi bi-check2-square"></i> Task
                 </div>
-                <div class="ft-dropdown-panel__item ft-dropdown-panel__item--featured" id="ft-add-task" role="menuitem" onclick="openCreateTaskModal()">
+                <div class="ft-dropdown-panel__item ft-dropdown-panel__item--featured" id="ft-add-task" role="menuitem" onclick="openCreateTaskModal('Task')">
                     <i class="bi bi-card-list"></i>
                     <span>New Task</span>
                     <i class="bi bi-arrow-right" style="margin-left:auto;font-size:12px;color:var(--ft-primary)"></i>
                 </div>
-                <div class="ft-dropdown-panel__item" id="ft-add-bug" role="menuitem">
+                <div class="ft-dropdown-panel__item" id="ft-add-bug" role="menuitem" onclick="openCreateTaskModal('Bug')">
                     <i class="bi bi-bug" style="color:#ef4444"></i> New Bug
                 </div>
-                <div class="ft-dropdown-panel__item" id="ft-add-story" role="menuitem">
+                <div class="ft-dropdown-panel__item" id="ft-add-story" role="menuitem" onclick="openCreateTaskModal('Story')">
                     <i class="bi bi-star" style="color:#f59e0b"></i> New Story
                 </div>
-                <div class="ft-dropdown-panel__item" id="ft-add-epic" role="menuitem">
+                <div class="ft-dropdown-panel__item" id="ft-add-epic" role="menuitem" onclick="openCreateTaskModal('Epic')">
                     <i class="bi bi-lightning" style="color:#8b5cf6"></i> New Epic
                 </div>
 

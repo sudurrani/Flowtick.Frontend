@@ -944,7 +944,7 @@ function renderBoard() {
 }
 
 function getProjectTasks(isBlockUI = true) {
-    let url = `flowtick/project/${projectId}/tasks/${projectType}`;
+    let url = `flowtick/project/${projectId}/sprint/0/tasks/${projectType}`;
     apiRequest({
         url: url,
         type: 'GET',
@@ -1373,11 +1373,11 @@ function ftUpdateClearBtn() {
         $('#ft-filter-type-panel .ft-dropdown-panel__item--selected').length > 0 ||
         $('#ft-filter-priority-panel .ft-dropdown-panel__item--selected').length > 0;
 
-    // if (hasFilters) {
-    //   $('#ft-filter-clear-btn').removeClass('ft-dropdown--hidden');
-    // } else {
-    //   $('#ft-filter-clear-btn').addClass('ft-dropdown--hidden');
-    // }
+     if (hasFilters) {
+       $('#ft-filter-clear-btn').removeClass('ft-dropdown--hidden');
+     } else {
+       $('#ft-filter-clear-btn').addClass('ft-dropdown--hidden');
+     }
 }
 
 function getProjectSprints() {

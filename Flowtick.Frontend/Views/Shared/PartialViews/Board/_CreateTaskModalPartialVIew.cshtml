@@ -218,14 +218,14 @@
 		$(".create-task-selected-reviewer").html(`  ${avatar}  <span class="user-name ms-2">${name}</span>`);
 	});
 
-	function openCreateTaskModal(){
+	function openCreateTaskModal(taskType){
 		$(".create-task-modal").fadeIn(500);
 
 		loadProjectUserDropdown("create-task-asignee-user-list", "create-task-selected-assignee",loginUserID)
 		loadProjectUserDropdown("create-task-reporter-user-list", "create-task-selected-reporter",loginUserID);
 		loadProjectUserDropdown("create-task-reviewer-user-list", "create-task-selected-reviewer",loginUserID);
 		loadCreateTaskStatusDropdown();
-		loadCreateTaskTypeDropdown();
+		loadCreateTaskTypeDropdown(taskType);
 	}
 
 	function closCreateTaskModal() {
@@ -252,10 +252,22 @@
 		});
 	}
 
-	function loadCreateTaskTypeDropdown() {
+	function loadCreateTaskTypeDropdown(taskType) {
+		let defaultItem = null;
 
-		// default selected type in create task  id = 3
-		var defaultItem = _taskTypes.find(x => x.id == 3);
+		if (taskType === 'Task') {
+			defaultItem = _taskTypes.find(x => x.id === 3);
+		}
+		else if (taskType === 'Bug') {
+			defaultItem = _taskTypes.find(x => x.id === 5);
+		}
+		else if (taskType === 'Story') {
+			defaultItem = _taskTypes.find(x => x.id === 2);
+		}
+		else if (taskType === 'Epic') {
+			defaultItem = _taskTypes.find(x => x.id === 1);
+		}
+		
 		if (defaultItem) {
 			$(".create-task-type-btn").attr("data-id", defaultItem.id);
 			$(".create-task-type-btn i").attr("class", defaultItem.icon).attr("style", defaultItem.iconCSS.replace('style="', '').replace('"', ''));
@@ -339,14 +351,14 @@
 	}
 
 	function createTaskFromModal(sprintId){
-			var inputJSON = {
+		var inputJSON = {
 			"title": $("#modalCreateTaskTitle").val().trim(),
 			"description": tinymce.get('CreateTaskDescriptionEditor').getContent(),
 			"assigneeId": $("#createTaskModalAssigneeID .profile-image").data("user-id"),
 			"reporterId":  $("#createTaskModalReporterID .profile-image").data("user-id"),
 			"reviewerId": $("#createTaskModalReviewerID .profile-image").data("user-id"),
 			"statusId": $('#createTaskModalStatusID').attr("data-status-id"),
-			"typeId": $("#createModalTaskTypeID").data("id"),
+			"typeId": $("#createModalTaskTypeID").attr("data-id"),
 			"parentId": null ,  // epicId is empty
 			"sprintId": sprintId
 		};
