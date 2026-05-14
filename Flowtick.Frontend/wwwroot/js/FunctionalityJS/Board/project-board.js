@@ -26,6 +26,21 @@ var _projectSprintArray = [];
 $(function () {
     getSetFilters();
 
+
+    //take data from access token
+    const token = localStorage.getItem("accessToken");
+    const tokenData = parseJwt(token);
+    var userId = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+    loginUserID = userId;
+    //end
+
+    var urlParams = new URLSearchParams(window.location.search);
+    projectId = urlParams.get('id');
+    boardId = getAndDecryptID(urlParams.get('boardId'));
+    projectName = urlParams.get('project');
+    projectType = urlParams.get('type');
+    projectId = (getAndDecryptID(projectId));
+
     /* ─────────────────────────────────────────────
        Filter Row js start
     ───────────────────────────────────────────── */
@@ -192,7 +207,20 @@ $(function () {
         /* set sprint name */
         $('#ft-filter-sprint-btn').attr('data-sprint-name', $(this).attr('data-sprint-name'));
 
+        /* save sprint data in localStorage */
+        var sprintData = {
+            projectId: projectId ,
+            sprintId: $(this).attr('data-sprint-id'),
+            sprintStatus: $(this).attr('data-sprint-status'),
+            sprintName: $(this).attr('data-sprint-name')
+        };
+
+        localStorage.setItem('sprintData', JSON.stringify(sprintData));
+
         ftFilterCloseAll();
+
+        getProjectTasks(true, $(this).attr('data-sprint-id'))
+
     });
 
     /* ─────────────────────────────────────────────
@@ -246,7 +274,7 @@ $(function () {
             .find('.ft-filter-toggle__box').text('');
 
         /* Hide clear button */
-        //  $('#ft-filter-clear-btn').addClass('ft-dropdown--hidden');
+          $('#ft-filter-clear-btn').addClass('ft-dropdown--hidden');
 
         $('#cbMyReview').prop('checked', false);
 
@@ -258,6 +286,7 @@ $(function () {
         localStorage.removeItem(localStorageKeyFilterTypeText);
         localStorage.removeItem(localStorageKeyFilterAssigneeIds);
         localStorage.removeItem(localStorageKeyFilterAssigneeText);
+        localStorage.removeItem('sprintData');
         filterTasks();
         getSetFilters();
 
@@ -316,24 +345,22 @@ $(function () {
 
     //});
 
-    //take data from access token
-    const token = localStorage.getItem("accessToken");
-    const tokenData = parseJwt(token);
-    var userId = tokenData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-    loginUserID = userId;
-    //end
+    /* remove sprintData From Local Storage when project change  */
+    var savedSprint = JSON.parse(localStorage.getItem('sprintData'));
 
-    var urlParams = new URLSearchParams(window.location.search);
-    projectId = urlParams.get('id');
-    boardId = getAndDecryptID(urlParams.get('boardId'));
-    projectName = urlParams.get('project');
-    projectType = urlParams.get('type');
-    projectId = (getAndDecryptID(projectId));
+    /* check project changed */
+    if (savedSprint && savedSprint.projectId != projectId) {
+
+        localStorage.removeItem('sprintData');
+        savedSprint = null;
+    }
 
     if (projectType.toLowerCase() === 'scrum') {
         $('#ft-filter-sprint-btn').show();
+        getProjectSprints();
     } else {
         $('#ft-filter-sprint-btn').hide();
+        localStorage.removeItem('sprintData');
     }
     // Filter  dropdown
     $(document).on('keyup', '.seach-user-dropdown', function (e) {
@@ -358,7 +385,6 @@ $(function () {
     if (!isTaskTypeLoaded) {
         getTaskTypes();
     }
-    getProjectSprints();
   
 
     initTooltips();
@@ -631,12 +657,12 @@ function filterTasks() {
         }
         if (isMyReviewChecked) {
             if (loginUserID == reviewerId) {
-                console.log('found');
+               // console.log('found');
                 $(this).show();
             }
             else {
                 $(this).hide();
-                console.log('not found');
+               // console.log('not found');
             }
         }
     });
@@ -853,7 +879,17 @@ var getTaskStatusCallBack = function (response) {
         isTaskStatusesLoaded = true;
         _taskStatusesArray = response.data;
         loadStatusDropdown();
-        getProjectTasks();
+        var sprintData = JSON.parse(localStorage.getItem('sprintData'));
+        if (sprintData) {
+            /* localStorage selection */
+           // console.log(sprintData.sprintId);
+            let sprintId = sprintData.sprintId;
+            getProjectTasks(true, sprintId);
+
+           
+        } else {
+            getProjectTasks();
+        }
 
 
     }
@@ -943,8 +979,9 @@ function renderBoard() {
     });
 }
 
-function getProjectTasks(isBlockUI = true) {
-    let url = `flowtick/project/${projectId}/sprint/0/tasks/${projectType}`;
+function getProjectTasks(isBlockUI = true, sprintId = 0) {
+   // debugger;
+    let url = `flowtick/project/${projectId}/sprint/${sprintId}/tasks/${projectType}`;
     apiRequest({
         url: url,
         type: 'GET',
@@ -1382,7 +1419,7 @@ function ftUpdateClearBtn() {
 
 function getProjectSprints() {
     let url = `flowtick/project/${projectId}/sprints`;
-    console.log(url);
+   // console.log(url);
     apiRequest({
         url: url,
         type: 'GET',
@@ -1436,43 +1473,67 @@ function loadProjectSprintDropdown() {
     //    </div>
     //    <div class="ft-dropdown-panel__separator"></div>
     //`;
+    /* get sprint from localStorage */
+    var savedSprint = JSON.parse(localStorage.getItem('sprintData'));
     $.each(_projectSprintArray, function (index, sprint) {
         var sprintStatus = sprint.status.description;
-   
-        if (sprintStatus === 'Completed') {
-            sprintItems += `
-                            <div class="ft-dropdown-panel__item" id="ft-sprint-1" data-sprint-name="${sprint.name}" data-sprint-id="${sprint.id}" data-sprint-status="${sprintStatus}" role="option">
-                                <i class="bi bi-check-circle-fill" style="color:#10b981"></i>
-                                ${sprint.name}
-                                <span class="ft-sprint-status ft-sprint-status--done">${sprint.status.description}</span>
-                            </div>
-            `
-        }
-        else if (sprintStatus === 'Active') {
 
+        /* check selected sprint */
+        var isSelected = false;
+
+        if (savedSprint) {
+            /* localStorage selection */
+            isSelected = savedSprint.sprintId == sprint.id;
+        } else {
+            /* default active sprint */
+            isSelected = sprintStatus === 'Active';
+        }
+
+        /* set top button values */
+        if (isSelected) {
             $('#ft-sprint-label').text(sprint.name);
             $('#ft-filter-sprint-btn').attr('data-sprint-id', sprint.id);
             $('#ft-filter-sprint-btn').attr('data-sprint-status', sprintStatus);
             $('#ft-filter-sprint-btn').attr('data-sprint-name', sprint.name);
+        }
+
+        /* selected class/checkmark */
+        var selectedClass = isSelected ? 'ft-dropdown-panel__item--selected' : '';
+        var selectedAttr = isSelected ? 'aria-selected="true"' : '';
+        var checkmark = isSelected  ? '<i class="bi bi-check ft-dropdown-panel__checkmark"></i>' : '';
+   
+        if (sprintStatus === 'Completed') {
             sprintItems += `
-                            <div class="ft-dropdown-panel__item ft-dropdown-panel__item--selected" id="ft-sprint-2" data-sprint-name="${sprint.name}"  data-sprint-id="${sprint.id}" data-sprint-status="${sprintStatus}" role="option" aria-selected="true">
+                            <div class="ft-dropdown-panel__item ${selectedClass}" id="ft-sprint-1" data-sprint-name="${sprint.name}" data-sprint-id="${sprint.id}" data-sprint-status="${sprintStatus}" role="option"  ${selectedAttr}>
+                                <i class="bi bi-check-circle-fill" style="color:#10b981"></i>
+                                ${sprint.name}
+                                <span class="ft-sprint-status ft-sprint-status--done">${sprint.status.description}</span>
+                                    ${checkmark}
+                            </div>
+            `
+        }
+        else if (sprintStatus === 'Active') {
+            sprintItems += `
+                            <div class="ft-dropdown-panel__item ${selectedClass}" id="ft-sprint-2" data-sprint-name="${sprint.name}"  data-sprint-id="${sprint.id}" data-sprint-status="${sprintStatus}" role="option"  ${selectedAttr}>
                                 <i class="bi bi-circle-fill" style="color:#0d9488;font-size:9px"></i>
                                     ${sprint.name}
                                 <span class="ft-sprint-status ft-sprint-status--active">${sprint.status.description}</span>
-                                <i class="bi bi-check ft-dropdown-panel__checkmark"></i>
+                                   ${checkmark}
                             </div>
             `
         }
         else {
             sprintItems += `
-                              <div class="ft-dropdown-panel__item" id="ft-sprint-3"  data-sprint-id="${sprint.id}" data-sprint-name="${sprint.name}" data-sprint-status="${sprintStatus}" role="option">
+                              <div class="ft-dropdown-panel__item ${selectedClass}" id="ft-sprint-3"  data-sprint-id="${sprint.id}" data-sprint-name="${sprint.name}" data-sprint-status="${sprintStatus}" role="option"  ${selectedAttr}>
                                    <i class="bi bi-clock" style="color:#6366f1"></i>
                                      ${sprint.name}
                                    <span class="ft-sprint-status ft-sprint-status--planned">${sprint.status.description}</span>
+                                       ${checkmark}
                                </div>
             `
 
         }
     });
+
     $itemsList.append(sprintItems);
 }
