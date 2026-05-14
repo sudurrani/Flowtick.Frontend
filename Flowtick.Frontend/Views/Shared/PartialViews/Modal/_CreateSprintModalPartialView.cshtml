@@ -1,0 +1,204 @@
+﻿<link href="~/css/flowtickmodal/flowtick-modals.css" rel="stylesheet" />
+
+<!-- ============================================================
+     OVERLAY 3 — CREATE SPRINT
+     ============================================================ -->
+<div class="ft-modal-overlay ft-hidden" id="ft-overlay-sprint">
+    <div class="ft-modal" id="ft-modal-sprint">
+
+        <!-- Header -->
+        <div class="ft-modal__header">
+            <div class="ft-modal__header-left">
+                <div class="ft-modal__icon">
+                    <i class="bi bi-kanban"></i>
+                </div>
+                <div>
+                    <div class="ft-modal__title">Create Sprint</div>
+                    <div class="ft-modal__subtitle">Fophex-ERP &mdash; Sprint 4 will be next</div>
+                </div>
+            </div>
+            <button class="ft-modal__close" id="ft-close-sprint" aria-label="Close" onclick="closeModal('ft-overlay-sprint');">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="ft-modal__body">
+
+            <!-- Name + Status -->
+            <div class="ft-form-row" id="ft-fg-sprint-name-status">
+                <div class="ft-form-group" id="ft-fg-sprint-name">
+                    <label class="ft-form-label" for="ft-sprint-name">
+                        Sprint name <span class="ft-label-required">*</span>
+                    </label>
+                    <div class="ft-input-wrap">
+                        <i class="bi bi-calendar2-week ft-input-icon"></i>
+                        <input class="ft-input" id="ft-sprint-name" type="text" placeholder="Sprint 4" />
+                    </div>
+                </div>
+                <div class="ft-form-group" id="ft-fg-sprint-status">
+                    <label class="ft-form-label" for="ft-sprint-status">
+                        Status <span class="ft-label-required">*</span>
+                    </label>
+                    <select class="ft-input" id="ft-sprint-status">
+                        <option value="planned">Planned</option>
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Start + End date -->
+            <div class="ft-form-row" id="ft-fg-sprint-dates">
+                <div class="ft-form-group" id="ft-fg-sprint-start">
+                    <label class="ft-form-label" for="ft-sprint-start">
+                        Start date <span class="ft-label-required">*</span>
+                    </label>
+                    <div class="ft-input-wrap">
+                        <i class="bi bi-calendar-date ft-input-icon"></i>
+                        <input class="ft-input" id="ft-sprint-start" type="date" />
+                    </div>
+                </div>
+                <div class="ft-form-group" id="ft-fg-sprint-end">
+                    <label class="ft-form-label" for="ft-sprint-end">
+                        End date <span class="ft-label-required">*</span>
+                    </label>
+                    <div class="ft-input-wrap">
+                        <i class="bi bi-calendar-check ft-input-icon"></i>
+                        <input class="ft-input" id="ft-sprint-end" type="date" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sprint goal -->
+            <div class="ft-form-group" id="ft-fg-sprint-goal">
+                <label class="ft-form-label" for="ft-sprint-goal">
+                    Sprint goal <span class="ft-label-optional">(optional)</span>
+                </label>
+                <div class="ft-input-wrap">
+                    <i class="bi bi-bullseye ft-input-icon"></i>
+                    <input class="ft-input"
+                           id="ft-sprint-goal"
+                           type="text"
+                           placeholder="What does the team aim to achieve this sprint?" />
+                </div>
+            </div>
+
+            <!-- Capacity + Lead -->
+            <div class="ft-form-row" id="ft-fg-sprint-capacity-lead">
+                <div class="ft-form-group" id="ft-fg-sprint-capacity">
+                    <label class="ft-form-label" for="ft-sprint-capacity">
+                        Story point capacity <span class="ft-label-optional">(optional)</span>
+                    </label>
+                    <div class="ft-input-wrap">
+                        <i class="bi bi-bar-chart ft-input-icon"></i>
+                        <input class="ft-input" id="ft-sprint-capacity" type="number" placeholder="e.g. 40" min="0" />
+                    </div>
+                    <span class="ft-form-hint">
+                        <i class="bi bi-lightning-charge"></i> Previous sprint velocity: 32 pts
+                    </span>
+                </div>
+                <div class="ft-form-group" id="ft-fg-sprint-lead">
+                    <label class="ft-form-label" for="ft-sprint-lead">
+                        Sprint lead <span class="ft-label-optional">(optional)</span>
+                    </label>
+                    <select class="ft-input" id="ft-sprint-lead">
+                        <option value="">No lead assigned</option>
+                        <option value="mn">Muhammad Nauman</option>
+                        <option value="us">Usman Said</option>
+                        <option value="mk">M. Ehtisham Khan</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="ft-form-group" id="ft-fg-sprint-desc">
+                <label class="ft-form-label" for="ft-sprint-description">
+                    Description <span class="ft-label-optional">(optional)</span>
+                </label>
+                <textarea class="ft-input"
+                          id="ft-sprint-description"
+                          placeholder="Any additional context, focus areas, or notes for this sprint…"></textarea>
+            </div>
+
+            <!-- Previous sprint summary -->
+            <div class="ft-sprint-summary" id="ft-prev-sprint-summary">
+                <div class="ft-sprint-summary__header">
+                    <span class="ft-sprint-summary__title">Previous sprint — Sprint 3</span>
+                    <span class="ft-sprint-summary__status">
+                        <i class="bi bi-check-circle-fill"></i> Completed
+                    </span>
+                </div>
+                <div class="ft-sprint-summary__body">
+                    <div class="ft-sprint-stat" id="ft-prev-tasks">
+                        <span class="ft-sprint-stat__label">Tasks done</span>
+                        <span class="ft-sprint-stat__value">8 / 10</span>
+                    </div>
+                    <div class="ft-sprint-stat" id="ft-prev-velocity">
+                        <span class="ft-sprint-stat__label">Velocity</span>
+                        <span class="ft-sprint-stat__value">32 pts</span>
+                    </div>
+                    <div class="ft-sprint-stat" id="ft-prev-duration">
+                        <span class="ft-sprint-stat__label">Duration</span>
+                        <span class="ft-sprint-stat__value">30 days</span>
+                    </div>
+                    <div class="ft-sprint-progress" id="ft-prev-progress">
+                        <div class="ft-progress-bar">
+                            <div class="ft-progress-fill" id="ft-prev-progress-fill" style="width:80%"></div>
+                        </div>
+                        <span class="ft-progress-label">80% completed</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="ft-modal__footer">
+            <div class="ft-modal__footer-note">
+                <i class="bi bi-info-circle"></i> Tasks can be added from backlog after creation
+            </div>
+            <div class="ft-modal__footer-actions">
+                <button class="ft-btn-ghost" id="ft-draft-sprint">Save as draft</button>
+                <button class="ft-btn-cancel" id="ft-cancel-sprint" onclick="closeModal('ft-overlay-sprint');">Cancel</button>
+                <button class="ft-btn-primary" id="ft-submit-sprint">
+                    <i class="bi bi-plus-circle"></i> Create Sprint
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div><!-- /ft-overlay-sprint -->
+<script>
+    $(function () {
+
+      $('#ft-submit-sprint').on('click', function () {
+        var data = {
+          name:        $('#ft-sprint-name').val().trim(),
+          status:      $('#ft-sprint-status').val(),
+          startDate:   $('#ft-sprint-start').val(),
+          endDate:     $('#ft-sprint-end').val(),
+          goal:        $('#ft-sprint-goal').val().trim(),
+          capacity:    $('#ft-sprint-capacity').val(),
+          lead:        $('#ft-sprint-lead').val(),
+          description: $('#ft-sprint-description').val().trim()
+        };
+        $(document).trigger('ft:sprint:create', [data]);
+      });
+      /* ── Sprint date: auto-set end date 2 weeks after start ── */
+      $('#ft-sprint-start').on('change', function () {
+        if ($('#ft-sprint-end').val()) return;
+        var start = new Date($(this).val());
+        if (isNaN(start)) return;
+        start.setDate(start.getDate() + 14);
+        var yyyy = start.getFullYear();
+        var mm   = String(start.getMonth() + 1).padStart(2, '0');
+        var dd   = String(start.getDate()).padStart(2, '0');
+        $('#ft-sprint-end').val(yyyy + '-' + mm + '-' + dd);
+      });
+
+    });
+    function closeModal(modalId){
+          $('#' + modalId).removeClass('ft-overlay--visible').addClass('ft-hidden');
+    }
+</script>

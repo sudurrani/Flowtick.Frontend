@@ -359,7 +359,17 @@
     <script src="~/js/functionalityjs/common-script.js"></script>
 	<script src="~/js/functionalityjs/dashboard/flowtick-header.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+ @*    Add Member Modal Partial View *@
+    @{
+        @await Html.PartialAsync("~/Views/Shared/PartialViews/Modal/_AddMemberModalPartialView.cshtml")
+        ;
+    }
 
+    @*    Add Board Modal Partial View *@
+    @{
+        @await Html.PartialAsync("~/Views/Shared/PartialViews/Modal/_AddBoardModalPartialView.cshtml")
+        ;
+    }
     <script>
 
         // Sidebar Toggle
@@ -640,7 +650,8 @@
             // clear form
             // $('#addPeopleForm')[0].reset();
             $('#email').val('');
-            $('#addPeopleModal').modal('show');
+           // $('#addPeopleModal').modal('show');
+             $('#ft-overlay-member').removeClass('ft-hidden').addClass('ft-overlay--visible');
             $('.project-dropdown').remove();
 
                $("#roleId").prop("disabled", false);
@@ -774,7 +785,8 @@
              $('#boardName').val('');
              $('#boardDescription').val('');
              $('#typeId').val('').trigger('change');
-             $('#addBoardModal').modal('show');
+            // $('#addBoardModal').modal('show');
+             $('#ft-overlay-add-board').removeClass('ft-hidden').addClass('ft-overlay--visible');
 
              $('#boardProjectId').val(projectId);
 

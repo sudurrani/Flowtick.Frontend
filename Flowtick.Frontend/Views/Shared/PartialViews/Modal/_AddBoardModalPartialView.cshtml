@@ -1,0 +1,577 @@
+﻿<link href="~/css/flowtickmodal/flowtick-modals.css" rel="stylesheet" />
+
+<!-- ============================================================
+     FLOWTICK — ADD BOARD MODAL PARTIAL
+     File: _AddBoardModal.cshtml  (or add-board-modal.html)
+     CSS:  already in flowtick-modals.css (global)
+     Extra CSS for this modal: flowtick-add-board.css (global)
+     Depends on: Bootstrap Icons CDN, jQuery 3.x, jQuery UI (sortable)
+     ============================================================ -->
+<!-- ▼▼▼ ADD BOARD HTML ▼▼▼ -->
+<div class="ft-modal-overlay ft-hidden" id="ft-overlay-add-board">
+    <div class="ft-modal" id="ft-modal-add-board" style="max-width:560px">
+
+        <!-- Header -->
+        <div class="ft-modal__header">
+            <div class="ft-modal__header-left">
+                <div class="ft-modal__icon">
+                    <i class="bi bi-kanban-fill"></i>
+                </div>
+                <div>
+                    <div class="ft-modal__title">Add Board</div>
+                    <div class="ft-modal__subtitle">Configure a new board for your project</div>
+                </div>
+            </div>
+            <button class="ft-modal__close" id="ft-close-add-board" aria-label="Close modal">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="ft-modal__body" id="ft-add-board-body">
+
+            <!-- Board type -->
+            <div class="ft-form-group" id="ft-fg-board-type">
+                <label class="ft-form-label">
+                    Board type <span class="ft-label-required">*</span>
+                </label>
+                <div class="ft-board-type-grid" id="ft-board-type-grid">
+
+                    <div class="ft-board-type-card ft-board-type--selected"
+                         id="ft-board-type-scrum"
+                         data-type="scrum"
+                         onclick="ftSelectBoardType('scrum')">
+                        <div class="ft-board-type-card__icon" style="background:#f0fdfa;border:1px solid #5eead4">
+                            <i class="bi bi-kanban" style="color:#0d9488"></i>
+                        </div>
+                        <div class="ft-board-type-card__name">Scrum Board</div>
+                        <div class="ft-board-type-card__desc">Sprint-based, backlog, velocity tracking</div>
+                    </div>
+
+                    <div class="ft-board-type-card"
+                         id="ft-board-type-kanban"
+                         data-type="kanban"
+                         onclick="ftSelectBoardType('kanban')">
+                        <div class="ft-board-type-card__icon" style="background:#ede9fe;border:1px solid #c4b5fd">
+                            <i class="bi bi-layout-three-columns" style="color:#7c3aed"></i>
+                        </div>
+                        <div class="ft-board-type-card__name">Kanban Board</div>
+                        <div class="ft-board-type-card__desc">Continuous flow, WIP limits, no sprints</div>
+                    </div>
+
+                    <div class="ft-board-type-card"
+                         id="ft-board-type-simple"
+                         data-type="simple"
+                         onclick="ftSelectBoardType('simple')">
+                        <div class="ft-board-type-card__icon" style="background:#fff7ed;border:1px solid #fed7aa">
+                            <i class="bi bi-list-check" style="color:#ea580c"></i>
+                        </div>
+                        <div class="ft-board-type-card__name">Simple Board</div>
+                        <div class="ft-board-type-card__desc">Basic to-do, in progress, done workflow</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Project -->
+            <div class="ft-form-group" id="ft-fg-board-project">
+                <label class="ft-form-label" for="ft-board-project">
+                    Project <span class="ft-label-required">*</span>
+                </label>
+                <div class="ft-project-select-wrap">
+                    <i class="bi bi-folder ft-input-icon"></i>
+                    <select class="ft-input" id="ft-board-project" style="padding-left:34px">
+                        <option value="">Select a project…</option>
+                        <option value="fophex-erp">Fophex-ERP</option>
+                        <option value="testing-nauman">Testing Nauman</option>
+                        <option value="flowtick-mgmt">Flowtick Management</option>
+                        <option value="bha-web">BHA Web</option>
+                        <option value="lms">LMS</option>
+                        <option value="project-r">Project R</option>
+                    </select>
+                </div>
+                <span class="ft-form-error ft-hidden" id="ft-error-board-project">
+                    <i class="bi bi-exclamation-circle-fill"></i> Please select a project.
+                </span>
+            </div>
+
+            <!-- Name + Lead -->
+            <div class="ft-form-row" id="ft-fg-name-assignee">
+                <div class="ft-form-group" id="ft-fg-board-name">
+                    <label class="ft-form-label" for="ft-board-name">
+                        Board name <span class="ft-label-required">*</span>
+                    </label>
+                    <div class="ft-input-wrap">
+                        <i class="bi bi-type ft-input-icon"></i>
+                        <input class="ft-input"
+                               id="ft-board-name"
+                               type="text"
+                               placeholder="e.g. Development Board"
+                               autocomplete="off"
+                               maxlength="60" />
+                    </div>
+                    <span class="ft-form-error ft-hidden" id="ft-error-board-name">
+                        <i class="bi bi-exclamation-circle-fill"></i> Board name is required.
+                    </span>
+                </div>
+                <div class="ft-form-group" id="ft-fg-board-lead">
+                    <label class="ft-form-label" for="ft-board-lead">
+                        Board lead <span class="ft-label-optional">(optional)</span>
+                    </label>
+                    <select class="ft-input" id="ft-board-lead">
+                        <option value="">No lead assigned</option>
+                        <option value="mn">Muhammad Nauman</option>
+                        <option value="us">Usman Said</option>
+                        <option value="mk">M. Ehtisham Khan</option>
+                        <option value="au">Aman Ullah</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="ft-form-group" id="ft-fg-board-desc">
+                <label class="ft-form-label" for="ft-board-description">
+                    Description <span class="ft-label-optional">(optional)</span>
+                </label>
+                <textarea class="ft-input"
+                          id="ft-board-description"
+                          placeholder="What is this board for? Any context or goals…"
+                          style="min-height:72px"></textarea>
+            </div>
+
+            <!-- Section: Column setup -->
+            <div class="ft-section-divider">
+                <div class="ft-section-divider__line"></div>
+                <span class="ft-section-divider__label">Column setup</span>
+                <div class="ft-section-divider__line"></div>
+            </div>
+
+            <!-- Column presets -->
+            <div class="ft-form-group" id="ft-fg-column-presets">
+                <label class="ft-form-label">Quick presets</label>
+                <div class="ft-column-presets" id="ft-column-presets">
+                    <span class="ft-column-chip ft-chip--selected"
+                          id="ft-preset-scrum"
+                          data-preset="scrum"
+                          onclick="ftApplyPreset('scrum')">
+                        <i class="bi bi-kanban"></i> Scrum (4 cols)
+                    </span>
+                    <span class="ft-column-chip"
+                          id="ft-preset-kanban"
+                          data-preset="kanban"
+                          onclick="ftApplyPreset('kanban')">
+                        <i class="bi bi-layout-three-columns"></i> Kanban (5 cols)
+                    </span>
+                    <span class="ft-column-chip"
+                          id="ft-preset-simple"
+                          data-preset="simple"
+                          onclick="ftApplyPreset('simple')">
+                        <i class="bi bi-list-check"></i> Simple (3 cols)
+                    </span>
+                    <span class="ft-column-chip"
+                          id="ft-preset-custom"
+                          data-preset="custom"
+                          onclick="ftApplyPreset('custom')">
+                        <i class="bi bi-pencil-square"></i> Custom
+                    </span>
+                </div>
+            </div>
+
+            <!-- Column list (drag & drop) -->
+            <div class="ft-form-group" id="ft-fg-columns">
+                <label class="ft-form-label">
+                    Board columns <span class="ft-label-required">*</span>
+                    <span class="ft-label-optional" id="ft-col-count">(4 columns)</span>
+                </label>
+                <!-- ft-column-list is the sortable container -->
+                <div class="ft-column-list" id="ft-column-list">
+                    <!-- rows injected by ftRenderColumns() -->
+                </div>
+                <button class="ft-add-column-btn" id="ft-add-column-btn" type="button">
+                    <i class="bi bi-plus-lg"></i> Add column
+                </button>
+                <span class="ft-form-hint" style="margin-top:4px">
+                    <i class="bi bi-grip-vertical"></i> Drag the handle to reorder columns.
+                </span>
+            </div>
+
+            <!-- Section: Settings -->
+            <div class="ft-section-divider">
+                <div class="ft-section-divider__line"></div>
+                <span class="ft-section-divider__label">Settings</span>
+                <div class="ft-section-divider__line"></div>
+            </div>
+
+            <!-- Visibility toggle -->
+            <div class="ft-visibility-row" id="ft-visibility-row">
+                <div class="ft-visibility-row__info">
+                    <div class="ft-visibility-row__icon" id="ft-visibility-icon">
+                        <i class="bi bi-people-fill" id="ft-visibility-icon-i"></i>
+                    </div>
+                    <div>
+                        <div class="ft-visibility-row__label" id="ft-visibility-label">
+                            Shared — visible to project members
+                        </div>
+                        <div class="ft-visibility-row__desc" id="ft-visibility-desc">
+                            All project members can view and interact with this board.
+                        </div>
+                    </div>
+                </div>
+                <label class="ft-toggle-switch" title="Toggle private board">
+                    <input type="checkbox" id="ft-board-private" />
+                    <span class="ft-toggle-switch__track"></span>
+                </label>
+            </div>
+
+            <!-- WIP limit (Kanban only) -->
+            <div class="ft-form-group ft-hidden" id="ft-fg-wip">
+                <label class="ft-form-label" for="ft-wip-limit">
+                    WIP limit per column <span class="ft-label-optional">(optional)</span>
+                </label>
+                <div class="ft-input-wrap">
+                    <i class="bi bi-bar-chart-steps ft-input-icon"></i>
+                    <input class="ft-input"
+                           id="ft-wip-limit"
+                           type="number"
+                           min="0"
+                           placeholder="e.g. 5 — 0 means no limit" />
+                </div>
+                <span class="ft-form-hint">
+                    <i class="bi bi-info-circle"></i>
+                    Work-in-progress limit highlights overloaded columns.
+                </span>
+            </div>
+
+        </div><!-- /ft-modal__body -->
+        <!-- Footer -->
+        <div class="ft-modal__footer">
+            <div class="ft-modal__footer-note">
+                <i class="bi bi-info-circle"></i>
+                <span id="ft-footer-note">Drag handles to reorder columns after creation.</span>
+            </div>
+            <div class="ft-modal__footer-actions">
+                <button class="ft-btn-cancel" id="ft-cancel-add-board">Cancel</button>
+                <button class="ft-btn-primary" id="ft-submit-add-board">
+                    <i class="bi bi-plus-circle"></i> Create Board
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div><!-- /ft-overlay-add-board -->
+<!-- ▲▲▲ END ADD BOARD HTML ▲▲▲ -->
+<!-- ▼▼▼ ADD BOARD JS ▼▼▼ -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<script>
+    $(function () {
+
+        /* ══════════════════════════════════════════════
+           PRESETS
+           FIX: scrum = 4 columns (To Do, In Progress,
+                Review, Done) — no Backlog column here.
+                Backlog is managed on the Backlog page.
+           ══════════════════════════════════════════════ */
+        var FT_BOARD_PRESETS = {
+            scrum: [
+                { name: 'To Do',       color: '#6366f1' },
+                { name: 'In Progress', color: '#f59e0b' },
+                { name: 'Review',      color: '#0ea5e9' },
+                { name: 'Done',        color: '#10b981' }
+            ],
+            kanban: [
+                { name: 'To Do',       color: '#6366f1' },
+                { name: 'In Progress', color: '#f59e0b' },
+                { name: 'Code Review', color: '#0ea5e9' },
+                { name: 'Testing',     color: '#8b5cf6' },
+                { name: 'Done',        color: '#10b981' }
+            ],
+            simple: [
+                { name: 'To Do',       color: '#6366f1' },
+                { name: 'In Progress', color: '#f59e0b' },
+                { name: 'Done',        color: '#10b981' }
+            ],
+            custom: [
+                { name: '', color: '#94a3b8' }
+            ]
+        };
+
+        /* rotating palette for new columns */
+        var FT_COL_COLORS = [
+            '#6366f1','#f59e0b','#0ea5e9','#10b981',
+            '#8b5cf6','#ef4444','#ec4899','#94a3b8'
+        ];
+
+        /* ══════════════════════════════════════════════
+           RENDER COLUMN LIST + RE-INIT SORTABLE
+           FIX: destroy old sortable before re-rendering
+                so drag always works after preset change.
+           ══════════════════════════════════════════════ */
+        function ftRenderColumns(cols) {
+            var $list = $('#ft-column-list');
+
+            /* destroy existing sortable to avoid duplicate bindings */
+            if ($list.hasClass('ui-sortable')) {
+                $list.sortable('destroy');
+            }
+
+            $list.empty();
+
+            $.each(cols, function (i, col) {
+                $list.append(ftBuildColumnRow(col.name, col.color));
+            });
+
+            ftInitSortable();
+            ftUpdateColCount();
+        }
+
+        /* ══════════════════════════════════════════════
+           BUILD A SINGLE COLUMN ROW DOM ELEMENT
+           ══════════════════════════════════════════════ */
+        function ftBuildColumnRow(name, color) {
+            var $row = $(
+                '<div class="ft-column-row">' +
+                    '<i class="bi bi-grip-vertical ft-column-row__drag"></i>' +
+                    '<span class="ft-column-row__color" style="background:' + color + '"></span>' +
+                    '<input class="ft-column-row__name" type="text"' +
+                           ' placeholder="Column name…"' +
+                           ' value="' + $('<div>').text(name).html() + '"' +
+                           ' maxlength="30"/>' +
+                    '<button class="ft-column-row__remove" type="button" title="Remove column">' +
+                        '<i class="bi bi-trash3"></i>' +
+                    '</button>' +
+                '</div>'
+            );
+
+            /* remove button handler */
+            $row.find('.ft-column-row__remove').on('click', function () {
+                if ($('#ft-column-list .ft-column-row').length <= 1) return; /* keep at least 1 */
+                $row.remove();
+                ftUpdateColCount();
+            });
+
+            return $row;
+        }
+
+        /* ══════════════════════════════════════════════
+           INIT JQUERY UI SORTABLE (drag & drop)
+           FIX: handle restricts drag to the grip icon,
+                axis: 'y' keeps rows from flying around.
+           ══════════════════════════════════════════════ */
+        function ftInitSortable() {
+            $('#ft-column-list').sortable({
+                handle:      '.ft-column-row__drag',
+                axis:        'y',
+                cursor:      'grabbing',
+                opacity:     0.85,
+                placeholder: 'ft-column-row ft-col-placeholder',
+                tolerance:   'pointer',
+                start: function (e, ui) {
+                    ui.item.addClass('ft-col-dragging');
+                    /* match placeholder height */
+                    ui.placeholder.height(ui.item.outerHeight());
+                },
+                stop: function (e, ui) {
+                    ui.item.removeClass('ft-col-dragging');
+                    ftUpdateColCount(); /* keeps count accurate */
+                }
+            }).disableSelection();
+        }
+
+        /* ══════════════════════════════════════════════
+           UPDATE COLUMN COUNT LABEL
+           ══════════════════════════════════════════════ */
+        function ftUpdateColCount() {
+            var n = $('#ft-column-list .ft-column-row').length;
+            $('#ft-col-count').text('(' + n + ' column' + (n !== 1 ? 's' : '') + ')');
+        }
+
+        /* ══════════════════════════════════════════════
+           BOARD TYPE SELECTION
+           ══════════════════════════════════════════════ */
+        window.ftSelectBoardType = function (type) {
+            $('.ft-board-type-card').removeClass('ft-board-type--selected');
+            $('#ft-board-type-' + type).addClass('ft-board-type--selected');
+
+            /* Show WIP only for kanban */
+            if (type === 'kanban') {
+                $('#ft-fg-wip').removeClass('ft-hidden');
+            } else {
+                $('#ft-fg-wip').addClass('ft-hidden');
+            }
+
+            /* sync preset chip + render columns */
+            ftApplyPreset(type);
+
+            $(document).trigger('ft:board:type-changed', [type]);
+        };
+
+        /* ══════════════════════════════════════════════
+           PRESET SELECTION
+           ══════════════════════════════════════════════ */
+        window.ftApplyPreset = function (preset) {
+            $('.ft-column-chip').removeClass('ft-chip--selected');
+            $('#ft-preset-' + preset).addClass('ft-chip--selected');
+            ftRenderColumns(FT_BOARD_PRESETS[preset] || [{ name: '', color: '#94a3b8' }]);
+        };
+
+        /* ══════════════════════════════════════════════
+           ADD COLUMN BUTTON
+           ══════════════════════════════════════════════ */
+        $('#ft-add-column-btn').on('click', function () {
+            var n     = $('#ft-column-list .ft-column-row').length;
+            var color = FT_COL_COLORS[n % FT_COL_COLORS.length];
+            var $row  = ftBuildColumnRow('', color);
+
+            /* destroy, append, re-init so new row is draggable */
+            if ($('#ft-column-list').hasClass('ui-sortable')) {
+                $('#ft-column-list').sortable('destroy');
+            }
+            $('#ft-column-list').append($row);
+            ftInitSortable();
+            ftUpdateColCount();
+
+            /* switch preset chip to "Custom" */
+            $('.ft-column-chip').removeClass('ft-chip--selected');
+            $('#ft-preset-custom').addClass('ft-chip--selected');
+
+            /* focus new input */
+            $row.find('.ft-column-row__name').focus();
+        });
+
+        /* ══════════════════════════════════════════════
+           VISIBILITY TOGGLE
+           ══════════════════════════════════════════════ */
+        $('#ft-board-private').on('change', function () {
+            var isPrivate = $(this).is(':checked');
+            if (isPrivate) {
+                $('#ft-visibility-icon-i').attr('class', 'bi bi-lock-fill');
+                $('#ft-visibility-icon').css({ background: '#fff7ed', 'border-color': '#fed7aa' });
+                $('#ft-visibility-icon-i').css('color', '#ea580c');
+                $('#ft-visibility-label').text('Private — only you can see this board');
+                $('#ft-visibility-desc').text('Other project members will not have access unless added explicitly.');
+            } else {
+                $('#ft-visibility-icon-i').attr('class', 'bi bi-people-fill');
+                $('#ft-visibility-icon').css({ background: '#f0fdfa', 'border-color': '#5eead4' });
+                $('#ft-visibility-icon-i').css('color', '#0d9488');
+                $('#ft-visibility-label').text('Shared — visible to project members');
+                $('#ft-visibility-desc').text('All project members can view and interact with this board.');
+            }
+        });
+
+        /* ══════════════════════════════════════════════
+           VALIDATION
+           ══════════════════════════════════════════════ */
+        function ftValidateBoard() {
+            var valid = true;
+
+            /* project */
+            if (!$('#ft-board-project').val()) {
+                $('#ft-board-project').addClass('ft-input--error');
+                $('#ft-error-board-project').removeClass('ft-hidden');
+                valid = false;
+            } else {
+                $('#ft-board-project').removeClass('ft-input--error');
+                $('#ft-error-board-project').addClass('ft-hidden');
+            }
+
+            /* name */
+            if (!$('#ft-board-name').val().trim()) {
+                $('#ft-board-name').addClass('ft-input--error');
+                $('#ft-error-board-name').removeClass('ft-hidden');
+                valid = false;
+            } else {
+                $('#ft-board-name').removeClass('ft-input--error');
+                $('#ft-error-board-name').addClass('ft-hidden');
+            }
+
+            /* at least one named column */
+            var hasCol = false;
+            $('#ft-column-list .ft-column-row__name').each(function () {
+                if ($(this).val().trim()) { hasCol = true; return false; }
+            });
+            if (!hasCol) {
+                $('#ft-column-list .ft-column-row:first .ft-column-row__name')
+                    .addClass('ft-input--error')
+                    .focus();
+                valid = false;
+            } else {
+                $('#ft-column-list .ft-column-row__name').removeClass('ft-input--error');
+            }
+
+            return valid;
+        }
+
+        /* live clear errors */
+        $('#ft-board-project').on('change', function () {
+            $(this).removeClass('ft-input--error');
+            $('#ft-error-board-project').addClass('ft-hidden');
+        });
+        $('#ft-board-name').on('input', function () {
+            $(this).removeClass('ft-input--error');
+            $('#ft-error-board-name').addClass('ft-hidden');
+        });
+
+        /* ══════════════════════════════════════════════
+           SUBMIT — collect ordered columns via sortable
+           ══════════════════════════════════════════════ */
+        $('#ft-submit-add-board').on('click', function () {
+            if (!ftValidateBoard()) return;
+
+            /* read columns in current DOM order (reflects drag result) */
+            var columns = [];
+            $('#ft-column-list .ft-column-row').each(function (idx) {
+                var colName = $(this).find('.ft-column-row__name').val().trim();
+                if (colName) {
+                    columns.push({
+                        name:  colName,
+                        color: $(this).find('.ft-column-row__color').css('background-color'),
+                        order: idx + 1
+                    });
+                }
+            });
+
+            var data = {
+                type:        $('.ft-board-type-card.ft-board-type--selected').data('type'),
+                project:     $('#ft-board-project').val(),
+                name:        $('#ft-board-name').val().trim(),
+                lead:        $('#ft-board-lead').val(),
+                description: $('#ft-board-description').val().trim(),
+                columns:     columns,
+                isPrivate:   $('#ft-board-private').is(':checked'),
+                wipLimit:    parseInt($('#ft-wip-limit').val(), 10) || null
+            };
+
+            $(document).trigger('ft:board:create', [data]);
+        });
+
+        /* ══════════════════════════════════════════════
+           CLOSE / CANCEL
+           ══════════════════════════════════════════════ */
+        $('#ft-close-add-board, #ft-cancel-add-board').on('click', function () {
+            $('#ft-overlay-add-board')
+                .removeClass('ft-overlay--visible')
+                .addClass('ft-hidden');
+            $(document).trigger('ft:board:cancel');
+        });
+
+        /* ══════════════════════════════════════════════
+           AUTO BOARD NAME FROM PROJECT
+           ══════════════════════════════════════════════ */
+        $('#ft-board-project').on('change', function () {
+            var projectText = $(this).find('option:selected').text();
+            if (projectText && projectText !== 'Select a project…') {
+                if (!$('#ft-board-name').val().trim()) {
+                    $('#ft-board-name').val(projectText + ' Board');
+                }
+            }
+        });
+
+        /* ══════════════════════════════════════════════
+           INIT — render scrum preset (4 columns) on load
+           ══════════════════════════════════════════════ */
+        ftRenderColumns(FT_BOARD_PRESETS.scrum);
+
+    });
+</script>
+<!-- ▲▲▲ END ADD BOARD JS ▲▲▲ -->

@@ -382,6 +382,14 @@ $(function () {
         });
     });
 
+    $("#ft-add-project").click(function () {
+        $('#ft-overlay-project').removeClass('ft-hidden').addClass('ft-overlay--visible');
+
+        $('.ft-dropdown-panel--right').addClass('ft-dropdown--hidden');
+        $('#ft-add-btn').attr('aria-expanded', 'false');
+    })
+
+
     if (!isTaskStatusesLoaded) {
         getTaskStatus();
     }

@@ -1,0 +1,185 @@
+﻿<link href="~/css/flowtickmodal/flowtick-modals.css" rel="stylesheet" />
+
+<!-- ============================================================
+     OVERLAY 2 — CREATE PROJECT
+     ============================================================ -->
+<div class="ft-modal-overlay ft-hidden" id="ft-overlay-project">
+    <div class="ft-modal" id="ft-modal-project">
+
+        <!-- Header -->
+        <div class="ft-modal__header">
+            <div class="ft-modal__header-left">
+                <div class="ft-modal__icon">
+                    <i class="bi bi-folder-plus"></i>
+                </div>
+                <div>
+                    <div class="ft-modal__title">Create Project</div>
+                    <div class="ft-modal__subtitle">Set up a new workspace for your team</div>
+                </div>
+            </div>
+            <button class="ft-modal__close" id="ft-close-project" aria-label="Close" onclick="closeModal('ft-overlay-project');">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="ft-modal__body">
+
+            <!-- Project name -->
+            <div class="ft-form-group" id="ft-fg-project-name">
+                <label class="ft-form-label" for="ft-project-name">
+                    Project name <span class="ft-label-required">*</span>
+                </label>
+                <div class="ft-input-wrap">
+                    <i class="bi bi-folder ft-input-icon"></i>
+                    <input class="ft-input" id="ft-project-name" type="text" placeholder="e.g. Fophex-ERP, Marketing Q3…" />
+                </div>
+            </div>
+
+            <!-- Key + Visibility -->
+            <div class="ft-form-row" id="ft-fg-key-visibility">
+                <div class="ft-form-group" id="ft-fg-project-key">
+                    <label class="ft-form-label" for="ft-project-key">
+                        Project key <span class="ft-label-required">*</span>
+                    </label>
+                    <div class="ft-input-wrap">
+                        <input class="ft-input"
+                               id="ft-project-key"
+                               type="text"
+                               placeholder="ERP"
+                               maxlength="6"
+                               style="text-transform:uppercase;font-weight:700;letter-spacing:0.06em" />
+                        <span class="ft-input-suffix">Auto</span>
+                    </div>
+                    <span class="ft-form-hint">Used in task codes e.g. ERP-101</span>
+                </div>
+                <div class="ft-form-group" id="ft-fg-visibility">
+                    <label class="ft-form-label" for="ft-project-visibility">Visibility</label>
+                    <select class="ft-input" id="ft-project-visibility">
+                        <option value="private">Private — invite only</option>
+                        <option value="internal">Internal — all members</option>
+                        <option value="public">Public</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="ft-form-group" id="ft-fg-project-desc">
+                <label class="ft-form-label" for="ft-project-description">
+                    Description <span class="ft-label-optional">(optional)</span>
+                </label>
+                <textarea class="ft-input"
+                          id="ft-project-description"
+                          placeholder="What is this project about? Goals, scope, team…"></textarea>
+            </div>
+
+            <!-- Color + Category -->
+            <div class="ft-form-row" id="ft-fg-color-category">
+                <div class="ft-form-group" id="ft-fg-project-color">
+                    <label class="ft-form-label">Project color</label>
+                    <div class="ft-color-picker" id="ft-color-picker">
+                        <div class="ft-color-dot ft-color--selected" style="background:#0d9488" title="Teal" onclick="ftSelectColor(this)"></div>
+                        <div class="ft-color-dot" style="background:#6366f1" title="Indigo" onclick="ftSelectColor(this)"></div>
+                        <div class="ft-color-dot" style="background:#f59e0b" title="Amber" onclick="ftSelectColor(this)"></div>
+                        <div class="ft-color-dot" style="background:#ef4444" title="Red" onclick="ftSelectColor(this)"></div>
+                        <div class="ft-color-dot" style="background:#10b981" title="Green" onclick="ftSelectColor(this)"></div>
+                        <div class="ft-color-dot" style="background:#8b5cf6" title="Purple" onclick="ftSelectColor(this)"></div>
+                        <div class="ft-color-dot" style="background:#ec4899" title="Pink" onclick="ftSelectColor(this)"></div>
+                        <div class="ft-color-dot" style="background:#0ea5e9" title="Sky" onclick="ftSelectColor(this)"></div>
+                    </div>
+                </div>
+                <div class="ft-form-group" id="ft-fg-project-category">
+                    <label class="ft-form-label" for="ft-project-category">Category</label>
+                    <select class="ft-input" id="ft-project-category">
+                        <option value="software">Software development</option>
+                        <option value="design">Design</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="operations">Operations</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Lead + Due date -->
+            <div class="ft-form-row" id="ft-fg-lead-due">
+                <div class="ft-form-group" id="ft-fg-project-lead">
+                    <label class="ft-form-label" for="ft-project-lead">Project lead</label>
+                    <select class="ft-input" id="ft-project-lead">
+                        <option value="">No lead assigned</option>
+                        <option value="mn">Muhammad Nauman</option>
+                        <option value="us">Usman Said</option>
+                        <option value="mk">M. Ehtisham Khan</option>
+                    </select>
+                </div>
+                <div class="ft-form-group" id="ft-fg-project-due">
+                    <label class="ft-form-label" for="ft-project-due">
+                        Target end date <span class="ft-label-optional">(optional)</span>
+                    </label>
+                    <input class="ft-input" id="ft-project-due" type="date" />
+                </div>
+            </div>
+
+            <div class="ft-info-box" id="ft-project-info-box">
+                <i class="bi bi-info-circle-fill"></i>
+                <p>You will be set as owner. Members and sprints can be added after the project is created.</p>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="ft-modal__footer">
+            <div class="ft-modal__footer-note">
+                <i class="bi bi-people"></i> 3 team members will be notified
+            </div>
+            <div class="ft-modal__footer-actions">
+                <button class="ft-btn-cancel" id="ft-cancel-project" onclick="closeModal('ft-overlay-project');">Cancel</button>
+                <button class="ft-btn-primary" id="ft-submit-project">
+                    <i class="bi bi-folder-plus"></i> Create Project
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div><!-- /ft-overlay-project -->
+<script>
+    $(function () {
+
+      /* ── Color dot selection (Create Project) ── */
+      window.ftSelectColor = function (dot) {
+        $('.ft-color-dot').removeClass('ft-color--selected');
+        $(dot).addClass('ft-color--selected');
+      };
+
+      $('#ft-submit-project').on('click', function () {
+        var data = {
+          name:        $('#ft-project-name').val().trim(),
+          key:         $('#ft-project-key').val().trim().toUpperCase(),
+          visibility:  $('#ft-project-visibility').val(),
+          description: $('#ft-project-description').val().trim(),
+          color:       $('.ft-color-dot.ft-color--selected').css('background-color'),
+          category:    $('#ft-project-category').val(),
+          lead:        $('#ft-project-lead').val(),
+          dueDate:     $('#ft-project-due').val()
+        };
+        $(document).trigger('ft:project:create', [data]);
+      });
+
+
+      /* ── Auto-generate project key from name ── */
+      $('#ft-project-name').on('input', function () {
+        var name = $(this).val().trim();
+        if (!name) return;
+        var key = name.replace(/[^a-zA-Z0-9\s]/g, '')
+                      .split(/\s+/)
+                      .map(function (w) { return w[0] || ''; })
+                      .join('')
+                      .toUpperCase()
+                      .substring(0, 5);
+        $('#ft-project-key').val(key);
+      });
+
+    });
+    function closeModal(modalId){
+          $('#' + modalId).removeClass('ft-overlay--visible').addClass('ft-hidden');
+    }
+</script>

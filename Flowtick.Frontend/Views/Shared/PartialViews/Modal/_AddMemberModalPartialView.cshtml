@@ -1,0 +1,190 @@
+﻿
+<link href="~/css/flowtickmodal/flowtick-modals.css" rel="stylesheet" />
+<!-- ============================================================
+     OVERLAY 1 — ADD MEMBER
+     ============================================================ -->
+<div class="ft-modal-overlay ft-hidden" id="ft-overlay-member">
+  <div class="ft-modal" id="ft-modal-member">
+
+    <!-- Header -->
+    <div class="ft-modal__header">
+      <div class="ft-modal__header-left">
+        <div class="ft-modal__icon">
+          <i class="bi bi-person-plus-fill"></i>
+        </div>
+        <div>
+          <div class="ft-modal__title">Add Member</div>
+          <div class="ft-modal__subtitle">Invite people to Fophex-ERP</div>
+        </div>
+      </div>
+            <button class="ft-modal__close" id="ft-close-member" aria-label="Close" onclick="closeModal('ft-overlay-member');">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="ft-modal__body">
+
+      <!-- Email tag input -->
+      <div class="ft-form-group" id="ft-fg-emails">
+        <label class="ft-form-label" for="ft-email-input">
+          Email addresses <span class="ft-label-required">*</span>
+        </label>
+        <div class="ft-tag-area" id="ft-tag-area" onclick="document.getElementById('ft-email-input').focus()">
+          <span class="ft-tag-pill" id="ft-tag-default">
+            aman@fophex.com
+            <span class="ft-tag-pill__remove" onclick="ftRemoveTag('ft-tag-default')" title="Remove">
+              <i class="bi bi-x"></i>
+            </span>
+          </span>
+          <input
+            class="ft-tag-raw-input"
+            id="ft-email-input"
+            type="email"
+            placeholder="Type email and press Enter or comma…"
+            autocomplete="off"
+          />
+        </div>
+        <span class="ft-form-hint">
+          <i class="bi bi-info-circle"></i>
+          Separate multiple emails with Enter or comma. Invites expire in 7 days.
+        </span>
+      </div>
+
+      <!-- Role selector -->
+      <div class="ft-form-group" id="ft-fg-role">
+        <label class="ft-form-label">Role <span class="ft-label-required">*</span></label>
+        <div class="ft-role-grid" id="ft-role-grid">
+          <div class="ft-role-card ft-role--selected" id="ft-role-admin" onclick="ftSelectRole('admin')">
+            <div class="ft-role-card__icon"><i class="bi bi-shield-check" style="color:#0d9488"></i></div>
+            <div class="ft-role-card__name">Admin</div>
+            <div class="ft-role-card__desc">Full access, manage members &amp; settings</div>
+          </div>
+          <div class="ft-role-card" id="ft-role-developer" onclick="ftSelectRole('developer')">
+            <div class="ft-role-card__icon"><i class="bi bi-code-slash" style="color:#6366f1"></i></div>
+            <div class="ft-role-card__name">Developer</div>
+            <div class="ft-role-card__desc">Create &amp; manage tasks, sprints</div>
+          </div>
+          <div class="ft-role-card" id="ft-role-viewer" onclick="ftSelectRole('viewer')">
+            <div class="ft-role-card__icon"><i class="bi bi-eye" style="color:#f59e0b"></i></div>
+            <div class="ft-role-card__name">Viewer</div>
+            <div class="ft-role-card__desc">Read-only access to board &amp; tasks</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal message -->
+      <div class="ft-form-group" id="ft-fg-message">
+        <label class="ft-form-label" for="ft-invite-message">
+          Personal message <span class="ft-label-optional">(optional)</span>
+        </label>
+        <textarea
+          class="ft-input"
+          id="ft-invite-message"
+          placeholder="Add a welcome note to the invitation email…"
+          style="min-height:68px"
+        ></textarea>
+      </div>
+
+      <!-- Current members -->
+      <div class="ft-form-group" id="ft-fg-members">
+        <label class="ft-form-label">Current members <span class="ft-label-optional">(3)</span></label>
+        <div class="ft-member-list" id="ft-member-list">
+          <div class="ft-member-item" id="ft-member-mn">
+            <span class="ft-member-avatar" style="background:#0d9488">MN</span>
+            <div class="ft-member-info">
+              <div class="ft-member-name">Muhammad Nauman</div>
+              <div class="ft-member-email">m.nauman@fophex.com</div>
+            </div>
+            <span class="ft-role-tag ft-role-tag--admin">Admin</span>
+          </div>
+          <div class="ft-member-item" id="ft-member-us">
+            <span class="ft-member-avatar" style="background:#6366f1">US</span>
+            <div class="ft-member-info">
+              <div class="ft-member-name">Usman Said</div>
+              <div class="ft-member-email">u.said@fophex.com</div>
+            </div>
+            <span class="ft-role-tag ft-role-tag--dev">Developer</span>
+          </div>
+          <div class="ft-member-item" id="ft-member-mk">
+            <span class="ft-member-avatar" style="background:#f59e0b">MK</span>
+            <div class="ft-member-info">
+              <div class="ft-member-name">M. Ehtisham Khan</div>
+              <div class="ft-member-email">m.khan@fophex.com</div>
+            </div>
+            <span class="ft-role-tag ft-role-tag--viewer">Viewer</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="ft-modal__footer">
+      <div class="ft-modal__footer-note">
+        <i class="bi bi-lock"></i> Invite link expires in 7 days
+      </div>
+      <div class="ft-modal__footer-actions">
+                <button class="ft-btn-cancel" id="ft-cancel-member" onclick="closeModal('ft-overlay-member');">Cancel</button>
+        <button class="ft-btn-primary" id="ft-submit-member">
+          <i class="bi bi-send"></i> Send Invites
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /ft-overlay-member -->
+
+<!-- ============================================================
+     JS — board-modals.js
+     Depends on: jQuery 3.x
+     ============================================================ -->
+<script>
+$(function () {
+
+  /* ── Role card selection (Add Member) ── */
+  window.ftSelectRole = function (role) {
+    $('.ft-role-card').removeClass('ft-role--selected');
+    $('#ft-role-' + role).addClass('ft-role--selected');
+  };
+
+
+  /* ── Email tag input (Add Member) ── */
+  $('#ft-email-input').on('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      var val = $(this).val().replace(',', '').trim();
+      if (!val) return;
+      var tagId = 'ft-tag-' + Date.now();
+      var $pill = $(
+        '<span class="ft-tag-pill" id="' + tagId + '">' +
+        val +
+        ' <span class="ft-tag-pill__remove" title="Remove">' +
+        '<i class="bi bi-x"></i>' +
+        '</span>' +
+        '</span>'
+      );
+      $pill.find('.ft-tag-pill__remove').on('click', function () {
+        $('#' + tagId).remove();
+      });
+      $(this).before($pill);
+      $(this).val('');
+    }
+  });
+
+  /* ── Submit handlers (wire up to your backend) ── */
+  $('#ft-submit-member').on('click', function () {
+    var emails = [];
+    $('.ft-tag-pill').each(function () {
+      emails.push($(this).clone().find('span').remove().end().text().trim());
+    });
+    var role = $('.ft-role-card.ft-role--selected').attr('id').replace('ft-role-', '');
+    var message = $('#ft-invite-message').val().trim();
+    $(document).trigger('ft:member:invite', [{ emails: emails, role: role, message: message }]);
+  });
+});
+    function closeModal(modalId){
+          $('#' + modalId).removeClass('ft-overlay--visible').addClass('ft-hidden');
+    };
+</script>
+

@@ -220,6 +220,8 @@
 
 	function openCreateTaskModal(taskType){
 		$(".create-task-modal").fadeIn(500);
+		$('.ft-dropdown-panel--right').addClass('ft-dropdown--hidden');
+		$('#ft-add-btn').attr('aria-expanded', 'false');
 
 		loadProjectUserDropdown("create-task-asignee-user-list", "create-task-selected-assignee",loginUserID)
 		loadProjectUserDropdown("create-task-reporter-user-list", "create-task-selected-reporter",loginUserID);
