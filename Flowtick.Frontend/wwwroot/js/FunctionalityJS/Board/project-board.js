@@ -210,6 +210,7 @@ $(function () {
         /* save sprint data in localStorage */
         var sprintData = {
             projectId: projectId ,
+            boardId: boardId ,
             sprintId: $(this).attr('data-sprint-id'),
             sprintStatus: $(this).attr('data-sprint-status'),
             sprintName: $(this).attr('data-sprint-name')
@@ -345,11 +346,16 @@ $(function () {
 
     //});
 
-    /* remove sprintData From Local Storage when project change  */
+    /* remove sprintData From Local Storage when project or board change  */
     var savedSprint = JSON.parse(localStorage.getItem('sprintData'));
 
-    /* check project changed */
+    /* check project changed  */
     if (savedSprint && savedSprint.projectId != projectId) {
+
+        localStorage.removeItem('sprintData');
+        savedSprint = null;
+    }
+    if (savedSprint && savedSprint.boardId != boardId) {
 
         localStorage.removeItem('sprintData');
         savedSprint = null;
