@@ -1835,7 +1835,7 @@
 	var updateTaskAssigneeCallBack = function (response) {
 		if (response.request.status === 204) {
 			successToastr("Assigned successfully", 'Assignee');
-			//getSprintBacklog();
+			getSprintBacklog();
 		}
 		else {
 			errorExtractor(response);
