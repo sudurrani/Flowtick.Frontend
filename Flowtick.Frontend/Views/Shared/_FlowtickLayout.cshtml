@@ -529,10 +529,9 @@
                                     <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
                                     <span class="nav-link-text ">${project.name}</span>
 
-                                    ${isOwner ? `
-                                    <span class="ms-auto three-dots" onclick="handleThreeDots(event, ${project.id})">
+                                    <span class="ms-auto three-dots" onclick="handleThreeDots(event, ${project.id}, ${isOwner})">
                                         <i class="bi bi-three-dots"></i>
-                                    </span>` : ''}
+                                    </span>
 
                                 </a>
 
@@ -605,7 +604,7 @@
             }
         }
 
-        function handleThreeDots(event, projectId) {
+        function handleThreeDots(event, projectId, isOwner) {
             event.stopPropagation();   // stops parent <a> click
             event.preventDefault();    // prevents link navigation (important)
 
@@ -632,8 +631,10 @@
                             <li><a class="dropdown-item" onclick="redirectToAction('/Project/Backlog?id=',${projectId});"><i class="bi bi-list-task me-2"></i>Backlog </a></li>
                             <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add Member</a></li>
                             <li><a class="dropdown-item" onclick="openAddBoardModal(${projectId});"><i class="bi bi-clipboard me-2"></i>Add Board</a></li>
-                            <li><a class="dropdown-item" id="projectSetting" onclick="redirectToAction('/Project/Settings?id=',${projectId});"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                            <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete</a></li>
+                            ${isOwner ? `
+                                <li><a class="dropdown-item" id="projectSetting" onclick="redirectToAction('/Project/Settings?id=',${projectId});"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                                <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete</a></li>
+                            ` : ''}
                         </ul>
                     `);
             // Your custom logic here
