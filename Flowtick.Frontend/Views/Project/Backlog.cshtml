@@ -446,7 +446,8 @@
 
 	/* ── Table ── */
 	.tbl-wrap {
-		overflow-x: auto
+		overflow-x: auto;
+		overflow-y: visible;
 	}
 
 	table {
@@ -881,6 +882,79 @@
 		color: #166534;
 		font-weight: 500
 	}
+	/* dropdown css */
+
+	.flowtick-dropdown {
+		width: 280px;
+		padding: 0;
+		border-radius: 10px;
+		border: 1px solid #E4E6EA;
+		overflow: hidden;
+		z-index: 99999;
+		transform: translateY(2px);
+	}
+
+
+	.flowtick-dropdown-search {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 12px;
+		border-bottom: 1px solid #E7E9ED;
+	}
+
+		.flowtick-dropdown-search .dropdown-avatar {
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+		}
+
+		.flowtick-dropdown-search input {
+			border: none;
+			outline: none;
+			font-size: 14px;
+			flex-grow: 1;
+		}
+
+	/* User List */
+	.dropdown-list {
+		max-height: 240px;
+		overflow-y: auto;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.dropdown-item {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 8px 12px;
+		cursor: pointer;
+	}
+
+		.dropdown-item:hover {
+			background-color: #e4f7fa !important;
+		}
+
+		.dropdown-item:hover {
+			background: #F4F5F7;
+		}
+
+	.dropdown-avatar {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+	}
+
+	.user-name {
+		font-size: 13px;
+	}
+	/* Hide Bootstrap caret icon */
+	.no-caret::after {
+		display: none !important;
+	}
+
 </style>
 <!-- Filter Bar -->
 <div class="filter-bar">
@@ -1003,7 +1077,7 @@
 	var _projectSprintArray = [];
 	var loginUserID,
 	 projectId;
-
+	 var _projectMember = []
 
 	$(function () {
 
@@ -1029,6 +1103,7 @@
 		dropdownParent: $('#createSprintModal'),
 		width: "100%",
 	  });
+	    getProjectMembers()
 		getTaskTypes();
 		getProjectSprints();
 		getSprintBacklog();
@@ -1115,6 +1190,35 @@
 		sel.style.fontWeight='600';
 	  }
 	}
+		// Filter  dropdown
+	$(document).on('keyup', '.seach-user-dropdown', function (e) {
+		e.stopImmediatePropagation();
+		let value = $(this).val().toLowerCase();
+
+		let dropdown = $(this).closest('.flowtick-dropdown');
+
+		dropdown.find('.dropdown-item').each(function () {
+			$(this).toggle(
+				$(this).find('.user-name').text().toLowerCase().includes(value)
+			);
+		});
+	});
+
+			// handle click for assignee in in sprints
+	$(document).on("click", ".sprint-asignee-user-list .dropdown-item", function () {
+	
+		let userId = $(this).data("id");
+		let username = $(this).data("name");
+		let backgrounColor = $(this).find(".profile-image").attr("style");
+
+		let avatar = `<div class="av av-mn" data-id="${userId}" style="${backgrounColor}">${getInitials(username)}</div>`;
+		let dropdown = $(this).closest(".dropdown");
+		dropdown.find(".sprint-selected-assignee").html(`${avatar} <span class="user-name ms-2">${username}</span> `);
+		
+		const selectedTasId = dropdown.closest("tr").attr("data-task-id");
+		updateTaskAssignee(selectedTasId, userId);
+
+	});
 
 	function getSprintStatuses() {
 		apiRequest({
@@ -1265,6 +1369,18 @@
 	  var backlogArray = sprintBacklogArray.backlog;
 	 // console.log(sprintArray);
 	 // console.log(backlogArray);
+
+	  // load ProjectMember Dropdown 
+		//console.log(_projectMember);
+		var assigneeDropdownItem = "";
+		$.each(_projectMember, function (i, member) {
+			assigneeDropdownItem += `
+						 <li class="dropdown-item" data-name="${member.user}" data-id="${member.userId}">
+								 <div class="assignee-avatar-sm profile-image" style="background:${member.colorCode}">${getInitials(member.user)} </div>
+								<span class="user-name ms-2">${member.user}</span>
+						 </li>
+			`;
+		});
 
 	  $.each(sprintArray, function (sIndex, sprint) {
 
@@ -1507,10 +1623,32 @@
 			statusHtml = `<span class="badge b-done"><i class="ti ti-check" aria-hidden="true" style="font-size:10px"></i>${task.status}</span>`
 		   }
 		  var tr = `
-					<tr>
+					<tr  data-task-id="${task.id}">
 						<td><div class="task-cell"><i class="${task.type.icon}"${task.type.iconCSS} aria-hidden="true"></i><span class="task-code">${task.code}</span><span class="task-name">${task.title}</span></div></td>
 						<td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td>
-						<td><div class="assign-cell"><span class="av av-mn">${getInitials(task.assignee)}</span>	${task.assignee}</div></td>
+						<td>
+						<div class="assign-cell">
+							<div class="dropdown mt-2">
+								<div class="dropdown-toggle no-caret" data-bs-toggle="dropdown">
+									<div class="sprint-selected-assignee d-flex align-items-center" style="cursor:pointer">
+										 <div class="av av-mn profile-image" data-user-id="${task.assignee.Id}" style="background:${task.assignee.colorCode}" >
+										 ${getInitials(task.assignee.name)} </div>
+										 <span class="user-name ms-2 ">${task.assignee.name}</span>
+									</div>
+								</div>
+								<div class="dropdown-menu flowtick-dropdown">
+									<div class="flowtick-dropdown-search">
+										<i class="bi bi-search"></i>
+										<input type="text" class="seach-user-dropdown" placeholder="Search users">
+									</div>
+									<ul class="dropdown-list sprint-asignee-user-list">
+										${assigneeDropdownItem}
+									</ul>
+								</div>
+							</div>
+						</div>
+						</td>
+
 						<td>${statusHtml}</td>
 					</tr>
 		  `;
@@ -1657,6 +1795,47 @@
 			$('#taskInput').val('');
 		    $('#tasktypeId').val(3);
 			getSprintBacklog();
+		}
+		else {
+			errorExtractor(response);
+		}
+	};
+
+	function getProjectMembers() {
+		let url = `flowtick/project/${projectId}/members`;
+		apiRequest({
+			url: url,
+			type: 'GET',
+			data: {},
+			callBack: getProjectMembersCallBack
+		});
+	}
+	var getProjectMembersCallBack = function (response) {
+		if (response.request.status === 200) {
+
+			_projectMember = response.data
+		}
+		else {
+			_projectMember = [];
+			errorExtractor(response);
+		}
+	};
+
+	function updateTaskAssignee(taskId, selectedAssigneeId) {
+		let url = `flowtick/tasks/${taskId}/assignee`;
+		apiRequest({
+			url: url,
+			type: 'PUT',
+			data: {
+				"assigneeId": selectedAssigneeId
+			},
+			callBack: updateTaskAssigneeCallBack
+		});
+	}
+	var updateTaskAssigneeCallBack = function (response) {
+		if (response.request.status === 204) {
+			successToastr("Assigned successfully", 'Assignee');
+			//getSprintBacklog();
 		}
 		else {
 			errorExtractor(response);
