@@ -1078,6 +1078,7 @@
 	var loginUserID,
 	 projectId;
 	 var _projectMember = []
+	 var _sprintStatusesArray = [];
 
 	$(function () {
 
@@ -1107,23 +1108,8 @@
 		getTaskTypes();
 		getProjectSprints();
 		getSprintBacklog();
+		getSprintStatuses();
 
-
-	  $('#openSprintModal').on('click', function () {
-
-		$('#name').val('');
-		$('#startDate').val('');
-		$('#endDate').val('');
-		$('#description').val('');
-		$("#statusId").prop("disabled", false);
-
-		//$('#createSprintModal').modal('show');
-		 $('#ft-overlay-sprint').removeClass('ft-hidden').addClass('ft-overlay--visible');
-		getSprintStatuses()
-	  });
-	   $("#saveSprint").click( function(){
-		   createSprint();
-	   })
 
 	});
 	$(document).on("click", ".activate-sprint-btn", function () {
@@ -1232,49 +1218,10 @@
 	var getSprintStatusesCallBack = function (response) {
 		if (response.request.status === 200) {
 
-			var statuses = response.data; //  array
-
-			var dropdown = $("#ft-sprint-status");
-			dropdown.empty();
-			dropdown.append('<option selected disabled>Select status</option>');
-
-			$.each(statuses, function (index, status) {
-				var option = `<option  value="${status.id}">${status.description}</option>`;
-				dropdown.append(option);
-			});
+		    _sprintStatusesArray = response.data; //  array
 		}
 		else {
 				errorExtractor(response);
-		}
-	};
-
-	function createSprint(){
-		if (customValidateForm('createSprintForm')) {
-			var inputJSON = getFormDataAsJSONObject('createSprintForm');
-			// convert dates
-			inputJSON.startDate = formatToISO(inputJSON.startDate);
-			inputJSON.endDate = formatToISO(inputJSON.endDate);
-			//console.log(inputJSON);
-
-			let url = `flowtick/project/${projectId}/sprints`;
-			apiRequest({
-				url: url,
-				type: 'POST',
-				data: inputJSON,
-				callBack: createSprintCallBack
-			});
-
-		}
-	}
-	var createSprintCallBack = function (response) {
-		if (response.request.status === 201) {
-			successToastr("Saved successfully", 'Sprint');
-			$('#createSprintModal').modal('hide');
-			getProjectSprints();
-			getSprintBacklog();
-		}
-		else {
-			errorExtractor(response);
 		}
 	};
 

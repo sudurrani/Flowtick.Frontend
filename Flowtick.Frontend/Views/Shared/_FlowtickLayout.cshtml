@@ -424,14 +424,14 @@
                 addPeopleToProject();
             });
 
-            $("#btnCreateProject").click(function () {
+            // $("#btnCreateProject").click(function () {
 
-                $('#createProjectModal').modal('show');
-            })
+            //     $('#createProjectModal').modal('show');
+            // })
 
-            $("#saveProject").click(function () {
-                createProject()
-            }); 
+            // $("#saveProject").click(function () {
+            //     createProject()
+            // }); 
             $("#ft-menu-signout").click( function(){
                 redirectToAction('/Auth/Login?key=', 10);
             });
@@ -756,31 +756,6 @@
             $("#closeModal").removeClass("readonly").prop("disabled", false);
             $("#email,#roleId").prop("disabled", false);
         }
-
-        function createProject() {
-            if (customValidateForm('createProjectForm')) {
-
-                const inputJSON = getFormDataAsJSONObject('createProjectForm');
-                apiRequest({
-                    url: 'flowtick/projects',
-                    type: 'POST',
-                    data: inputJSON,
-                    callBack: createProjectCallBack
-                });
-            };
-        }
-        var createProjectCallBack = function (response) {
-            if (response.request.status === 201) {
-                $('#createProjectModal').modal('hide');
-                location.reload();
-            }
-            else if (response.request.status === 422) {
-                infoToastr('The Name field is required', 'info');
-            }
-            else {
-                errorExtractor(response);
-            }
-        };
 
         function openAddBoardModal(projectId){
              $('#boardName').val('');

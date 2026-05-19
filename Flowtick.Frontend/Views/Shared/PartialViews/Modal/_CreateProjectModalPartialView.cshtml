@@ -105,10 +105,7 @@
                 <div class="ft-form-group" id="ft-fg-project-lead">
                     <label class="ft-form-label" for="ft-project-lead">Project lead</label>
                     <select class="ft-input" id="ft-project-lead">
-                        <option value="">No lead assigned</option>
-                        <option value="mn">Muhammad Nauman</option>
-                        <option value="us">Usman Said</option>
-                        <option value="mk">M. Ehtisham Khan</option>
+                   
                     </select>
                 </div>
                 <div class="ft-form-group" id="ft-fg-project-due">
@@ -144,6 +141,24 @@
 <script>
     $(function () {
 
+        $("#ft-add-project").click(function () {
+
+            $('#ft-project-name').val('');
+            $('#ft-project-key').val('');
+            $('#ft-project-visibility').val('');
+            $('#ft-project-description').val('');
+            $("#ft-project-category").val('');
+            $("#ft-project-lead").val('');
+            $("#ft-project-due").val('');
+
+
+            $('#ft-overlay-project').removeClass('ft-hidden').addClass('ft-overlay--visible');
+            $('.ft-dropdown-panel--right').addClass('ft-dropdown--hidden');
+            $('#ft-add-btn').attr('aria-expanded', 'false');
+
+           loadProjectLeadDropdown();
+        })
+
       /* ── Color dot selection (Create Project) ── */
       window.ftSelectColor = function (dot) {
         $('.ft-color-dot').removeClass('ft-color--selected');
@@ -151,17 +166,7 @@
       };
 
       $('#ft-submit-project').on('click', function () {
-        var data = {
-          name:        $('#ft-project-name').val().trim(),
-          key:         $('#ft-project-key').val().trim().toUpperCase(),
-          visibility:  $('#ft-project-visibility').val(),
-          description: $('#ft-project-description').val().trim(),
-          color:       $('.ft-color-dot.ft-color--selected').css('background-color'),
-          category:    $('#ft-project-category').val(),
-          lead:        $('#ft-project-lead').val(),
-          dueDate:     $('#ft-project-due').val()
-        };
-        $(document).trigger('ft:project:create', [data]);
+         createProject()
       });
 
 
@@ -179,6 +184,53 @@
       });
 
     });
+     
+    function loadProjectLeadDropdown(){
+            var projectMember = _projectMember;
+            var dropdown = $("#ft-project-lead");
+            dropdown.empty();
+            dropdown.append('<option selected disabled value="">No lead assigned</option>');
+
+            $.each(projectMember, function (index, member) {
+                var option = `<option  value="${member.userId}">${member.user}</option>`;
+                dropdown.append(option);
+            });
+    }
+
+
+        function createProject() {
+            var inputJSON = {
+                  name:        $('#ft-project-name').val().trim(),
+                  key:         $('#ft-project-key').val().trim().toUpperCase(),
+                  visibility:  $('#ft-project-visibility').val(),
+                  description: $('#ft-project-description').val().trim(),
+                  color:       $('.ft-color-dot.ft-color--selected').css('background-color'),
+                  category:    $('#ft-project-category').val(),
+                  lead:        $('#ft-project-lead').val(),
+                  dueDate:     $('#ft-project-due').val()
+            };
+            console.log(inputJSON);
+            // apiRequest({
+            //       url: 'flowtick/projects',
+            //       type: 'POST',
+            //       data: inputJSON,
+            //       callBack: createProjectCallBack
+            // });
+        
+        }
+        var createProjectCallBack = function (response) {
+            if (response.request.status === 201) {
+                $('#ft-overlay-project').removeClass('ft-overlay--visible').addClass('ft-hidden');
+                location.reload();
+            }
+            else if (response.request.status === 422) {
+                infoToastr('The Name field is required', 'info');
+            }
+            else {
+                errorExtractor(response);
+            }
+        };
+
     function closeModal(modalId){
           $('#' + modalId).removeClass('ft-overlay--visible').addClass('ft-hidden');
     }

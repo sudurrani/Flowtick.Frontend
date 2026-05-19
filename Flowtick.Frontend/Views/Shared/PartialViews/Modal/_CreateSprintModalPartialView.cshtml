@@ -35,6 +35,9 @@
                         <i class="bi bi-calendar2-week ft-input-icon"></i>
                         <input class="ft-input" id="ft-sprint-name" type="text" placeholder="Sprint 4" />
                     </div>
+                    <span class="ft-form-error ft-hidden" id="ft-error-sprint-name">
+                        <i class="bi bi-exclamation-circle-fill"></i> Please select a sprint.
+                    </span>
                 </div>
                 <div class="ft-form-group" id="ft-fg-sprint-status">
                     <label class="ft-form-label" for="ft-sprint-status">
@@ -43,6 +46,9 @@
                     <select class="ft-input" id="ft-sprint-status">
                         
                     </select>
+                    <span class="ft-form-error ft-hidden" id="ft-error-sprint-status">
+                        <i class="bi bi-exclamation-circle-fill"></i> Please select a status.
+                    </span>
                 </div>
             </div>
 
@@ -56,6 +62,9 @@
                         <i class="bi bi-calendar-date ft-input-icon"></i>
                         <input class="ft-input" id="ft-sprint-start" type="date" />
                     </div>
+                    <span class="ft-form-error ft-hidden" id="ft-error-sprint-start">
+                        <i class="bi bi-exclamation-circle-fill"></i> Please select a state Date.
+                    </span>
                 </div>
                 <div class="ft-form-group" id="ft-fg-sprint-end">
                     <label class="ft-form-label" for="ft-sprint-end">
@@ -65,6 +74,9 @@
                         <i class="bi bi-calendar-check ft-input-icon"></i>
                         <input class="ft-input" id="ft-sprint-end" type="date" />
                     </div>
+                    <span class="ft-form-error ft-hidden" id="ft-error-sprint-end">
+                        <i class="bi bi-exclamation-circle-fill"></i> Please select a end date.
+                    </span>
                 </div>
             </div>
 
@@ -101,10 +113,7 @@
                         Sprint lead <span class="ft-label-optional">(optional)</span>
                     </label>
                     <select class="ft-input" id="ft-sprint-lead">
-                        <option value="">No lead assigned</option>
-                        <option value="mn">Muhammad Nauman</option>
-                        <option value="us">Usman Said</option>
-                        <option value="mk">M. Ehtisham Khan</option>
+                       
                     </select>
                 </div>
             </div>
@@ -120,7 +129,7 @@
             </div>
 
             <!-- Previous sprint summary -->
-            <div class="ft-sprint-summary" id="ft-prev-sprint-summary">
+       @*      <div class="ft-sprint-summary" id="ft-prev-sprint-summary">
                 <div class="ft-sprint-summary__header">
                     <span class="ft-sprint-summary__title">Previous sprint — Sprint 3</span>
                     <span class="ft-sprint-summary__status">
@@ -147,7 +156,7 @@
                         <span class="ft-progress-label">80% completed</span>
                     </div>
                 </div>
-            </div>
+            </div> *@
 
         </div>
 
@@ -170,32 +179,142 @@
 <script>
     $(function () {
 
-      $('#ft-submit-sprint').on('click', function () {
-        var data = {
-          name:        $('#ft-sprint-name').val().trim(),
-          status:      $('#ft-sprint-status').val(),
-          startDate:   $('#ft-sprint-start').val(),
-          endDate:     $('#ft-sprint-end').val(),
-          goal:        $('#ft-sprint-goal').val().trim(),
-          capacity:    $('#ft-sprint-capacity').val(),
-          lead:        $('#ft-sprint-lead').val(),
-          description: $('#ft-sprint-description').val().trim()
-        };
-        $(document).trigger('ft:sprint:create', [data]);
-      });
-      /* ── Sprint date: auto-set end date 2 weeks after start ── */
-      $('#ft-sprint-start').on('change', function () {
-        if ($('#ft-sprint-end').val()) return;
-        var start = new Date($(this).val());
-        if (isNaN(start)) return;
-        start.setDate(start.getDate() + 14);
-        var yyyy = start.getFullYear();
-        var mm   = String(start.getMonth() + 1).padStart(2, '0');
-        var dd   = String(start.getDate()).padStart(2, '0');
-        $('#ft-sprint-end').val(yyyy + '-' + mm + '-' + dd);
+
+      $('#openSprintModal').on('click', function () {
+
+        $('#ft-sprint-name').val('');
+        $('#ft-sprint-start').val('');
+        $('#ft-sprint-end').val('');
+        $('#ft-sprint-description').val('');
+        $("#ft-sprint-status").val('');
+        $("#ft-sprint-goal").val('');
+        $("#ft-sprint-capacity").val('');
+        $("#ft-sprint-lead").val('');
+
+        //$('#createSprintModal').modal('show');
+         $('#ft-overlay-sprint').removeClass('ft-hidden').addClass('ft-overlay--visible');
+         loadSprintStatusesDropdown();
+         loadSprintLeadDropdown();
       });
 
+      $('#ft-submit-sprint').on('click', function () {
+          createSprint();
+      });
+
+
     });
+    function loadSprintStatusesDropdown(){
+            var statuses = _sprintStatusesArray; //  array
+            var dropdown = $("#ft-sprint-status");
+            dropdown.empty();
+            dropdown.append('<option selected disabled>Select status</option>');
+
+            $.each(statuses, function (index, status) {
+                var option = `<option  value="${status.id}">${status.description}</option>`;
+                dropdown.append(option);
+            });
+    }
+    function loadSprintLeadDropdown(){
+            var projectMember = _projectMember; //  array
+            var dropdown = $("#ft-sprint-lead");
+            dropdown.empty();
+            dropdown.append('<option selected disabled value="">No lead assigned</option>');
+
+            $.each(projectMember, function (index, member) {
+                var option = `<option  value="${member.userId}">${member.user}</option>`;
+                dropdown.append(option);
+            });
+    }
+
+            /* ══════════════════════════════════════════════
+           VALIDATION
+           ══════════════════════════════════════════════ */
+        function ftValidateBoard() {
+            var valid = true;
+
+            /* project */
+            if (!$('#ft-sprint-name').val()) {
+                $('#ft-sprint-name').addClass('ft-input--error');
+                $('#ft-error-sprint-name').removeClass('ft-hidden');
+                valid = false;
+            } else {
+                $('#ft-sprint-name').removeClass('ft-input--error');
+                $('#ft-error-sprint-name').addClass('ft-hidden');
+            }
+            /* status */
+            if (!$('#ft-sprint-status').val()) {
+                $('#ft-sprint-status').addClass('ft-input--error');
+                $('#ft-error-sprint-status').removeClass('ft-hidden');
+                valid = false;
+            } else {
+                $('#ft-sprint-status').removeClass('ft-input--error');
+                $('#ft-error-sprint-status').addClass('ft-hidden');
+            }
+
+             /* Start Date */
+            if (!$('#ft-sprint-start').val()) {
+                $('#ft-sprint-start').addClass('ft-input--error');
+                $('#ft-error-sprint-start').removeClass('ft-hidden');
+                valid = false;
+            } else {
+                $('#ft-sprint-start').removeClass('ft-input--error');
+                $('#ft-error-sprint-start').addClass('ft-hidden');
+            }
+                         /* Start Date */
+            if (!$('#ft-sprint-end').val()) {
+                $('#ft-sprint-end').addClass('ft-input--error');
+                $('#ft-error-sprint-end').removeClass('ft-hidden');
+                valid = false;
+            } else {
+                $('#ft-sprint-end').removeClass('ft-input--error');
+                $('#ft-error-sprint-end').addClass('ft-hidden');
+            }
+
+           
+
+            return valid;
+        }
+
+
+    function createSprint(){
+
+       if (!ftValidateBoard()) return;
+
+        var inputJSON = {
+          name:        $('#ft-sprint-name').val().trim(),
+          statusId:      $('#ft-sprint-status').val(),
+          startDate:   $('#ft-sprint-start').val(),
+          endDate:     $('#ft-sprint-end').val(),
+          sprintGoal:        $('#ft-sprint-goal').val().trim(),
+          storyPoint: $('#ft-sprint-capacity').val() || null,
+          sprintLeadId:        $('#ft-sprint-lead').val(),
+          description: $('#ft-sprint-description').val().trim()
+        };
+
+       // console.log(inputJSON);
+
+        let url = `flowtick/project/${projectId}/sprints`;
+         apiRequest({
+             url: url,
+             type: 'POST',
+             data: inputJSON,
+             callBack: createSprintCallBack
+         });
+    }
+    var createSprintCallBack = function (response) {
+        if (response.request.status === 201) {
+            successToastr("Saved successfully", 'Sprint');
+         
+             $('#ft-overlay-sprint').removeClass('ft-overlay--visible').addClass('ft-hidden');
+
+            getProjectSprints();
+            getSprintBacklog();
+        }
+        else {
+            errorExtractor(response);
+        }
+    };
+
     function closeModal(modalId){
           $('#' + modalId).removeClass('ft-overlay--visible').addClass('ft-hidden');
     }
