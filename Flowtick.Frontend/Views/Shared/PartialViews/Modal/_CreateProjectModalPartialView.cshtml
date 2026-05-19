@@ -34,6 +34,9 @@
                     <i class="bi bi-folder ft-input-icon"></i>
                     <input class="ft-input" id="ft-project-name" type="text" placeholder="e.g. Fophex-ERP, Marketing Q3…" />
                 </div>
+                <span class="ft-form-error ft-hidden" id="ft-error-project-name">
+                    <i class="bi bi-exclamation-circle-fill"></i> Please select a project name.
+                </span>
             </div>
 
             <!-- Key + Visibility -->
@@ -52,6 +55,9 @@
                         <span class="ft-input-suffix">Auto</span>
                     </div>
                     <span class="ft-form-hint">Used in task codes e.g. ERP-101</span>
+                    <span class="ft-form-error ft-hidden" id="ft-error-project-key">
+                        <i class="bi bi-exclamation-circle-fill"></i> Please select a project key.
+                    </span>
                 </div>
                 <div class="ft-form-group" id="ft-fg-visibility">
                     <label class="ft-form-label" for="ft-project-visibility">Visibility</label>
@@ -151,6 +157,11 @@
             $("#ft-project-lead").val('');
             $("#ft-project-due").val('');
 
+            //remove validation message when modal open
+            $('#ft-project-name').removeClass('ft-input--error');
+            $('#ft-error-project-name').addClass('ft-hidden');
+            $('#ft-project-key').removeClass('ft-input--error');
+            $('#ft-error-project-key').addClass('ft-hidden');
 
             $('#ft-overlay-project').removeClass('ft-hidden').addClass('ft-overlay--visible');
             $('.ft-dropdown-panel--right').addClass('ft-dropdown--hidden');
@@ -199,6 +210,9 @@
 
 
         function createProject() {
+
+          if (!ftValidateProject()) return;
+
             var inputJSON = {
                   name:        $('#ft-project-name').val().trim(),
                   key:         $('#ft-project-key').val().trim().toUpperCase(),
@@ -230,7 +244,31 @@
                 errorExtractor(response);
             }
         };
+      function ftValidateProject() {
+            var valid = true;
 
+            /* project name*/
+            if (!$('#ft-project-name').val()) {
+                $('#ft-project-name').addClass('ft-input--error');
+                $('#ft-error-project-name').removeClass('ft-hidden');
+                valid = false;
+            } else {
+                $('#ft-project-name').removeClass('ft-input--error');
+                $('#ft-error-project-name').addClass('ft-hidden');
+            }
+            /* status */
+            if (!$('#ft-project-key').val()) {
+                $('#ft-project-key').addClass('ft-input--error');
+                $('#ft-error-project-key').removeClass('ft-hidden');
+                valid = false;
+            } else {
+                $('#ft-project-key').removeClass('ft-input--error');
+                $('#ft-error-project-key').addClass('ft-hidden');
+            }
+
+
+            return valid;
+        }
     function closeModal(modalId){
           $('#' + modalId).removeClass('ft-overlay--visible').addClass('ft-hidden');
     }

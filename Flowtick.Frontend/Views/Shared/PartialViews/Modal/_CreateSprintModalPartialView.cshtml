@@ -191,6 +191,16 @@
         $("#ft-sprint-capacity").val('');
         $("#ft-sprint-lead").val('');
 
+        // remove validation when modal open
+        $('#ft-sprint-name').removeClass('ft-input--error');
+        $('#ft-error-sprint-name').addClass('ft-hidden');
+        $('#ft-sprint-status').removeClass('ft-input--error');
+        $('#ft-error-sprint-status').addClass('ft-hidden');
+        $('#ft-sprint-start').removeClass('ft-input--error');
+        $('#ft-error-sprint-start').addClass('ft-hidden');
+        $('#ft-sprint-end').removeClass('ft-input--error');
+        $('#ft-error-sprint-end').addClass('ft-hidden');
+
         //$('#createSprintModal').modal('show');
          $('#ft-overlay-sprint').removeClass('ft-hidden').addClass('ft-overlay--visible');
          loadSprintStatusesDropdown();
@@ -229,10 +239,10 @@
             /* ══════════════════════════════════════════════
            VALIDATION
            ══════════════════════════════════════════════ */
-        function ftValidateBoard() {
+   function ftValidateSprint() {
             var valid = true;
 
-            /* project */
+            /* sprint name */
             if (!$('#ft-sprint-name').val()) {
                 $('#ft-sprint-name').addClass('ft-input--error');
                 $('#ft-error-sprint-name').removeClass('ft-hidden');
@@ -260,7 +270,7 @@
                 $('#ft-sprint-start').removeClass('ft-input--error');
                 $('#ft-error-sprint-start').addClass('ft-hidden');
             }
-                         /* Start Date */
+                         /* end Date */
             if (!$('#ft-sprint-end').val()) {
                 $('#ft-sprint-end').addClass('ft-input--error');
                 $('#ft-error-sprint-end').removeClass('ft-hidden');
@@ -278,7 +288,7 @@
 
     function createSprint(){
 
-       if (!ftValidateBoard()) return;
+       if (!ftValidateSprint()) return;
 
         var inputJSON = {
           name:        $('#ft-sprint-name').val().trim(),
