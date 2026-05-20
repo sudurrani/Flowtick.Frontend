@@ -14,7 +14,7 @@
         </div>
         <div>
           <div class="ft-modal__title">Add Member</div>
-          <div class="ft-modal__subtitle">Invite people to Fophex-ERP</div>
+                    <div class="ft-modal__subtitle">Invite people to <span id="member-modal-project-name"></span> </div>
         </div>
       </div>
             <button class="ft-modal__close" id="ft-close-member" aria-label="Close" onclick="closeModal('ft-overlay-member');">
@@ -49,32 +49,21 @@
           <i class="bi bi-info-circle"></i>
           Separate multiple emails with Enter or comma. Invites expire in 7 days.
         </span>
+        <span class="ft-form-error ft-hidden" id="ft-error-email">
+          <i class="bi bi-exclamation-circle-fill"></i> Please add one or more email.
+        </span>
       </div>
 
       <!-- Role selector -->
       <div class="ft-form-group" id="ft-fg-role">
         <label class="ft-form-label">Role <span class="ft-label-required">*</span></label>
         <div class="ft-role-grid" id="ft-role-grid">
-          <div class="ft-role-card ft-role--selected" id="ft-role-admin" onclick="ftSelectRole('admin')">
-            <div class="ft-role-card__icon"><i class="bi bi-shield-check" style="color:#0d9488"></i></div>
-            <div class="ft-role-card__name">Admin</div>
-            <div class="ft-role-card__desc">Full access, manage members &amp; settings</div>
-          </div>
-          <div class="ft-role-card" id="ft-role-developer" onclick="ftSelectRole('developer')">
-            <div class="ft-role-card__icon"><i class="bi bi-code-slash" style="color:#6366f1"></i></div>
-            <div class="ft-role-card__name">Developer</div>
-            <div class="ft-role-card__desc">Create &amp; manage tasks, sprints</div>
-          </div>
-          <div class="ft-role-card" id="ft-role-viewer" onclick="ftSelectRole('viewer')">
-            <div class="ft-role-card__icon"><i class="bi bi-eye" style="color:#f59e0b"></i></div>
-            <div class="ft-role-card__name">Viewer</div>
-            <div class="ft-role-card__desc">Read-only access to board &amp; tasks</div>
-          </div>
+
         </div>
       </div>
 
       <!-- Personal message -->
-      <div class="ft-form-group" id="ft-fg-message">
+@*       <div class="ft-form-group" id="ft-fg-message">
         <label class="ft-form-label" for="ft-invite-message">
           Personal message <span class="ft-label-optional">(optional)</span>
         </label>
@@ -84,36 +73,13 @@
           placeholder="Add a welcome note to the invitation email…"
           style="min-height:68px"
         ></textarea>
-      </div>
+      </div> *@
 
       <!-- Current members -->
       <div class="ft-form-group" id="ft-fg-members">
-        <label class="ft-form-label">Current members <span class="ft-label-optional">(3)</span></label>
+        <label class="ft-form-label">Current members <span class="ft-label-optional" id="member-count"></span></label>
         <div class="ft-member-list" id="ft-member-list">
-          <div class="ft-member-item" id="ft-member-mn">
-            <span class="ft-member-avatar" style="background:#0d9488">MN</span>
-            <div class="ft-member-info">
-              <div class="ft-member-name">Muhammad Nauman</div>
-              <div class="ft-member-email">m.nauman@fophex.com</div>
-            </div>
-            <span class="ft-role-tag ft-role-tag--admin">Admin</span>
-          </div>
-          <div class="ft-member-item" id="ft-member-us">
-            <span class="ft-member-avatar" style="background:#6366f1">US</span>
-            <div class="ft-member-info">
-              <div class="ft-member-name">Usman Said</div>
-              <div class="ft-member-email">u.said@fophex.com</div>
-            </div>
-            <span class="ft-role-tag ft-role-tag--dev">Developer</span>
-          </div>
-          <div class="ft-member-item" id="ft-member-mk">
-            <span class="ft-member-avatar" style="background:#f59e0b">MK</span>
-            <div class="ft-member-info">
-              <div class="ft-member-name">M. Ehtisham Khan</div>
-              <div class="ft-member-email">m.khan@fophex.com</div>
-            </div>
-            <span class="ft-role-tag ft-role-tag--viewer">Viewer</span>
-          </div>
+
         </div>
       </div>
 
@@ -140,12 +106,38 @@
      Depends on: jQuery 3.x
      ============================================================ -->
 <script>
+        var _projectMember = [];
 $(function () {
 
+   $(document).on('click', '#addPeopleBtn', function (e) {
+       e.preventDefault();
+       e.stopPropagation();
+
+       let projectId = $('.project-dropdown').data('id');   // <-- get id
+       let projectName = $('.project-dropdown').data('project-name');   // <-- get name
+       $('#member-modal-project-name').text(projectName);
+       $('#ft-overlay-member').attr('data-project-id', projectId);
+
+       $('#ft-tag-area .ft-tag-pill').remove();
+       $('#ft-email-input').val('');
+
+        //remove validation
+        $('#ft-tag-area').removeClass('ft-input--error');
+        $('#ft-error-email').addClass('ft-hidden');
+
+       $('#ft-overlay-member').removeClass('ft-hidden').addClass('ft-overlay--visible');
+
+       $('.project-dropdown').remove();
+
+        getRole();
+        getProjectMembersList(projectId);
+   });
+
+
   /* ── Role card selection (Add Member) ── */
-  window.ftSelectRole = function (role) {
+      window.ftSelectRole = function (element) {
     $('.ft-role-card').removeClass('ft-role--selected');
-    $('#ft-role-' + role).addClass('ft-role--selected');
+           $(element).addClass('ft-role--selected');
   };
 
 
@@ -172,17 +164,212 @@ $(function () {
     }
   });
 
+
+
+
   /* ── Submit handlers (wire up to your backend) ── */
   $('#ft-submit-member').on('click', function () {
-    var emails = [];
-    $('.ft-tag-pill').each(function () {
-      emails.push($(this).clone().find('span').remove().end().text().trim());
-    });
-    var role = $('.ft-role-card.ft-role--selected').attr('id').replace('ft-role-', '');
-    var message = $('#ft-invite-message').val().trim();
-    $(document).trigger('ft:member:invite', [{ emails: emails, role: role, message: message }]);
+       addPeopleToProject();
   });
 });
+
+  function getRole() {
+        apiRequest({
+             url: 'flowtick/project/roles',
+             type: 'GET',
+             data: {},
+             callBack: getRoleCallBack
+        });
+  }
+
+  var getRoleCallBack = function (response) {
+     if (response.request.status === 200) {
+
+       var roles = response.data; //  array
+
+           var rolGrid = $("#ft-role-grid");
+             rolGrid.empty();
+
+        $.each(roles, function (index, role) {
+
+            var roleName = role.description.toLowerCase();
+
+            var icon = 'bi-person';
+            var color = '#6b7280';
+            var description = 'Standard access';
+
+            if (roleName == 'owner') {
+                icon = 'bi-award';
+                color = '#d97706';
+                description = 'Full project control';
+            }
+
+            else if (roleName == 'admin') {
+                icon = 'bi-shield-check';
+                color = '#0f766e';
+                description = 'Manages team and settings';
+            }
+
+            else if (roleName == 'contributor') {
+                icon = 'bi-kanban';
+                color = '#4f46e5';
+                description = 'Handles assigned work items';
+            }
+
+            else if (roleName == 'reader') {
+                icon = 'bi-eye';
+                color = '#64748b';
+                description = 'View-only access';
+            }
+            else {
+                icon = 'bi-person';
+                color = '#6b7280';
+                description = 'Standard access';
+            }
+
+            var roleCard = `
+                <div class="ft-role-card ${index == 0 ? 'ft-role--selected' : ''}"
+                     id="ft-role-${roleName}"
+                     data-id="${role.id}"
+                     data-role="${roleName}"
+                     onclick="ftSelectRole(this)">
+
+                    <div class="ft-role-card__icon">
+                        <i class="bi ${icon}" style="color:${color}"></i>
+                    </div>
+
+                    <div class="ft-role-card__name">
+                        ${role.description}
+                    </div>
+
+                    <div class="ft-role-card__desc">
+                        ${description}
+                    </div>
+
+                </div>
+            `;
+
+            $('#ft-role-grid').append(roleCard);
+        });
+     }
+     else {
+        errorExtractor(response);
+     }
+  };
+  
+  function getProjectMembersList(projectId) {
+        let url = `flowtick/project/${projectId}/members`;
+        apiRequest({
+            url: url,
+            type: 'GET',
+            data: {},
+            callBack: getProjectMembersListCallBack
+        });
+    }
+   var getProjectMembersListCallBack = function (response) {
+        if (response.request.status === 200) {
+
+            _projectMember = response.data;
+           console.log(_projectMember);
+           var membersList = $("#ft-member-list");
+               membersList.empty();
+           var totalMember = _projectMember.length;
+             $('#member-count').text('(' + totalMember + ')')
+           $.each(_projectMember , function(index , member){
+               let memberList = `
+                      <div class="ft-member-item" id="ft-member-mn">
+                        <span class="ft-member-avatar" style="background:${member.colorCode}">${getInitials(member.user)}</span>
+                        <div class="ft-member-info">
+                              <div class="ft-member-name">${member.user}</div>
+                              <div class="ft-member-email">${member.email}</div>
+                        </div>
+                          <span class="ft-role-tag ft-role-tag--dev">${member.role}</span>
+                      </div>
+               `
+              membersList.append(memberList);
+
+           });
+        }
+        else {
+            _projectMember = [];
+            errorExtractor(response);
+        }
+    };
+
+   function addPeopleToProject() {
+
+       if (!ftValidateMember()) return;
+
+        let emails = [];
+        // get emails from tags
+        $('.ft-tag-pill').each(function () {
+            let email = $(this).clone().find('span').remove().end().text().trim();
+
+            if (email.length) {
+                emails.push(email);
+            }
+        });
+
+        // get current input value
+        let currentEmail = $('#ft-email-input').val().trim();
+        if (currentEmail.length) {
+            emails.push(currentEmail);
+        }
+
+            // validate emails
+        let valid = emails.every(e => /\S+@@\S+\.\S+/.test(e));
+
+        if (!valid) {
+            infoToastr('One or more emails are invalid', 'info');
+            return;
+        }
+        // get projectId stored in modal
+       let projectId = $('#ft-overlay-member').attr('data-project-id');
+       let roleId = $('.ft-role-card.ft-role--selected').attr('data-id');
+        inputJSON = {
+              "email": emails,
+              "projectid": projectId,
+               "roleid": roleId,
+        }
+
+        apiRequest({
+            url: 'flowtick/project/member/invite',
+            type: 'POST',
+            data: inputJSON,
+            callBack: addPeopleToProjectCallBack
+        });
+    
+   }
+   var addPeopleToProjectCallBack = function (response) {
+        if (response.request.status === 201) {
+             successToastr("Send successfully", 'Invitation');
+             $('#ft-overlay-member').removeClass('ft-overlay--visible').addClass('ft-hidden');
+
+        } else {
+            errorExtractor(response);
+            $('#addPeopleModal').modal('hide');
+
+        }
+   }
+   
+  function ftValidateMember() {
+       var valid = true;
+       /* email*/
+        let tagText = $('#ft-tag-area .ft-tag-pill').text().trim();
+        let inputEmail = $('#ft-email-input').val().trim();
+
+        // check if both are empty
+        if (!tagText && !inputEmail) {
+           $('#ft-tag-area').addClass('ft-input--error');
+           $('#ft-error-email').removeClass('ft-hidden');
+           valid = false;
+        } else {
+            $('#ft-tag-area').removeClass('ft-input--error');
+            $('#ft-error-email').addClass('ft-hidden');
+         }
+
+      return valid;
+  }
     function closeModal(modalId){
           $('#' + modalId).removeClass('ft-overlay--visible').addClass('ft-hidden');
     };
