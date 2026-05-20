@@ -389,15 +389,6 @@
 
             //end
 
-             $('#roleId').select2({
-                dropdownParent: $('#addPeopleModal'),
-                     width: "100%",
-            });
-            $('#typeId').select2({
-               dropdownParent: $('#addBoardModal'),
-               width: "100%",
-            });
-
 
             var urlParameters = new URLSearchParams(window.location.search);
             let project = urlParameters.get('project'); 
@@ -418,11 +409,11 @@
                 }, 300);
             });
 
-            $("#addPeople").click(function (e) {
+            // $("#addPeople").click(function (e) {
 
-                e.preventDefault();
-                addPeopleToProject();
-            });
+            //     e.preventDefault();
+            //     addPeopleToProject();
+            // });
 
             // $("#btnCreateProject").click(function () {
 
@@ -529,7 +520,7 @@
                                     <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
                                     <span class="nav-link-text ">${project.name}</span>
 
-                                    <span class="ms-auto three-dots" onclick="handleThreeDots(event, ${project.id}, ${isOwner})">
+                                    <span class="ms-auto three-dots" onclick="handleThreeDots(event, ${project.id}, ${isOwner}, '${project.name}')">
                                         <i class="bi bi-three-dots"></i>
                                     </span>
 
@@ -604,7 +595,7 @@
             }
         }
 
-        function handleThreeDots(event, projectId, isOwner) {
+        function handleThreeDots(event, projectId, isOwner,projectName) {
             event.stopPropagation();   // stops parent <a> click
             event.preventDefault();    // prevents link navigation (important)
 
@@ -621,6 +612,7 @@
                                                 <ul class="dropdown-menu project-dropdown"
 
                                                  data-id="${projectId}"
+                                                 data-project-name="${projectName}"
                                                     style="
                                                         display:block;
                                                         position:absolute;
@@ -640,54 +632,54 @@
             // Your custom logic here
             // alert("Three dots clicked for project:", projectId);
         }
-        $(document).on('click', '#addPeopleBtn', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
+          //below code move to the AddMemberPartialView
+        // $(document).on('click', '#addPeopleBtn', function (e) {
+        //     e.preventDefault();
+        //     e.stopPropagation();
 
-            let projectId = $('.project-dropdown').data('id');   // <-- get id
+        //     let projectId = $('.project-dropdown').data('id');   // <-- get id
 
-            $('#addPeopleModal').data('project-id', projectId);
+        //     $('#addPeopleModal').data('project-id', projectId);
 
-            // clear form
-            // $('#addPeopleForm')[0].reset();
-            $('#email').val('');
-           // $('#addPeopleModal').modal('show');
-             $('#ft-overlay-member').removeClass('ft-hidden').addClass('ft-overlay--visible');
-            $('.project-dropdown').remove();
+        //     // clear form
+        //     // $('#addPeopleForm')[0].reset();
+        //     $('#email').val('');
+        //    // $('#addPeopleModal').modal('show');
+        //      $('#ft-overlay-member').removeClass('ft-hidden').addClass('ft-overlay--visible');
+        //     $('.project-dropdown').remove();
 
-               $("#roleId").prop("disabled", false);
+        //        $("#roleId").prop("disabled", false);
 
+        //     getRole();
+        // });
 
-            getRole();
-        });
+        // function getRole() {
+        //     apiRequest({
+        //         url: 'flowtick/project/roles',
+        //         type: 'GET',
+        //         data: {},
+        //         callBack: getRoleCallBack
+        //     });
+        // }
 
-        function getRole() {
-            apiRequest({
-                url: 'flowtick/project/roles',
-                type: 'GET',
-                data: {},
-                callBack: getRoleCallBack
-            });
-        }
+        // var getRoleCallBack = function (response) {
+        //     if (response.request.status === 200) {
 
-        var getRoleCallBack = function (response) {
-            if (response.request.status === 200) {
+        //         var roles = response.data; //  array
 
-                var roles = response.data; //  array
+        //         var dropdown = $("#roleId");
+        //         dropdown.empty();
+        //         dropdown.append('<option selected disabled>Select Role</option>');
 
-                var dropdown = $("#roleId");
-                dropdown.empty();
-                dropdown.append('<option selected disabled>Select Role</option>');
-
-                $.each(roles, function (index, role) {
-                    var option = `<option class="role-option"  value="${role.id}">${role.description}</option>`;
-                    dropdown.append(option);
-                });
-            }
-            else {
-                errorExtractor(response);
-            }
-        };
+        //         $.each(roles, function (index, role) {
+        //             var option = `<option class="role-option"  value="${role.id}">${role.description}</option>`;
+        //             dropdown.append(option);
+        //         });
+        //     }
+        //     else {
+        //         errorExtractor(response);
+        //     }
+        // };
 
         // Hide dropdown when clicking anywhere else
         $(document).on('click', function () {
@@ -695,107 +687,108 @@
             $('.user-profile-dropdown').remove();
         });
 
-        function addPeopleToProject() {
+        //below code move to the AddMemberPartialView
+        // function addPeopleToProject() {
 
 
 
-            if (customValidateForm('addPeopleForm')) {
+        //     if (customValidateForm('addPeopleForm')) {
 
-                let emailText = $('#email').val().trim();
+        //         let emailText = $('#email').val().trim();
 
-                // split by comma
-                let email = emailText.split(',').map(e => e.trim()).filter(e => e.length);
+        //         // split by comma
+        //         let email = emailText.split(',').map(e => e.trim()).filter(e => e.length);
 
-                // add simple email validation because take the input type text instead of email
-                let valid = email.every(e => /\S+@@\S+\.\S+/.test(e));
-                if (!valid) {
-                    infoToastr('One or more emails are invalid', 'info');
-                    return;
-                }
+        //         // add simple email validation because take the input type text instead of email
+        //         let valid = email.every(e => /\S+@@\S+\.\S+/.test(e));
+        //         if (!valid) {
+        //             infoToastr('One or more emails are invalid', 'info');
+        //             return;
+        //         }
 
-                let roleId = $('#roleId').val();
+        //         let roleId = $('#roleId').val();
 
-                // get projectId stored in modal
-                let projectId = $('#addPeopleModal').data('project-id');
+        //         // get projectId stored in modal
+        //         let projectId = $('#addPeopleModal').data('project-id');
 
-                // Disable button & inputs
-                $("#addPeople").addClass("readonly").prop("disabled", true).text("Adding...");
-                $("#closeModal").addClass("readonly").prop("disabled", true);
-                $("#email, #roleId").prop("disabled", true);
+        //         // Disable button & inputs
+        //         $("#addPeople").addClass("readonly").prop("disabled", true).text("Adding...");
+        //         $("#closeModal").addClass("readonly").prop("disabled", true);
+        //         $("#email, #roleId").prop("disabled", true);
 
-                apiRequest({
-                    url: 'flowtick/project/member/invite',
-                    type: 'POST',
-                    data: {
+        //         apiRequest({
+        //             url: 'flowtick/project/member/invite',
+        //             type: 'POST',
+        //             data: {
 
-                        "email": email,
-                        "projectId": projectId,
-                        "roleId": roleId,
+        //                 "email": email,
+        //                 "projectId": projectId,
+        //                 "roleId": roleId,
 
-                    },
-                    callBack: addPeopleToProjectCallBack
-                });
-            }
-        }
-        var addPeopleToProjectCallBack = function (response) {
-            if (response.request.status === 201) {
+        //             },
+        //             callBack: addPeopleToProjectCallBack
+        //         });
+        //     }
+        // }
+        // var addPeopleToProjectCallBack = function (response) {
+        //     if (response.request.status === 201) {
 
-                    $('#email').val('');         
-                   $('#roleId').val('Select Role').trigger('change');
-                    successToastr("Send successfully", 'Invitation');
-                // $('#addPeopleModal').modal('hide');
+        //             $('#email').val('');         
+        //            $('#roleId').val('Select Role').trigger('change');
+        //             successToastr("Send successfully", 'Invitation');
+        //         // $('#addPeopleModal').modal('hide');
 
-            } else {
+        //     } else {
 
-                errorExtractor(response);
-                $('#addPeopleModal').modal('hide');
+        //         errorExtractor(response);
+        //         $('#addPeopleModal').modal('hide');
 
-            }
-            // enable button back
-            $("#addPeople") .removeClass("readonly") .prop("disabled", false).html('<i class="bi bi-plus-lg me-1"></i>Add');
-            $("#closeModal").removeClass("readonly").prop("disabled", false);
-            $("#email,#roleId").prop("disabled", false);
-        }
+        //     }
+        //     // enable button back
+        //     $("#addPeople") .removeClass("readonly") .prop("disabled", false).html('<i class="bi bi-plus-lg me-1"></i>Add');
+        //     $("#closeModal").removeClass("readonly").prop("disabled", false);
+        //     $("#email,#roleId").prop("disabled", false);
+        // }
 
-        function openAddBoardModal(projectId){
-             $('#boardName').val('');
-             $('#boardDescription').val('');
-             $('#typeId').val('').trigger('change');
-            // $('#addBoardModal').modal('show');
-             $('#ft-overlay-add-board').removeClass('ft-hidden').addClass('ft-overlay--visible');
+        // function openAddBoardModal(projectId){
+        //      $('#boardName').val('');
+        //      $('#boardDescription').val('');
+        //      $('#typeId').val('').trigger('change');
+        //     // $('#addBoardModal').modal('show');
+        //      $('#ft-overlay-add-board').removeClass('ft-hidden').addClass('ft-overlay--visible');
 
-             $('#boardProjectId').val(projectId);
+        //      $('#boardProjectId').val(projectId);
 
-        }
-        function addBoard(){
-             if (customValidateForm('boardForm')) {
+        // }
+        // function addBoard(){
+        //      if (customValidateForm('boardForm')) {
 
-                const inputJSON = {
-                            "name":  $('#boardName').val(),
-                            "description": $('#boardDescription').val(),
-                            "type":$('#typeId').val()
-                }
-                let projectID = $('#boardProjectId').val();
-                console.log(projectID);
-                console.log(inputJSON);
-                let url = `flowtick/project/${projectID}/boards`;
-                apiRequest({
-                    url: url,
-                    type: 'POST',
-                    data: inputJSON,
-                    callBack: function (response) {
-                        if (response.request.status === 201) {
-                             $('#addBoardModal').modal('hide');
-                            successToastr("Saved successfully", 'Board');
-                           getMyProjects();
-                        }
-                        else {
-                            errorExtractor(response);
-                        }
-                     }
-                });
-            };
-        }
+        //         const inputJSON = {
+        //                     "name":  $('#boardName').val(),
+        //                     "description": $('#boardDescription').val(),
+        //                     "type":$('#typeId').val()
+        //         }
+        //         let projectID = $('#boardProjectId').val();
+        //         console.log(projectID);
+        //         console.log(inputJSON);
+        //         let url = `flowtick/project/${projectID}/boards`;
+        //         apiRequest({
+        //             url: url,
+        //             type: 'POST',
+        //             data: inputJSON,
+        //             callBack: function (response) {
+        //                 if (response.request.status === 201) {
+        //                      $('#addBoardModal').modal('hide');
+        //                     successToastr("Saved successfully", 'Board');
+        //                    getMyProjects();
+        //                 }
+        //                 else {
+        //                     errorExtractor(response);
+        //                 }
+        //              }
+        //         });
+        //     };
+        // }
     </script>
 </body>
 </html>

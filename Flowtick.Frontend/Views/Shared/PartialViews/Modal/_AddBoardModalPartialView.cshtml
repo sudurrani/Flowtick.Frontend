@@ -29,7 +29,8 @@
 
         <!-- Body -->
         <div class="ft-modal__body" id="ft-add-board-body">
-
+            @* projeID *@
+            <input type="hidden" name="name" id="boardProjectId" value="" />
             <!-- Board type -->
             <div class="ft-form-group" id="ft-fg-board-type">
                 <label class="ft-form-label">
@@ -59,7 +60,7 @@
                         <div class="ft-board-type-card__desc">Continuous flow, WIP limits, no sprints</div>
                     </div>
 
-                    <div class="ft-board-type-card"
+                    @* <div class="ft-board-type-card"
                          id="ft-board-type-simple"
                          data-type="simple"
                          onclick="ftSelectBoardType('simple')">
@@ -68,13 +69,13 @@
                         </div>
                         <div class="ft-board-type-card__name">Simple Board</div>
                         <div class="ft-board-type-card__desc">Basic to-do, in progress, done workflow</div>
-                    </div>
+                    </div> *@
 
                 </div>
             </div>
 
             <!-- Project -->
-            <div class="ft-form-group" id="ft-fg-board-project">
+@*             <div class="ft-form-group" id="ft-fg-board-project">
                 <label class="ft-form-label" for="ft-board-project">
                     Project <span class="ft-label-required">*</span>
                 </label>
@@ -93,10 +94,10 @@
                 <span class="ft-form-error ft-hidden" id="ft-error-board-project">
                     <i class="bi bi-exclamation-circle-fill"></i> Please select a project.
                 </span>
-            </div>
+            </div> *@
 
             <!-- Name + Lead -->
-            <div class="ft-form-row" id="ft-fg-name-assignee">
+       @*      <div class="ft-form-row" id="ft-fg-name-assignee"> *@
                 <div class="ft-form-group" id="ft-fg-board-name">
                     <label class="ft-form-label" for="ft-board-name">
                         Board name <span class="ft-label-required">*</span>
@@ -114,7 +115,7 @@
                         <i class="bi bi-exclamation-circle-fill"></i> Board name is required.
                     </span>
                 </div>
-                <div class="ft-form-group" id="ft-fg-board-lead">
+                @* <div class="ft-form-group" id="ft-fg-board-lead">
                     <label class="ft-form-label" for="ft-board-lead">
                         Board lead <span class="ft-label-optional">(optional)</span>
                     </label>
@@ -125,8 +126,8 @@
                         <option value="mk">M. Ehtisham Khan</option>
                         <option value="au">Aman Ullah</option>
                     </select>
-                </div>
-            </div>
+                </div> *@
+        @*     </div> *@
 
             <!-- Description -->
             <div class="ft-form-group" id="ft-fg-board-desc">
@@ -459,23 +460,139 @@
             }
         });
 
+        /* live clear errors */
+        $('#ft-board-project').on('change', function () {
+            $(this).removeClass('ft-input--error');
+            $('#ft-error-board-project').addClass('ft-hidden');
+        });
+        $('#ft-board-name').on('input', function () {
+            $(this).removeClass('ft-input--error');
+            $('#ft-error-board-name').addClass('ft-hidden');
+        });
+
         /* ══════════════════════════════════════════════
+           SUBMIT — collect ordered columns via sortable
+           ══════════════════════════════════════════════ */
+        $('#ft-submit-add-board').on('click', function () {
+
+            /* read columns in current DOM order (reflects drag result) */
+            // var columns = [];
+            // $('#ft-column-list .ft-column-row').each(function (idx) {
+            //     var colName = $(this).find('.ft-column-row__name').val().trim();
+            //     if (colName) {
+            //         columns.push({
+            //             name:  colName,
+            //             color: $(this).find('.ft-column-row__color').css('background-color'),
+            //             order: idx + 1
+            //         });
+            //     }
+            // });
+
+            // var data = {
+            //     type:        $('.ft-board-type-card.ft-board-type--selected').data('type'),
+            //     project:     $('#ft-board-project').val(),
+            //     name:        $('#ft-board-name').val().trim(),
+            //     lead:        $('#ft-board-lead').val(),
+            //     description: $('#ft-board-description').val().trim(),
+            //     columns:     columns,
+            //     isPrivate:   $('#ft-board-private').is(':checked'),
+            //     wipLimit:    parseInt($('#ft-wip-limit').val(), 10) || null
+            // };
+
+            addBoard()
+        });
+
+        /* ══════════════════════════════════════════════
+           CLOSE / CANCEL
+           ══════════════════════════════════════════════ */
+        $('#ft-close-add-board, #ft-cancel-add-board').on('click', function () {
+            $('#ft-overlay-add-board')
+                .removeClass('ft-overlay--visible')
+                .addClass('ft-hidden');
+            $(document).trigger('ft:board:cancel');
+        });
+
+        /* ══════════════════════════════════════════════
+           AUTO BOARD NAME FROM PROJECT
+           ══════════════════════════════════════════════ */
+        // $('#ft-board-project').on('change', function () {
+        //     var projectText = $(this).find('option:selected').text();
+        //     if (projectText && projectText !== 'Select a project…') {
+        //         if (!$('#ft-board-name').val().trim()) {
+        //             $('#ft-board-name').val(projectText + ' Board');
+        //         }
+        //     }
+        // });
+
+        /* ══════════════════════════════════════════════
+           INIT — render scrum preset (4 columns) on load
+           ══════════════════════════════════════════════ */
+        ftRenderColumns(FT_BOARD_PRESETS.scrum);
+
+    });
+
+     function openAddBoardModal(projectId){
+         $('#boardProjectId').val('');
+         $('#ft-board-name').val('');
+         $('#ft-board-description').val('');
+
+         $('#ft-overlay-add-board').removeClass('ft-hidden').addClass('ft-overlay--visible');
+
+         $('#boardProjectId').val(projectId);
+
+         //Remove Valiation Error
+         $('#ft-board-name').removeClass('ft-input--error');
+        $('#ft-error-board-name').addClass('ft-hidden');
+
+     }
+
+     function addBoard(){
+
+            if (!ftValidateBoard()) return;
+
+             const inputJSON = {
+                         "name":  $('#ft-board-name').val().trim(),
+                         "description": $('#ft-board-description').val().trim(),
+                         "type":$('.ft-board-type-card.ft-board-type--selected').data('type')
+             }
+             let projectID = $('#boardProjectId').val();
+             // console.log(projectID);
+             // console.log(inputJSON);
+             let url = `flowtick/project/${projectID}/boards`;
+             apiRequest({
+                 url: url,
+                 type: 'POST',
+                 data: inputJSON,
+                 callBack: function (response) {
+                     if (response.request.status === 201) {
+                        $('#ft-overlay-add-board').removeClass('ft-overlay--visible').addClass('ft-hidden');
+                         successToastr("Saved successfully", 'Board');
+                        getMyProjects();
+                     }
+                     else {
+                         errorExtractor(response);
+                     }
+                 }
+             });
+     };
+
+             /* ══════════════════════════════════════════════
            VALIDATION
            ══════════════════════════════════════════════ */
         function ftValidateBoard() {
             var valid = true;
 
             /* project */
-            if (!$('#ft-board-project').val()) {
-                $('#ft-board-project').addClass('ft-input--error');
-                $('#ft-error-board-project').removeClass('ft-hidden');
-                valid = false;
-            } else {
-                $('#ft-board-project').removeClass('ft-input--error');
-                $('#ft-error-board-project').addClass('ft-hidden');
-            }
+            // if (!$('#ft-board-project').val()) {
+            //     $('#ft-board-project').addClass('ft-input--error');
+            //     $('#ft-error-board-project').removeClass('ft-hidden');
+            //     valid = false;
+            // } else {
+            //     $('#ft-board-project').removeClass('ft-input--error');
+            //     $('#ft-error-board-project').addClass('ft-hidden');
+            // }
 
-            /* name */
+            /* board name */
             if (!$('#ft-board-name').val().trim()) {
                 $('#ft-board-name').addClass('ft-input--error');
                 $('#ft-error-board-name').removeClass('ft-hidden');
@@ -501,77 +618,5 @@
 
             return valid;
         }
-
-        /* live clear errors */
-        $('#ft-board-project').on('change', function () {
-            $(this).removeClass('ft-input--error');
-            $('#ft-error-board-project').addClass('ft-hidden');
-        });
-        $('#ft-board-name').on('input', function () {
-            $(this).removeClass('ft-input--error');
-            $('#ft-error-board-name').addClass('ft-hidden');
-        });
-
-        /* ══════════════════════════════════════════════
-           SUBMIT — collect ordered columns via sortable
-           ══════════════════════════════════════════════ */
-        $('#ft-submit-add-board').on('click', function () {
-            if (!ftValidateBoard()) return;
-
-            /* read columns in current DOM order (reflects drag result) */
-            var columns = [];
-            $('#ft-column-list .ft-column-row').each(function (idx) {
-                var colName = $(this).find('.ft-column-row__name').val().trim();
-                if (colName) {
-                    columns.push({
-                        name:  colName,
-                        color: $(this).find('.ft-column-row__color').css('background-color'),
-                        order: idx + 1
-                    });
-                }
-            });
-
-            var data = {
-                type:        $('.ft-board-type-card.ft-board-type--selected').data('type'),
-                project:     $('#ft-board-project').val(),
-                name:        $('#ft-board-name').val().trim(),
-                lead:        $('#ft-board-lead').val(),
-                description: $('#ft-board-description').val().trim(),
-                columns:     columns,
-                isPrivate:   $('#ft-board-private').is(':checked'),
-                wipLimit:    parseInt($('#ft-wip-limit').val(), 10) || null
-            };
-
-            $(document).trigger('ft:board:create', [data]);
-        });
-
-        /* ══════════════════════════════════════════════
-           CLOSE / CANCEL
-           ══════════════════════════════════════════════ */
-        $('#ft-close-add-board, #ft-cancel-add-board').on('click', function () {
-            $('#ft-overlay-add-board')
-                .removeClass('ft-overlay--visible')
-                .addClass('ft-hidden');
-            $(document).trigger('ft:board:cancel');
-        });
-
-        /* ══════════════════════════════════════════════
-           AUTO BOARD NAME FROM PROJECT
-           ══════════════════════════════════════════════ */
-        $('#ft-board-project').on('change', function () {
-            var projectText = $(this).find('option:selected').text();
-            if (projectText && projectText !== 'Select a project…') {
-                if (!$('#ft-board-name').val().trim()) {
-                    $('#ft-board-name').val(projectText + ' Board');
-                }
-            }
-        });
-
-        /* ══════════════════════════════════════════════
-           INIT — render scrum preset (4 columns) on load
-           ══════════════════════════════════════════════ */
-        ftRenderColumns(FT_BOARD_PRESETS.scrum);
-
-    });
 </script>
 <!-- ▲▲▲ END ADD BOARD JS ▲▲▲ -->
