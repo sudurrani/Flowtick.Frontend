@@ -389,15 +389,6 @@
 
             //end
 
-             $('#roleId').select2({
-                dropdownParent: $('#addPeopleModal'),
-                     width: "100%",
-            });
-            $('#typeId').select2({
-               dropdownParent: $('#addBoardModal'),
-               width: "100%",
-            });
-
 
             var urlParameters = new URLSearchParams(window.location.search);
             let project = urlParameters.get('project'); 
@@ -418,11 +409,11 @@
                 }, 300);
             });
 
-            $("#addPeople").click(function (e) {
+            // $("#addPeople").click(function (e) {
 
-                e.preventDefault();
-                addPeopleToProject();
-            });
+            //     e.preventDefault();
+            //     addPeopleToProject();
+            // });
 
             // $("#btnCreateProject").click(function () {
 
@@ -759,45 +750,45 @@
         //     $("#email,#roleId").prop("disabled", false);
         // }
 
-        function openAddBoardModal(projectId){
-             $('#boardName').val('');
-             $('#boardDescription').val('');
-             $('#typeId').val('').trigger('change');
-            // $('#addBoardModal').modal('show');
-             $('#ft-overlay-add-board').removeClass('ft-hidden').addClass('ft-overlay--visible');
+        // function openAddBoardModal(projectId){
+        //      $('#boardName').val('');
+        //      $('#boardDescription').val('');
+        //      $('#typeId').val('').trigger('change');
+        //     // $('#addBoardModal').modal('show');
+        //      $('#ft-overlay-add-board').removeClass('ft-hidden').addClass('ft-overlay--visible');
 
-             $('#boardProjectId').val(projectId);
+        //      $('#boardProjectId').val(projectId);
 
-        }
-        function addBoard(){
-             if (customValidateForm('boardForm')) {
+        // }
+        // function addBoard(){
+        //      if (customValidateForm('boardForm')) {
 
-                const inputJSON = {
-                            "name":  $('#boardName').val(),
-                            "description": $('#boardDescription').val(),
-                            "type":$('#typeId').val()
-                }
-                let projectID = $('#boardProjectId').val();
-                console.log(projectID);
-                console.log(inputJSON);
-                let url = `flowtick/project/${projectID}/boards`;
-                apiRequest({
-                    url: url,
-                    type: 'POST',
-                    data: inputJSON,
-                    callBack: function (response) {
-                        if (response.request.status === 201) {
-                             $('#addBoardModal').modal('hide');
-                            successToastr("Saved successfully", 'Board');
-                           getMyProjects();
-                        }
-                        else {
-                            errorExtractor(response);
-                        }
-                     }
-                });
-            };
-        }
+        //         const inputJSON = {
+        //                     "name":  $('#boardName').val(),
+        //                     "description": $('#boardDescription').val(),
+        //                     "type":$('#typeId').val()
+        //         }
+        //         let projectID = $('#boardProjectId').val();
+        //         console.log(projectID);
+        //         console.log(inputJSON);
+        //         let url = `flowtick/project/${projectID}/boards`;
+        //         apiRequest({
+        //             url: url,
+        //             type: 'POST',
+        //             data: inputJSON,
+        //             callBack: function (response) {
+        //                 if (response.request.status === 201) {
+        //                      $('#addBoardModal').modal('hide');
+        //                     successToastr("Saved successfully", 'Board');
+        //                    getMyProjects();
+        //                 }
+        //                 else {
+        //                     errorExtractor(response);
+        //                 }
+        //              }
+        //         });
+        //     };
+        // }
     </script>
 </body>
 </html>

@@ -706,8 +706,8 @@ select.ft-input {
 /* ── Board type card grid ── */
 .ft-board-type-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
 }
 
 .ft-board-type-card {
