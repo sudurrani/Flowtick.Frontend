@@ -1,0 +1,1497 @@
+﻿
+<style>
+
+    .ft-content {
+           padding: 18px !important;
+                  gap: 16px
+    }
+    /* ── COMPACT HERO BANNER ── */
+    .hero {
+        background: linear-gradient(135deg,#0c6b62 0%,#0d9488 40%,#12b0a2 80%,#14b8a6 100%);
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        align-items: stretch;
+        position: relative;
+        flex-shrink: 0;
+        min-height: 86px;
+    }
+
+    .hero-glow {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(ellipse at 75% 40%,rgba(255,255,255,.13) 0%,transparent 55%),radial-gradient(ellipse at 10% 80%,rgba(255,255,255,.07) 0%,transparent 40%)
+    }
+
+    .hero-ring {
+        position: absolute;
+        right: -30px;
+        top: -30px;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        border: 30px solid rgba(255,255,255,.07);
+        pointer-events: none
+    }
+
+    .hero-left {
+        flex: 1;
+        padding: 14px 18px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+        gap: 5px
+    }
+
+    .hero-eyebrow {
+        font-size: 10.5px;
+        font-weight: 600;
+        color: rgba(255,255,255,.6);
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 5px
+    }
+
+    .hero-eyebrow-dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.5);
+        flex-shrink: 0
+    }
+
+    .hero-name {
+        font-size: 18px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: -.03em;
+        line-height: 1.2
+    }
+
+    .hero-sub {
+        font-size: 12px;
+        color: rgba(255,255,255,.78);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        flex-wrap: wrap
+    }
+
+        .hero-sub strong {
+            color: #fff;
+            font-weight: 700
+        }
+
+    .hero-chips {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        margin-top: 2px
+    }
+
+    .hero-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(255,255,255,.14);
+        border: 1px solid rgba(255,255,255,.18);
+        border-radius: 20px;
+        padding: 2px 9px;
+        font-size: 10.5px;
+        font-weight: 600;
+        color: #fff
+    }
+
+        .hero-chip i {
+            font-size: 10px
+        }
+
+    .hero-stats {
+        display: flex;
+        border-left: 1px solid rgba(255,255,255,.12);
+        flex-shrink: 0
+    }
+
+    .hero-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px;
+        border-right: 1px solid rgba(255,255,255,.1);
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        cursor: pointer;
+        transition: background .15s;
+        min-width: 72px
+    }
+
+        .hero-stat:last-child {
+            border-right: none
+        }
+
+        .hero-stat:hover {
+            background: rgba(255,255,255,.09)
+        }
+
+    .hero-stat-val {
+        font-size: 20px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1;
+        letter-spacing: -.02em
+    }
+
+    .hero-stat-lbl {
+        font-size: 9.5px;
+        color: rgba(255,255,255,.65);
+        margin-top: 2px;
+        font-weight: 500;
+        white-space: nowrap
+    }
+
+    .hero-stat-sub {
+        font-size: 9px;
+        color: rgba(255,255,255,.55);
+        margin-top: 1px;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        justify-content: center
+    }
+    /* METRICS */
+    .metrics {
+        display: grid;
+        grid-template-columns: repeat(4,1fr);
+        gap: 10px
+    }
+
+    .mc {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: 10px;
+        padding: 12px 14px;
+        transition: all .15s;
+        cursor: default
+    }
+
+        .mc:hover {
+            border-color: var(--pt-bd);
+            box-shadow: 0 2px 8px rgba(13,148,136,.07)
+        }
+
+    .mc-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 7px
+    }
+
+    .mc-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px
+    }
+
+    .mc-trend {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        font-size: 10.5px;
+        font-weight: 600;
+        border-radius: 20px;
+        padding: 2px 6px
+    }
+
+    .tup {
+        background: #dcfce7;
+        color: #166534
+    }
+
+    .tdn {
+        background: #fee2e2;
+        color: #991b1b
+    }
+
+    .mc-val {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--txt);
+        letter-spacing: -.03em;
+        line-height: 1
+    }
+
+    .mc-lbl {
+        font-size: 11.5px;
+        color: var(--txt2);
+        margin-top: 3px
+    }
+
+    /* CARD */
+    .card {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: 10px;
+        padding: 14px 16px
+    }
+
+    .card-hd {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 11px
+    }
+
+    .card-ttl {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--txt)
+    }
+
+    .card-lnk {
+        font-size: 11.5px;
+        color: var(--pt);
+        cursor: pointer;
+        font-weight: 500
+    }
+
+        .card-lnk:hover {
+            color: var(--pt-h)
+        }
+
+    /* GRIDS */
+    .g21 {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 14px
+    }
+
+    .g3 {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 10px
+    }
+
+    .g11 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px
+    }
+
+    .g-sp {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 14px
+    }
+
+    /* CHART TABS */
+    .ctabs {
+        display: flex;
+        gap: 3px
+    }
+
+    .ctab {
+        padding: 4px 9px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 500;
+        cursor: pointer;
+        border: 1px solid var(--bd);
+        color: var(--txt2);
+        background: transparent;
+        transition: all .15s;
+        font-family: inherit
+    }
+
+        .ctab:hover {
+            border-color: var(--pt-bd);
+            color: var(--pt);
+            background: var(--pt-lt)
+        }
+
+        .ctab.on {
+            background: var(--pt);
+            color: #fff;
+            border-color: var(--pt)
+        }
+
+    .chart-wrap {
+        position: relative;
+        height: 175px;
+        margin-top: 10px
+    }
+
+    /* ACTIVITY */
+    .act {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 7px 0;
+        border-bottom: 1px solid var(--bd2)
+    }
+
+        .act:last-child {
+            border-bottom: none
+        }
+
+    .act-av {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8px;
+        font-weight: 700;
+        color: #fff;
+        flex-shrink: 0;
+        margin-top: 1px
+    }
+
+    .act-txt {
+        font-size: 11.5px;
+        color: var(--txt);
+        line-height: 1.4
+    }
+
+        .act-txt strong {
+            font-weight: 600
+        }
+
+    .act-lnk {
+        color: var(--pt);
+        font-weight: 500
+    }
+
+    .act-time {
+        font-size: 10px;
+        color: var(--txt3);
+        margin-top: 1px
+    }
+
+    /* PROJECT CARDS */
+    .pc {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: 10px;
+        padding: 13px;
+        cursor: pointer;
+        transition: all .15s
+    }
+
+        .pc:hover {
+            border-color: var(--pt-bd);
+            box-shadow: 0 2px 8px rgba(13,148,136,.08);
+            transform: translateY(-1px)
+        }
+
+    .pc-top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 9px
+    }
+
+    .pc-av {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 800;
+        color: #fff;
+        flex-shrink: 0
+    }
+
+    .pc-name {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--txt)
+    }
+
+    .pc-key {
+        font-size: 10.5px;
+        color: var(--txt2);
+        margin-top: 1px
+    }
+
+    .prog {
+        height: 3px;
+        background: var(--bd);
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 7px
+    }
+
+    .prog-f {
+        height: 100%;
+        background: var(--pt);
+        border-radius: 3px
+    }
+
+    .pc-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 10.5px;
+        color: var(--txt2)
+    }
+
+    .pc-avs {
+        display: flex
+    }
+
+    .pmem {
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        border: 1.5px solid var(--card);
+        margin-left: -4px;
+        font-size: 6.5px;
+        font-weight: 700;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0
+    }
+
+        .pmem:first-child {
+            margin-left: 0
+        }
+
+    /* SPRINT ROWS */
+    .sr {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 0;
+        border-bottom: 1px solid var(--bd2)
+    }
+
+        .sr:last-child {
+            border-bottom: none
+        }
+
+    .sr-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0
+    }
+
+    .sr-info {
+        flex: 1;
+        min-width: 0
+    }
+
+    .sr-name {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--txt)
+    }
+
+    .sr-proj {
+        font-size: 10px;
+        color: var(--txt2)
+    }
+
+    .sr-bar {
+        width: 64px;
+        height: 3px;
+        background: var(--bd);
+        border-radius: 3px;
+        overflow: hidden
+    }
+
+    .sr-fill {
+        height: 100%;
+        border-radius: 3px
+    }
+
+    .sr-pct {
+        font-size: 11px;
+        font-weight: 700;
+        min-width: 30px;
+        text-align: right
+    }
+
+    /* TASKS */
+    .tr {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 0;
+        border-bottom: 1px solid var(--bd2)
+    }
+
+        .tr:last-child {
+            border-bottom: none
+        }
+
+    .tchk {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        border: 1.5px solid var(--bd);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all .15s
+    }
+
+        .tchk:hover {
+            border-color: var(--pt)
+        }
+
+        .tchk.dn {
+            background: var(--pt);
+            border-color: var(--pt)
+        }
+
+    .tname {
+        flex: 1;
+        font-size: 11.5px;
+        color: var(--txt)
+    }
+
+        .tname.dn {
+            text-decoration: line-through;
+            color: var(--txt3)
+        }
+
+    .tpri {
+        font-size: 10px;
+        font-weight: 600;
+        border-radius: 20px;
+        padding: 1px 6px;
+        flex-shrink: 0
+    }
+
+    .ph {
+        background: #fee2e2;
+        color: #991b1b
+    }
+
+    .pm {
+        background: #fef3c7;
+        color: #92400e
+    }
+
+    .pl {
+        background: #ede9fe;
+        color: #4c1d95
+    }
+
+    /* WHAT'S NEXT */
+    .wntabs {
+        display: flex;
+        border-bottom: 1px solid var(--bd);
+        margin-bottom: 10px
+    }
+
+    .wntab {
+        padding: 5px 11px;
+        font-size: 11.5px;
+        font-weight: 500;
+        color: var(--txt2);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        transition: all .15s;
+        background: transparent;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        font-family: inherit
+    }
+
+        .wntab:hover {
+            color: var(--txt)
+        }
+
+        .wntab.on {
+            color: var(--pt);
+            border-bottom-color: var(--pt)
+        }
+
+    .wni {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 9px;
+        border: 1px solid var(--bd2);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all .15s;
+        margin-bottom: 5px;
+        background: var(--bg)
+    }
+
+        .wni:last-child {
+            margin-bottom: 0
+        }
+
+        .wni:hover {
+            border-color: var(--pt-bd);
+            background: var(--pt-lt)
+        }
+
+    .wni-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        flex-shrink: 0
+    }
+
+    /* CHARTS */
+    .create-cta {
+        background: var(--pt-lt);
+        border: 1.5px dashed var(--pt-bd);
+        border-radius: 10px;
+        padding: 18px;
+        text-align: center;
+        cursor: pointer;
+        transition: all .15s;
+        margin-bottom: 12px
+    }
+
+        .create-cta:hover {
+            background: var(--pt-mid);
+            border-color: var(--pt)
+        }
+
+        .create-cta i {
+            font-size: 26px;
+            color: var(--pt);
+            display: block;
+            margin-bottom: 6px
+        }
+
+    .create-cta-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--pt)
+    }
+
+    .create-cta-desc {
+        font-size: 11.5px;
+        color: #0f766e;
+        margin-top: 2px
+    }
+
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 10px
+    }
+
+    .chcard {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all .15s;
+        cursor: pointer
+    }
+
+        .chcard:hover {
+            border-color: var(--pt-bd);
+            box-shadow: 0 2px 8px rgba(13,148,136,.07)
+        }
+
+    .chcard-hd {
+        padding: 10px 12px 6px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between
+    }
+
+    .chcard-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--txt)
+    }
+
+    .chcard-sub {
+        font-size: 10px;
+        color: var(--txt3);
+        margin-top: 1px
+    }
+
+    .chcard-type {
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        background: var(--pt-lt);
+        border: 1px solid var(--pt-bd);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        color: var(--pt);
+        flex-shrink: 0
+    }
+
+    .chcard-body {
+        padding: 2px 12px 12px
+    }
+
+    .chcard-canvas {
+        position: relative;
+        height: 90px
+    }
+
+    /* ═══ CHART BUILDER MODAL ═══ */
+    .cb-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 100;
+        background: rgba(8,12,24,.52);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+        .cb-overlay.open {
+            display: flex
+        }
+
+    .cb-modal {
+        background: var(--card);
+        border-radius: 14px;
+        border: 1px solid var(--bd);
+        width: 100%;
+        max-width: 720px;
+        max-height: 560px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0,0,0,.18);
+        display: flex;
+        flex-direction: column
+    }
+
+    .cbm-hd {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--bd2);
+        flex-shrink: 0
+    }
+
+    .cbm-hd-l {
+        display: flex;
+        align-items: center;
+        gap: 10px
+    }
+
+    .cbm-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        background: var(--pt-lt);
+        border: 1px solid var(--pt-bd);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        color: var(--pt);
+        flex-shrink: 0
+    }
+
+    .cbm-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--txt)
+    }
+
+    .cbm-sub {
+        font-size: 11px;
+        color: var(--txt2);
+        margin-top: 1px
+    }
+
+    .cbm-x {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        border: 1px solid var(--bd);
+        background: transparent;
+        cursor: pointer;
+        color: var(--txt3);
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: inherit;
+        transition: all .15s
+    }
+
+        .cbm-x:hover {
+            background: var(--bg);
+            color: var(--txt)
+        }
+
+    .cbm-body {
+        display: grid;
+        grid-template-columns: 210px 1fr;
+        flex: 1;
+        overflow: hidden
+    }
+
+    .cbm-left {
+        background: var(--bg);
+        border-right: 1px solid var(--bd);
+        overflow-y: auto
+    }
+
+        .cbm-left::-webkit-scrollbar {
+            width: 3px
+        }
+
+        .cbm-left::-webkit-scrollbar-thumb {
+            background: var(--bd);
+            border-radius: 3px
+        }
+
+    .cbm-sec {
+        padding: 11px 13px;
+        border-bottom: 1px solid var(--bd)
+    }
+
+        .cbm-sec:last-child {
+            border-bottom: none
+        }
+
+    .cbm-sec-lbl {
+        font-size: 9.5px;
+        font-weight: 700;
+        color: var(--txt3);
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        margin-bottom: 8px
+    }
+
+    .cbt-grid {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 5px
+    }
+
+    .cbt {
+        border: 1.5px solid var(--bd);
+        border-radius: 8px;
+        padding: 8px 5px 6px;
+        cursor: pointer;
+        background: var(--card);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        transition: all .15s
+    }
+
+        .cbt:hover {
+            border-color: var(--pt-bd);
+            background: var(--pt-lt)
+        }
+
+        .cbt.on {
+            border-color: var(--pt);
+            background: var(--pt-lt)
+        }
+
+        .cbt i {
+            font-size: 18px;
+            color: var(--txt3)
+        }
+
+        .cbt.on i {
+            color: var(--pt)
+        }
+
+    .cbt-lbl {
+        font-size: 9.5px;
+        font-weight: 600;
+        color: var(--txt2);
+        text-align: center
+    }
+
+    .cbt.on .cbt-lbl {
+        color: var(--pt)
+    }
+
+    .cbs {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 8px;
+        border: 1px solid var(--bd);
+        border-radius: 7px;
+        cursor: pointer;
+        margin-bottom: 4px;
+        background: var(--card);
+        transition: all .15s
+    }
+
+        .cbs:last-child {
+            margin-bottom: 0
+        }
+
+        .cbs:hover {
+            border-color: var(--pt-bd);
+            background: var(--pt-lt)
+        }
+
+        .cbs.on {
+            border-color: var(--pt);
+            background: var(--pt-lt)
+        }
+
+    .cbs-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0
+    }
+
+    .cbs-name {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--txt);
+        flex: 1
+    }
+
+    .cbs.on .cbs-name {
+        color: var(--pt)
+    }
+
+    .cbs-meta {
+        font-size: 10px;
+        color: var(--txt3)
+    }
+
+    .cbs-chk {
+        font-size: 12px;
+        color: var(--pt)
+    }
+
+    .cbg-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px
+    }
+
+    .cbg {
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-size: 10.5px;
+        font-weight: 500;
+        border: 1px solid var(--bd);
+        background: var(--card);
+        color: var(--txt2);
+        cursor: pointer;
+        transition: all .15s;
+        font-family: inherit
+    }
+
+        .cbg:hover {
+            border-color: var(--pt-bd);
+            color: var(--pt)
+        }
+
+        .cbg.on {
+            border-color: var(--pt);
+            background: var(--pt-lt);
+            color: var(--pt);
+            font-weight: 600
+        }
+
+    .cbc-wrap {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap
+    }
+
+    .cbc {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2.5px solid transparent;
+        transition: all .15s
+    }
+
+        .cbc:hover {
+            transform: scale(1.1)
+        }
+
+        .cbc.on {
+            border-color: var(--txt);
+            transform: scale(1.18)
+        }
+
+    .cbn {
+        border: 1px solid var(--bd);
+        border-radius: 7px;
+        background: var(--card);
+        color: var(--txt);
+        font-size: 11.5px;
+        font-family: inherit;
+        padding: 7px 9px;
+        outline: none;
+        width: 100%;
+        transition: border-color .2s
+    }
+
+        .cbn:focus {
+            border-color: var(--pt);
+            box-shadow: 0 0 0 3px rgba(13,148,136,.1)
+        }
+
+    .cbm-right {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden
+    }
+
+    .cbm-prev-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--bd2);
+        flex-shrink: 0
+    }
+
+    .cbm-prev-lbl {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--txt);
+        display: flex;
+        align-items: center;
+        gap: 6px
+    }
+
+    .live-badge {
+        font-size: 9.5px;
+        font-weight: 700;
+        background: var(--pt-lt);
+        color: var(--pt);
+        border: 1px solid var(--pt-bd);
+        border-radius: 20px;
+        padding: 1px 6px
+    }
+
+    .cbm-btns {
+        display: flex;
+        gap: 5px
+    }
+
+    .cbm-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--bd);
+        background: var(--card);
+        color: var(--txt2);
+        font-size: 11px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all .15s;
+        font-family: inherit
+    }
+
+        .cbm-btn:hover {
+            border-color: var(--pt-bd);
+            color: var(--pt);
+            background: var(--pt-lt)
+        }
+
+        .cbm-btn.prim {
+            background: var(--pt);
+            color: #fff;
+            border-color: var(--pt)
+        }
+
+            .cbm-btn.prim:hover {
+                background: var(--pt-h)
+            }
+
+    .cbm-prev-area {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px
+    }
+
+    .cbm-stats {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap: 8px
+    }
+
+    .cbm-stat {
+        background: var(--bg);
+        border: 1px solid var(--bd2);
+        border-radius: 8px;
+        padding: 9px 11px
+    }
+
+    .cbm-stat-val {
+        font-size: 17px;
+        font-weight: 800;
+        color: var(--pt);
+        line-height: 1
+    }
+
+    .cbm-stat-lbl {
+        font-size: 10px;
+        color: var(--txt2);
+        margin-top: 2px
+    }
+
+    .cbm-pcard {
+        background: var(--bg);
+        border: 1px solid var(--bd);
+        border-radius: 10px;
+        padding: 14px
+    }
+
+    .cbm-ptitle {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--txt);
+        margin-bottom: 2px
+    }
+
+    .cbm-psub {
+        font-size: 10.5px;
+        color: var(--txt2);
+        margin-bottom: 12px
+    }
+
+    .cbm-cwrap {
+        position: relative;
+        height: 185px
+    }
+
+    .cbm-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 9px
+    }
+
+    .cbm-leg {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 10.5px;
+        color: var(--txt2)
+    }
+
+    .cbm-leg-sw {
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+        flex-shrink: 0
+    }
+
+
+    /* MOBILE OVERLAY */
+    .mob-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,.42);
+        z-index: 15;
+        display: none;
+        border-radius: 12px
+    }
+
+        .mob-overlay.vis {
+            display: block
+        }
+
+    /* SECTION HDR */
+    .sec-hd {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px
+    }
+
+    .sec-ttl {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--txt)
+    }
+
+    /* TOAST */
+    .toast-bar {
+        background: var(--pt);
+        color: #fff;
+        border-radius: 8px;
+        padding: 9px 14px;
+        font-size: 12px;
+        font-weight: 600;
+        display: none;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0
+    }
+
+        .toast-bar.show {
+            display: flex
+        }
+
+        .toast-bar i {
+            font-size: 15px
+        }
+</style> 
+
+<!-- ═══ MAIN ═══ -->
+
+
+    <!-- TOPBAR — always visible, always has toggle button -->
+@*     <div class="ft-top"> *@
+        
+@*     </div> *@
+
+
+
+        <!-- ═══ HERO BANNER ═══ -->
+       <!-- COMPACT HERO -->
+      <div class="hero">
+        <div class="hero-glow"></div><div class="hero-ring"></div>
+        <div class="hero-left">
+        <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span> <span id="bannerDate"></span></div>
+            <div class="hero-name">Hello, <span id="bannerUserName"></span> 👋</div>
+            <div class="hero-sub">You have <strong>5 tasks due today</strong> across 3 active sprints.</div>
+            <div class="hero-chips">
+                <span class="hero-chip"><i class="bi bi-check2-circle"></i>2 done today</span>
+                <span class="hero-chip"><i class="bi bi-exclamation-circle"></i>3 overdue</span>
+                <span class="hero-chip"><i class="bi bi-clock"></i>Sprint ends in 16d</span>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat"><div class="hero-stat-val">3</div><div class="hero-stat-lbl">Sprints</div><div class="hero-stat-sub"><i class="bi bi-arrow-up" style="font-size:8px"></i>+1</div></div>
+            <div class="hero-stat"><div class="hero-stat-val">8</div><div class="hero-stat-lbl">Projects</div></div>
+            <div class="hero-stat"><div class="hero-stat-val">70%</div><div class="hero-stat-lbl">Progress</div><div class="hero-stat-sub"><i class="bi bi-arrow-up" style="font-size:8px"></i>8%</div></div>
+        </div>
+    </div>
+
+        <!-- METRICS -->
+        <div class="metrics">
+            <div class="mc"><div class="mc-top"><div class="mc-icon" style="background:#f0fdfa"><i class="bi bi-list-check" style="color:#0d9488"></i></div><span class="mc-trend tup"><i class="bi bi-arrow-up" style="font-size:9px"></i>12%</span></div><div class="mc-val">124</div><div class="mc-lbl">Total tasks</div></div>
+            <div class="mc"><div class="mc-top"><div class="mc-icon" style="background:#ede9fe"><i class="bi bi-check-circle-fill" style="color:#7c3aed"></i></div><span class="mc-trend tup"><i class="bi bi-arrow-up" style="font-size:9px"></i>8%</span></div><div class="mc-val">87</div><div class="mc-lbl">Completed</div></div>
+            <div class="mc"><div class="mc-top"><div class="mc-icon" style="background:#fef3c7"><i class="bi bi-exclamation-triangle-fill" style="color:#d97706"></i></div><span class="mc-trend tdn"><i class="bi bi-arrow-down" style="font-size:9px"></i>3%</span></div><div class="mc-val">12</div><div class="mc-lbl">Overdue</div></div>
+            <div class="mc"><div class="mc-top"><div class="mc-icon" style="background:#dbeafe"><i class="bi bi-lightning-charge-fill" style="color:#1d4ed8"></i></div><span class="mc-trend tup"><i class="bi bi-arrow-up" style="font-size:9px"></i>18%</span></div><div class="mc-val">142</div><div class="mc-lbl">Story points</div></div>
+        </div>
+
+        <!-- ANALYTICS + ACTIVITY -->
+        <div class="g21">
+            <div class="card">
+                <div class="card-hd">
+                    <span class="card-ttl">Task analytics</span>
+                    <div class="ctabs" id="a-tabs">
+                        <button class="ctab on" data-k="velocity">Velocity</button>
+                        <button class="ctab" data-k="completion">Completion</button>
+                        <button class="ctab" data-k="burndown">Burndown</button>
+                    </div>
+                </div>
+                <div class="chart-wrap"><canvas id="a-canvas" role="img" aria-label="Analytics chart">Analytics data.</canvas></div>
+            </div>
+            <div class="card">
+                <div class="card-hd"><span class="card-ttl">Recent activity</span><span class="card-lnk">View all</span></div>
+                <div class="act"><div class="act-av" style="background:#0d9488">MN</div><div><div class="act-txt"><strong>You</strong> moved <span class="act-lnk">TI-29</span> to Review</div><div class="act-time">2 min ago</div></div></div>
+                <div class="act"><div class="act-av" style="background:#6366f1">IA</div><div><div class="act-txt"><strong>Israr Ahmad</strong> completed <span class="act-lnk">TI-28</span></div><div class="act-time">18 min ago</div></div></div>
+                <div class="act"><div class="act-av" style="background:#f59e0b">AU</div><div><div class="act-txt"><strong>Aman Ullah</strong> created <span class="act-lnk">Sprint 4</span></div><div class="act-time">1 hr ago</div></div></div>
+                <div class="act"><div class="act-av" style="background:#10b981">US</div><div><div class="act-txt"><strong>Usman Said</strong> added tasks to <span class="act-lnk">BHA Sprint 2</span></div><div class="act-time">3 hr ago</div></div></div>
+                <div class="act"><div class="act-av" style="background:#8b5cf6">MK</div><div><div class="act-txt"><strong>M. Ehtisham</strong> updated <span class="act-lnk">LMS-14</span> priority</div><div class="act-time">4 hr ago</div></div></div>
+            </div>
+        </div>
+
+        <!-- PROJECTS + SPRINTS -->
+        <div class="g-sp">
+            <div>
+                <div class="sec-hd"><span class="sec-ttl">My projects</span><span class="card-lnk">View all →</span></div>
+                <div class="g3">
+                    <div class="pc"><div class="pc-top"><div class="pc-av" style="background:#0d9488">F</div><div><div class="pc-name">Fophex-ERP</div><div class="pc-key">FE · 2 boards</div></div></div><div class="prog"><div class="prog-f" style="width:72%"></div></div><div class="pc-meta"><div class="pc-avs"><div class="pmem" style="background:#0d9488">MN</div><div class="pmem" style="background:#6366f1">IA</div><div class="pmem" style="background:#f59e0b">AU</div></div><span>72%</span></div></div>
+                    <div class="pc"><div class="pc-top"><div class="pc-av" style="background:#6366f1">T</div><div><div class="pc-name">Testing Nauman</div><div class="pc-key">TN · 1 board</div></div></div><div class="prog"><div class="prog-f" style="width:45%"></div></div><div class="pc-meta"><div class="pc-avs"><div class="pmem" style="background:#0d9488">MN</div><div class="pmem" style="background:#10b981">US</div></div><span>45%</span></div></div>
+                    <div class="pc"><div class="pc-top"><div class="pc-av" style="background:#f59e0b">L</div><div><div class="pc-name">LMS</div><div class="pc-key">LMS · 1 board</div></div></div><div class="prog"><div class="prog-f" style="width:88%"></div></div><div class="pc-meta"><div class="pc-avs"><div class="pmem" style="background:#f59e0b">AU</div></div><span>88%</span></div></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-hd"><span class="card-ttl">Active sprints</span><span class="card-lnk">All</span></div>
+                <div class="sr"><div class="sr-dot" style="background:#0d9488"></div><div class="sr-info"><div class="sr-name">Sprint 3</div><div class="sr-proj">Fophex-ERP</div></div><div class="sr-bar"><div class="sr-fill" style="width:67%;background:#0d9488"></div></div><div class="sr-pct" style="color:#0d9488">67%</div></div>
+                <div class="sr"><div class="sr-dot" style="background:#6366f1"></div><div class="sr-info"><div class="sr-name">Sprint 2</div><div class="sr-proj">Testing Nauman</div></div><div class="sr-bar"><div class="sr-fill" style="width:45%;background:#6366f1"></div></div><div class="sr-pct" style="color:#6366f1">45%</div></div>
+                <div class="sr"><div class="sr-dot" style="background:#f59e0b"></div><div class="sr-info"><div class="sr-name">Sprint 1</div><div class="sr-proj">LMS</div></div><div class="sr-bar"><div class="sr-fill" style="width:88%;background:#f59e0b"></div></div><div class="sr-pct" style="color:#d97706">88%</div></div>
+            </div>
+        </div>
+
+        <!-- WHAT'S NEXT + TASKS -->
+        <div class="g11">
+            <div class="card">
+                <div class="card-hd"><span class="card-ttl">What's next</span></div>
+                <div class="wntabs" id="wn-tabs">
+                    <button class="wntab on">Worked on</button>
+                    <button class="wntab">Viewed</button>
+                    <button class="wntab">Recommended</button>
+                </div>
+                <div class="wni"><div class="wni-icon" style="background:#f0fdfa"><i class="bi bi-kanban" style="color:#0d9488"></i></div><div style="flex:1;min-width:0"><div style="font-size:11.5px;font-weight:600;color:#1e293b">TI-29 · VAT Return Module</div><div style="font-size:10px;color:#64748b">Fophex-ERP · Review</div></div><div style="font-size:10px;color:#94a3b8;white-space:nowrap">May 14</div></div>
+                <div class="wni"><div class="wni-icon" style="background:#ede9fe"><i class="bi bi-bug" style="color:#7c3aed"></i></div><div style="flex:1;min-width:0"><div style="font-size:11.5px;font-weight:600;color:#1e293b">TI-13 · Sale Order Report</div><div style="font-size:10px;color:#64748b">Fophex-ERP · Review</div></div><div style="font-size:10px;color:#94a3b8;white-space:nowrap">May 15</div></div>
+                <div class="wni"><div class="wni-icon" style="background:#fef3c7"><i class="bi bi-star" style="color:#d97706"></i></div><div style="flex:1;min-width:0"><div style="font-size:11.5px;font-weight:600;color:#1e293b">TI-11 · Testing Nauman</div><div style="font-size:10px;color:#64748b">Flowtick · In Progress</div></div><div style="font-size:10px;color:#94a3b8;white-space:nowrap">Jan 2026</div></div>
+            </div>
+            <div class="card">
+                <div class="card-hd"><span class="card-ttl">My tasks today</span><span class="card-lnk">View all</span></div>
+                <div class="tr"><div class="tchk" id="t1"><i class="bi bi-check2" style="font-size:8px;color:#fff;display:none"></i></div><span class="tname" id="tn1">Fix login redirect bug</span><span class="tpri ph">High</span></div>
+                <div class="tr"><div class="tchk dn" id="t2"><i class="bi bi-check2" style="font-size:8px;color:#fff"></i></div><span class="tname dn" id="tn2">Create epic for VAT module</span><span class="tpri pm">Med</span></div>
+                <div class="tr"><div class="tchk" id="t3"><i class="bi bi-check2" style="font-size:8px;color:#fff;display:none"></i></div><span class="tname" id="tn3">Review Sale Order Report</span><span class="tpri pm">Med</span></div>
+                <div class="tr"><div class="tchk dn" id="t4"><i class="bi bi-check2" style="font-size:8px;color:#fff"></i></div><span class="tname dn" id="tn4">Sprint 3 planning meeting</span><span class="tpri pl">Low</span></div>
+                <div class="tr"><div class="tchk" id="t5"><i class="bi bi-check2" style="font-size:8px;color:#fff;display:none"></i></div><span class="tname" id="tn5">Deploy BHA Website hotfix</span><span class="tpri ph">High</span></div>
+            </div>
+        </div>
+
+        <!-- MY CHARTS -->
+        <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px"><span class="card-ttl">My charts</span><span class="card-lnk">Manage</span></div>
+            <div class="create-cta" id="create-cta" role="button" tabindex="0" aria-label="Create a new chart">
+                <i class="bi bi-pie-chart-fill"></i>
+                <div class="create-cta-title">Create a new chart</div>
+                <div class="create-cta-desc">Visualize your project data — pie, donut, bar, line, burndown &amp; more</div>
+            </div>
+            <div class="charts-grid">
+                <div class="chcard"><div class="chcard-hd"><div><div class="chcard-title">Task Status</div><div class="chcard-sub">Fophex-ERP · Donut</div></div><div class="chcard-type"><i class="bi bi-circle-half"></i></div></div><div class="chcard-body"><div class="chcard-canvas"><canvas id="mini1" role="img" aria-label="Donut chart: 44% done, 28% in progress, 17% review, 11% todo">Task status.</canvas></div></div></div>
+                <div class="chcard"><div class="chcard-hd"><div><div class="chcard-title">Sprint Velocity</div><div class="chcard-sub">All projects · Bar</div></div><div class="chcard-type"><i class="bi bi-bar-chart-fill"></i></div></div><div class="chcard-body"><div class="chcard-canvas"><canvas id="mini2" role="img" aria-label="Bar chart: sprint velocity S1–S6">Sprint velocity.</canvas></div></div></div>
+                <div class="chcard"><div class="chcard-hd"><div><div class="chcard-title">Priority Split</div><div class="chcard-sub">Open tasks · Pie</div></div><div class="chcard-type"><i class="bi bi-pie-chart-fill"></i></div></div><div class="chcard-body"><div class="chcard-canvas"><canvas id="mini3" role="img" aria-label="Pie: 30% high, 45% medium, 25% low">Priority split.</canvas></div></div></div>
+            </div>
+        </div>
+
+        <!-- TOAST -->
+        <div class="toast-bar" id="ft-toast" role="status"><i class="bi bi-check-circle-fill"></i><span id="toast-msg">Chart saved!</span></div>
+
+
+    <!-- CHART BUILDER MODAL — absolute inside ft-shell, covers everything -->
+    <div class="cb-overlay" id="ft-cb-overlay" role="dialog" aria-modal="true" aria-label="Chart builder">
+        <div class="cb-modal">
+            <div class="cbm-hd">
+                <div class="cbm-hd-l"><div class="cbm-icon"><i class="bi bi-pie-chart-fill"></i></div><div><div class="cbm-title">Create Chart</div><div class="cbm-sub">Build a custom chart from your project data</div></div></div>
+                <button class="cbm-x" id="cbm-x" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="cbm-body">
+                <div class="cbm-left">
+                    <div class="cbm-sec"><div class="cbm-sec-lbl">Chart type</div><div class="cbt-grid" id="cbt-grid"><div class="cbt on" data-type="bar"><i class="bi bi-bar-chart-fill"></i><span class="cbt-lbl">Bar</span></div><div class="cbt" data-type="line"><i class="bi bi-graph-up"></i><span class="cbt-lbl">Line</span></div><div class="cbt" data-type="pie"><i class="bi bi-pie-chart-fill"></i><span class="cbt-lbl">Pie</span></div><div class="cbt" data-type="doughnut"><i class="bi bi-circle-half"></i><span class="cbt-lbl">Donut</span></div><div class="cbt" data-type="radar"><i class="bi bi-hexagon"></i><span class="cbt-lbl">Radar</span></div><div class="cbt" data-type="polarArea"><i class="bi bi-bullseye"></i><span class="cbt-lbl">Polar</span></div></div></div>
+                    <div class="cbm-sec"><div class="cbm-sec-lbl">Data source</div><div id="cbs-list"><div class="cbs on" data-src="tasks"><span class="cbs-dot" style="background:#0d9488"></span><div style="flex:1;min-width:0"><div class="cbs-name">Tasks</div><div class="cbs-meta">124 tasks · all projects</div></div><i class="bi bi-check2 cbs-chk"></i></div><div class="cbs" data-src="sprints"><span class="cbs-dot" style="background:#6366f1"></span><div style="flex:1;min-width:0"><div class="cbs-name">Sprint velocity</div><div class="cbs-meta">6 sprints · story points</div></div></div><div class="cbs" data-src="members"><span class="cbs-dot" style="background:#f59e0b"></span><div style="flex:1;min-width:0"><div class="cbs-name">Team workload</div><div class="cbs-meta">4 members · task count</div></div></div><div class="cbs" data-src="projects"><span class="cbs-dot" style="background:#ef4444"></span><div style="flex:1;min-width:0"><div class="cbs-name">Project progress</div><div class="cbs-meta">8 projects · % complete</div></div></div></div></div>
+                    <div class="cbm-sec"><div class="cbm-sec-lbl">Group by</div><div class="cbg-wrap" id="cbg-wrap"><button class="cbg on" data-g="status">Status</button><button class="cbg" data-g="priority">Priority</button><button class="cbg" data-g="assignee">Assignee</button><button class="cbg" data-g="project">Project</button><button class="cbg" data-g="type">Type</button><button class="cbg" data-g="week">Week</button></div></div>
+                    <div class="cbm-sec"><div class="cbm-sec-lbl">Color theme</div><div class="cbc-wrap" id="cbc-wrap"><div class="cbc on" style="background:#0d9488" data-p="teal"></div><div class="cbc" style="background:#6366f1" data-p="indigo"></div><div class="cbc" style="background:#f59e0b" data-p="amber"></div><div class="cbc" style="background:#ef4444" data-p="red"></div><div class="cbc" style="background:#8b5cf6" data-p="purple"></div><div class="cbc" style="background:linear-gradient(135deg,#0d9488,#6366f1,#f59e0b)" data-p="multi"></div></div></div>
+                    <div class="cbm-sec"><div class="cbm-sec-lbl">Chart name</div><input class="cbn" id="cbn" type="text" value="Task Status Overview" placeholder="Name your chart…" autocomplete="off" /></div>
+                </div>
+                <div class="cbm-right">
+                    <div class="cbm-prev-top"><div class="cbm-prev-lbl">Preview <span class="live-badge">Live</span></div><div class="cbm-btns"><button class="cbm-btn" id="cbm-refresh"><i class="bi bi-arrow-clockwise"></i> Refresh</button><button class="cbm-btn prim" id="cbm-save"><i class="bi bi-cloud-arrow-up"></i> Save</button></div></div>
+                    <div class="cbm-prev-area">
+                        <div class="cbm-stats"><div class="cbm-stat"><div class="cbm-stat-val" id="cs1v">87</div><div class="cbm-stat-lbl" id="cs1l">Completed</div></div><div class="cbm-stat"><div class="cbm-stat-val" id="cs2v">25</div><div class="cbm-stat-lbl" id="cs2l">In progress</div></div><div class="cbm-stat"><div class="cbm-stat-val" id="cs3v">12</div><div class="cbm-stat-lbl" id="cs3l">Overdue</div></div></div>
+                        <div class="cbm-pcard"><div class="cbm-ptitle" id="cprev-title">Task Status Overview</div><div class="cbm-psub" id="cprev-sub">Tasks · Status · all projects</div><div class="cbm-cwrap"><canvas id="cbm-canvas" role="img" aria-label="Chart preview">Chart preview.</canvas></div><div class="cbm-legend" id="cbm-legend"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    $(function () {
+                        /* ── wn tabs ── */
+      document.querySelectorAll('#wn-tabs .wntab').forEach(function(b){
+        b.addEventListener('click',function(){document.querySelectorAll('#wn-tabs .wntab').forEach(function(x){x.classList.remove('on')});b.classList.add('on');});
+      });
+
+        /* ── analytics chart ── */
+      var aC=null,FTA={
+        velocity:{t:'bar',l:['S1','S2','S3','S4','S5','S6'],ds:[{label:'pts',data:[28,32,24,36,32,38],backgroundColor:'#0d9488',borderRadius:4}]},
+        completion:{t:'line',l:['W1','W2','W3','W4'],ds:[{label:'%',data:[18,42,65,87],borderColor:'#0d9488',backgroundColor:'rgba(13,148,136,0.1)',tension:.4,fill:true,pointBackgroundColor:'#0d9488'}]},
+        burndown:{t:'line',l:['D1','D5','D10','D15','D20','D25','D30'],ds:[{label:'Ideal',data:[40,34,28,22,16,10,0],borderColor:'#cbd5e1',borderDash:[4,4],tension:0,pointRadius:0},{label:'Actual',data:[40,36,30,20,18,12,6],borderColor:'#0d9488',backgroundColor:'rgba(13,148,136,0.08)',tension:.3,fill:true,pointBackgroundColor:'#0d9488'}]}
+      };
+      function bAC(k){var d=FTA[k];if(aC)aC.destroy();aC=new Chart(document.getElementById('a-canvas'),{type:d.t,data:{labels:d.l,datasets:d.ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:d.ds.length>1,labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10}}}}}});}
+      document.getElementById('a-tabs').addEventListener('click',function(e){var b=e.target.closest('.ctab');if(!b)return;document.querySelectorAll('.ctab').forEach(function(x){x.classList.remove('on')});b.classList.add('on');bAC(b.dataset.k);});
+      bAC('velocity');
+
+      /* ── mini charts ── */
+      new Chart(document.getElementById('mini1'),{type:'doughnut',data:{labels:['Done','In Progress','Review','Todo'],datasets:[{data:[44,28,17,11],backgroundColor:['#0d9488','#f59e0b','#0ea5e9','#6366f1'],borderWidth:2,borderColor:'#fff',hoverOffset:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'right',labels:{boxWidth:7,font:{size:9},padding:5}}},cutout:'60%'}});
+      new Chart(document.getElementById('mini2'),{type:'bar',data:{labels:['S1','S2','S3','S4','S5','S6'],datasets:[{data:[28,32,24,36,32,38],backgroundColor:['#0d9488','#14b8a6','#0d9488','#14b8a6','#0d9488','#14b8a6'],borderRadius:3,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:9}}}}}});
+      new Chart(document.getElementById('mini3'),{type:'pie',data:{labels:['High','Medium','Low'],datasets:[{data:[30,45,25],backgroundColor:['#ef4444','#f59e0b','#6366f1'],borderWidth:2,borderColor:'#fff',hoverOffset:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'right',labels:{boxWidth:7,font:{size:9},padding:5}}}}});
+
+      /* ── chart builder ── */
+      var CB={type:'bar',src:'tasks',grp:'status',pal:'teal'},cbChart=null;
+      var PAL={teal:['#0d9488','#14b8a6','#5eead4','#0f766e','#ccfbf1','#f0fdfa'],indigo:['#6366f1','#818cf8','#a5b4fc','#4338ca','#c7d2fe','#ede9fe'],amber:['#f59e0b','#fbbf24','#fde68a','#d97706','#fef3c7','#fffbeb'],red:['#ef4444','#f87171','#fca5a5','#b91c1c','#fee2e2','#fff1f2'],purple:['#8b5cf6','#a78bfa','#c4b5fd','#6d28d9','#ede9fe','#f5f3ff'],multi:['#0d9488','#6366f1','#f59e0b','#ef4444','#10b981','#8b5cf6']};
+      var DS={tasks:{status:{l:['Done','In Progress','Review','To Do'],d:[87,18,12,7]},priority:{l:['High','Medium','Low'],d:[38,52,34]},assignee:{l:['M.Nauman','I.Ahmad','A.Ullah','U.Said'],d:[42,31,28,23]},project:{l:['Fophex','Testing','LMS','BHA'],d:[48,22,18,21]},type:{l:['Task','Bug','Story','Epic'],d:[72,28,16,8]},week:{l:['W1','W2','W3','W4'],d:[18,26,34,46]}},sprints:{status:{l:['S1','S2','S3','S4','S5','S6'],d:[28,32,24,36,32,38]},priority:{l:['S1','S2','S3','S4','S5','S6'],d:[28,32,24,36,32,38]},assignee:{l:['S1','S2','S3','S4','S5','S6'],d:[28,32,24,36,32,38]},project:{l:['S1','S2','S3','S4','S5','S6'],d:[28,32,24,36,32,38]},type:{l:['S1','S2','S3','S4','S5','S6'],d:[28,32,24,36,32,38]},week:{l:['S1','S2','S3','S4','S5','S6'],d:[28,32,24,36,32,38]}},members:{status:{l:['M.Nauman','I.Ahmad','A.Ullah','U.Said'],d:[42,31,28,23]},priority:{l:['M.Nauman','I.Ahmad','A.Ullah','U.Said'],d:[42,31,28,23]},assignee:{l:['M.Nauman','I.Ahmad','A.Ullah','U.Said'],d:[42,31,28,23]},project:{l:['M.Nauman','I.Ahmad','A.Ullah','U.Said'],d:[42,31,28,23]},type:{l:['M.Nauman','I.Ahmad','A.Ullah','U.Said'],d:[42,31,28,23]},week:{l:['M.Nauman','I.Ahmad','A.Ullah','U.Said'],d:[42,31,28,23]}},projects:{status:{l:['Fophex','Testing','LMS','BHA','Flowtick','Log'],d:[72,45,88,63,30,15]},priority:{l:['Fophex','Testing','LMS','BHA','Flowtick','Log'],d:[72,45,88,63,30,15]},assignee:{l:['Fophex','Testing','LMS','BHA','Flowtick','Log'],d:[72,45,88,63,30,15]},project:{l:['Fophex','Testing','LMS','BHA','Flowtick','Log'],d:[72,45,88,63,30,15]},type:{l:['Fophex','Testing','LMS','BHA','Flowtick','Log'],d:[72,45,88,63,30,15]},week:{l:['Fophex','Testing','LMS','BHA','Flowtick','Log'],d:[72,45,88,63,30,15]}}};
+      var STATS={tasks:[{v:87,l:'Completed'},{v:25,l:'In progress'},{v:12,l:'Overdue'}],sprints:[{v:6,l:'Sprints'},{v:186,l:'Points'},{v:32,l:'Avg velocity'}],members:[{v:4,l:'Members'},{v:124,l:'Assigned'},{v:31,l:'Avg tasks'}],projects:[{v:8,l:'Projects'},{v:58,l:'Avg % done'},{v:3,l:'Active sprints'}]};
+
+      function openCB(){document.getElementById('ft-cb-overlay').classList.add('open');renderCB();}
+      function closeCB(){document.getElementById('ft-cb-overlay').classList.remove('open');}
+
+      document.getElementById('create-cta').addEventListener('click',openCB);
+      document.getElementById('create-cta').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')openCB();});
+      document.getElementById('cbm-x').addEventListener('click',closeCB);
+      document.getElementById('ft-cb-overlay').addEventListener('click',function(e){if(e.target===this)closeCB();});
+      document.addEventListener('keydown',function(e){if(e.key==='Escape')closeCB();});
+
+      function renderCB(){
+        var d=DS[CB.src][CB.grp],colors=PAL[CB.pal];
+        var ctx=document.getElementById('cbm-canvas');
+        if(cbChart)cbChart.destroy();
+        var isPie=['pie','doughnut','polarArea'].indexOf(CB.type)>-1;
+        var bgC=isPie?d.l.map(function(_,i){return colors[i%colors.length];}):colors[0];
+        var ds={label:document.getElementById('cbn').value||'My Chart',data:d.d,backgroundColor:bgC,borderColor:isPie?bgC:colors[0],borderWidth:isPie?0:2,borderRadius:CB.type==='bar'?4:0,tension:.4,fill:CB.type==='line',pointBackgroundColor:colors[0]};
+        if(CB.type==='line')ds.backgroundColor=colors[0]+'22';
+        cbChart=new Chart(ctx,{type:CB.type,data:{labels:d.l,datasets:[ds]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:isPie?{}:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10}}}}}});
+        var leg=document.getElementById('cbm-legend');leg.innerHTML='';
+        d.l.forEach(function(lbl,i){var c=Array.isArray(bgC)?bgC[i%bgC.length]:colors[0];var s=document.createElement('span');s.className='cbm-leg';s.innerHTML='<span class="cbm-leg-sw" style="background:'+c+'"></span>'+lbl;leg.appendChild(s);});
+        var sn={tasks:'Tasks',sprints:'Sprint velocity',members:'Team workload',projects:'Project progress'};
+        document.getElementById('cprev-sub').textContent=sn[CB.src]+' \u00b7 '+CB.grp+' \u00b7 all projects';
+        document.getElementById('cprev-title').textContent=document.getElementById('cbn').value||'My Chart';
+        STATS[CB.src].forEach(function(s,i){document.getElementById('cs'+(i+1)+'v').textContent=s.v;document.getElementById('cs'+(i+1)+'l').textContent=s.l;});
+      }
+
+      document.getElementById('cbt-grid').addEventListener('click',function(e){var c=e.target.closest('.cbt');if(!c)return;document.querySelectorAll('.cbt').forEach(function(x){x.classList.remove('on')});c.classList.add('on');CB.type=c.dataset.type;renderCB();});
+      document.getElementById('cbs-list').addEventListener('click',function(e){var c=e.target.closest('.cbs');if(!c)return;document.querySelectorAll('.cbs').forEach(function(x){x.classList.remove('on');var ch=x.querySelector('.cbs-chk');if(ch)ch.remove();});c.classList.add('on');var i=document.createElement('i');i.className='bi bi-check2 cbs-chk';c.appendChild(i);CB.src=c.dataset.src;renderCB();});
+      document.getElementById('cbg-wrap').addEventListener('click',function(e){var b=e.target.closest('.cbg');if(!b)return;document.querySelectorAll('.cbg').forEach(function(x){x.classList.remove('on')});b.classList.add('on');CB.grp=b.dataset.g;renderCB();});
+      document.getElementById('cbc-wrap').addEventListener('click',function(e){var c=e.target.closest('.cbc');if(!c)return;document.querySelectorAll('.cbc').forEach(function(x){x.classList.remove('on')});c.classList.add('on');CB.pal=c.dataset.p;renderCB();});
+      document.getElementById('cbn').addEventListener('input',function(){document.getElementById('cprev-title').textContent=this.value||'My Chart';});
+      document.getElementById('cbm-refresh').addEventListener('click',renderCB);
+      document.getElementById('cbm-save').addEventListener('click',function(){
+        var name=document.getElementById('cbn').value.trim()||'My Chart';
+        closeCB();
+        var t=document.getElementById('ft-toast');
+        document.getElementById('toast-msg').textContent='"'+name+'" saved to dashboard!';
+        t.classList.add('show');
+        setTimeout(function(){t.classList.remove('show');},3000);
+      });
+
+    });
+
+</script>

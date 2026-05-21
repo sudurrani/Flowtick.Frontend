@@ -113,8 +113,8 @@ $(function () {
        e.preventDefault();
        e.stopPropagation();
 
-       let projectId = $('.project-dropdown').data('id');   // <-- get id
-       let projectName = $('.project-dropdown').data('project-name');   // <-- get name
+           let projectId = $('#ft-ctx').data('id');   // <-- get id
+           let projectName = $('#ft-ctx').data('project-name');   // <-- get name
        $('#member-modal-project-name').text(projectName);
        $('#ft-overlay-member').attr('data-project-id', projectId);
 

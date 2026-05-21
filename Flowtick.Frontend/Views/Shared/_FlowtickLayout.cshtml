@@ -39,8 +39,13 @@
     @{
         @await Html.PartialAsync("~/Views/Shared/PartialViews/Common/_AjaxRequestLoaderPartialView.cshtml")
     }
+  <div class="ft-shell" id="ft-shell">
+        @{
+            @await Html.PartialAsync("~/Views/Shared/PartialViews/Common/_FlowtickSidebarPartialView.cshtml")
+        }
+    <div class="ft-main">
     <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+@*     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-brand">
                 <i class="bi bi-app-indicator"></i>
@@ -103,150 +108,156 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div> *@
     <!-- Sidebar -->
 
-    <div class="main-content" id="mainContent">
-        <!-- ============================================================
-             FLOWTICK — BOARD HEADER ROW
-             Standalone component. Include board-header.css + board-header.js
-             ============================================================ -->
+    @*     <div class="main-content" id="mainContent"> *@
+            <!-- ============================================================
+                 FLOWTICK — BOARD HEADER ROW
+                 Standalone component. Include board-header.css + board-header.js
+                 ============================================================ -->
 
-        <header class="ft-header" id="ft-header">
+            <header class="ft-header" id="ft-header">
 
-            <!-- LEFT: Breadcrumb navigation -->
-            <div class="ft-header__left" id="ft-header-left">
-                <nav class="ft-breadcrumb" id="ft-breadcrumb" aria-label="Breadcrumb">
-                    <span class="ft-breadcrumb__link" id="ft-bc-projects">
-                        <i class="bi bi-grid-3x3-gap"></i> Projects
+                <!-- LEFT: Breadcrumb navigation -->
+                <div class="ft-header__left" id="ft-header-left">
+  
+                    <nav class="ft-breadcrumb" id="ft-breadcrumb" aria-label="Breadcrumb">
+                        <span class="ft-breadcrumb__link" id="ft-bc-projects">
+                            <i class="bi bi-grid-3x3-gap"></i> Projects
+                        </span>
+                        <span class="ft-breadcrumb__sep">/</span>
+                        <span class="ft-breadcrumb__project" id="ft-bc-project-name"></span>
+                        <span class="ft-breadcrumb__sep">/</span>
+                        <span class="ft-breadcrumb__current" id="ft-bc-current-page">Board</span>
+                    </nav>
+                    <span class="ft-header__board-badge" id="ft-board-badge">
+                        <i class="bi bi-kanban"></i> Sprint Board
                     </span>
-                    <span class="ft-breadcrumb__sep">/</span>
-                    <span class="ft-breadcrumb__project" id="ft-bc-project-name">Fophex-ERP</span>
-                    <span class="ft-breadcrumb__sep">/</span>
-                    <span class="ft-breadcrumb__current" id="ft-bc-current-page">Board</span>
-                </nav>
-                <span class="ft-header__board-badge" id="ft-board-badge">
-                    <i class="bi bi-kanban"></i> Sprint Board
-                </span>
-            </div>
-
-            <!-- RIGHT: Actions -->
-            <div class="ft-header__right" id="ft-header-right">
-
-                <!-- Search -->
-                <div class="ft-search" id="ft-search-wrap">
-                    <i class="bi bi-search ft-search__icon"></i>
-                    <input type="text"
-                           class="ft-search__input"
-                           id="searchInput"
-                           placeholder="Search tasks…"
-                           autocomplete="off" />
                 </div>
 
-                <!-- View Toggle: Board / List / Backlog -->
-                <div class="ft-view-toggle" id="ft-view-toggle" role="group" aria-label="View mode">
-                    <button class="ft-view-toggle__btn ft-view-toggle__btn--active" id="ft-view-board" data-view="board" title="Board view" aria-label="Board view">
-                        <i class="bi bi-kanban"></i>
-                    </button>
-                    <button class="ft-view-toggle__btn" id="ft-view-list" data-view="list" title="List view" aria-label="List view">
-                        <i class="bi bi-list-ul"></i>
-                    </button>
-                    <button class="ft-view-toggle__btn" id="ft-view-backlog" data-view="backlog" title="Backlog view" aria-label="Backlog view">
-                        <i class="bi bi-layout-text-sidebar"></i>
-                    </button>
-                </div>
+                <!-- RIGHT: Actions -->
+                <div class="ft-header__right" id="ft-header-right">
 
-                <!-- Notifications -->
-                <button class="ft-header__icon-btn" id="ft-btn-notifications" title="Notifications" aria-label="Notifications">
-                    <i class="bi bi-bell"></i>
-                    <span class="ft-notification-dot" id="ft-notification-dot"></span>
-                </button>
-
-                <!-- Settings -->
-                <button class="ft-header__icon-btn" id="ft-btn-settings" title="Settings" aria-label="Settings">
-                    <i class="bi bi-gear"></i>
-                </button>
-
-                <!-- Help -->
-                <button class="ft-header__icon-btn" id="ft-btn-help" title="Help" aria-label="Help">
-                    <i class="bi bi-question-circle"></i>
-                </button>
-
-                <!-- User Avatar + Dropdown -->
-                <div class="ft-user" id="ft-user-wrap">
-                    <div class="ft-user__avatar" id="ft-user-avatar" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Account menu">
-             
+                    <!-- Search -->
+                    <div class="ft-search" id="ft-search-wrap">
+                        <i class="bi bi-search ft-search__icon"></i>
+                        <input type="text"
+                               class="ft-search__input"
+                               id="searchInput"
+                               placeholder="Search tasks…"
+                               autocomplete="off" />
                     </div>
 
-                    <!-- User dropdown menu -->
-                    <div class="ft-user__menu ft-dropdown--hidden" id="ft-user-menu" role="menu">
+                    <!-- View Toggle: Board / List / Backlog -->
+                    <div class="ft-view-toggle" id="ft-view-toggle" role="group" aria-label="View mode">
+                        <button class="ft-view-toggle__btn ft-view-toggle__btn--active" id="ft-view-board" data-view="board" title="Board view" aria-label="Board view">
+                            <i class="bi bi-kanban"></i>
+                        </button>
+                        <button class="ft-view-toggle__btn" id="ft-view-list" data-view="list" title="List view" aria-label="List view">
+                            <i class="bi bi-list-ul"></i>
+                        </button>
+                        <button class="ft-view-toggle__btn" id="ft-view-backlog" data-view="backlog" title="Backlog view" aria-label="Backlog view">
+                            <i class="bi bi-layout-text-sidebar"></i>
+                        </button>
+                    </div>
 
-                        <!-- Hero section -->
-                        <div class="ft-user__menu-hero" id="ft-user-menu-hero">
-                            <div class="ft-user__menu-hero-top">
-                                <div class="ft-user__menu-avatar-lg" id="ft-user-menu-avatar"></div>
-                                <div class="ft-user__menu-info">
-                                    <div class="ft-user__menu-name" id="ft-user-menu-name"></div>
-                                    <div class="ft-user__menu-role" id="ft-user-menu-role">Project Manager</div>
-                                    <div class="ft-user__menu-email" id="ft-user-menu-email">
-                                        <i class="bi bi-envelope-fill"></i> m.nauman@fophex.com
+                    <!-- Notifications -->
+                    <button class="ft-header__icon-btn" id="ft-btn-notifications" title="Notifications" aria-label="Notifications">
+                        <i class="bi bi-bell"></i>
+                        <span class="ft-notification-dot" id="ft-notification-dot"></span>
+                    </button>
+
+                    <!-- Settings -->
+                    <button class="ft-header__icon-btn" id="ft-btn-settings" title="Settings" aria-label="Settings">
+                        <i class="bi bi-gear"></i>
+                    </button>
+
+                    <!-- Help -->
+                    <button class="ft-header__icon-btn" id="ft-btn-help" title="Help" aria-label="Help">
+                        <i class="bi bi-question-circle"></i>
+                    </button>
+
+                    <!-- User Avatar + Dropdown -->
+                    <div class="ft-user" id="ft-user-wrap">
+                        <div class="ft-user__avatar" id="ft-user-avatar" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="Account menu">
+             
+                        </div>
+
+                        <!-- User dropdown menu -->
+                        <div class="ft-user__menu ft-dropdown--hidden" id="ft-user-menu" role="menu">
+
+                            <!-- Hero section -->
+                            <div class="ft-user__menu-hero" id="ft-user-menu-hero">
+                                <div class="ft-user__menu-hero-top">
+                                    <div class="ft-user__menu-avatar-lg" id="ft-user-menu-avatar"></div>
+                                    <div class="ft-user__menu-info">
+                                        <div class="ft-user__menu-name" id="ft-user-menu-name"></div>
+                                        <div class="ft-user__menu-role" id="ft-user-menu-role">Project Manager</div>
+                                        <div class="ft-user__menu-email" id="ft-user-menu-email">
+                                            <i class="bi bi-envelope-fill"></i> m.nauman@fophex.com
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Quick stats -->
+                                <div class="ft-user__menu-stats" id="ft-user-menu-stats">
+                                    <div class="ft-user__menu-stat">
+                                        <div class="ft-user__menu-stat-val" id="ft-stat-tasks">12</div>
+                                        <div class="ft-user__menu-stat-lbl">My Tasks</div>
+                                    </div>
+                                    <div class="ft-user__menu-stat">
+                                        <div class="ft-user__menu-stat-val" id="ft-stat-review">3</div>
+                                        <div class="ft-user__menu-stat-lbl">In Review</div>
+                                    </div>
+                                    <div class="ft-user__menu-stat">
+                                        <div class="ft-user__menu-stat-val" id="ft-stat-overdue">2</div>
+                                        <div class="ft-user__menu-stat-lbl">Overdue</div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Quick stats -->
-                            <div class="ft-user__menu-stats" id="ft-user-menu-stats">
-                                <div class="ft-user__menu-stat">
-                                    <div class="ft-user__menu-stat-val" id="ft-stat-tasks">12</div>
-                                    <div class="ft-user__menu-stat-lbl">My Tasks</div>
+
+                            <!-- Menu items -->
+                            <div class="ft-user__menu-body">
+                                <div class="ft-user__menu-item" id="ft-menu-profile" role="menuitem">
+                                    <i class="bi bi-person-circle"></i> My Profile
                                 </div>
-                                <div class="ft-user__menu-stat">
-                                    <div class="ft-user__menu-stat-val" id="ft-stat-review">3</div>
-                                    <div class="ft-user__menu-stat-lbl">In Review</div>
+                                <div class="ft-user__menu-item" id="ft-menu-my-tasks" role="menuitem">
+                                    <i class="bi bi-check2-square"></i> My Tasks
+                                    <span class="ft-user__menu-item-badge ft-badge--teal" id="ft-my-tasks-count">12 open</span>
                                 </div>
-                                <div class="ft-user__menu-stat">
-                                    <div class="ft-user__menu-stat-val" id="ft-stat-overdue">2</div>
-                                    <div class="ft-user__menu-stat-lbl">Overdue</div>
+                                <div class="ft-user__menu-item" id="ft-menu-notifications" role="menuitem">
+                                    <i class="bi bi-bell"></i> Notifications
+                                    <span class="ft-user__menu-item-badge ft-badge--red" id="ft-notif-count">3</span>
+                                </div>
+                                <div class="ft-user__menu-separator"></div>
+                                <div class="ft-user__menu-item" id="ft-menu-settings" role="menuitem">
+                                    <i class="bi bi-gear"></i> Settings
+                                </div>
+                                <div class="ft-user__menu-item" id="ft-menu-permissions" role="menuitem">
+                                    <i class="bi bi-shield-check"></i> Permissions
+                                </div>
+                                <div class="ft-user__menu-item" id="ft-menu-appearance" role="menuitem">
+                                    <i class="bi bi-palette"></i> Appearance
+                                </div>
+                                <div class="ft-user__menu-separator"></div>
+                                <div class="ft-user__menu-item ft-user__menu-item--danger" id="ft-menu-signout" role="menuitem">
+                                    <i class="bi bi-box-arrow-right"></i> Sign out
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Menu items -->
-                        <div class="ft-user__menu-body">
-                            <div class="ft-user__menu-item" id="ft-menu-profile" role="menuitem">
-                                <i class="bi bi-person-circle"></i> My Profile
-                            </div>
-                            <div class="ft-user__menu-item" id="ft-menu-my-tasks" role="menuitem">
-                                <i class="bi bi-check2-square"></i> My Tasks
-                                <span class="ft-user__menu-item-badge ft-badge--teal" id="ft-my-tasks-count">12 open</span>
-                            </div>
-                            <div class="ft-user__menu-item" id="ft-menu-notifications" role="menuitem">
-                                <i class="bi bi-bell"></i> Notifications
-                                <span class="ft-user__menu-item-badge ft-badge--red" id="ft-notif-count">3</span>
-                            </div>
-                            <div class="ft-user__menu-separator"></div>
-                            <div class="ft-user__menu-item" id="ft-menu-settings" role="menuitem">
-                                <i class="bi bi-gear"></i> Settings
-                            </div>
-                            <div class="ft-user__menu-item" id="ft-menu-permissions" role="menuitem">
-                                <i class="bi bi-shield-check"></i> Permissions
-                            </div>
-                            <div class="ft-user__menu-item" id="ft-menu-appearance" role="menuitem">
-                                <i class="bi bi-palette"></i> Appearance
-                            </div>
-                            <div class="ft-user__menu-separator"></div>
-                            <div class="ft-user__menu-item ft-user__menu-item--danger" id="ft-menu-signout" role="menuitem">
-                                <i class="bi bi-box-arrow-right"></i> Sign out
-                            </div>
-                        </div>
+                        </div><!-- /ft-user__menu -->
+                    </div><!-- /ft-user -->
 
-                    </div><!-- /ft-user__menu -->
-                </div><!-- /ft-user -->
+                </div><!-- /ft-header__right -->
 
-            </div><!-- /ft-header__right -->
-
-        </header><!-- /ft-header -->
-        @RenderBody()
-    </div>
+            </header>
+            <!-- SCROLLABLE CONTENT -->
+         <div class="ft-content">
+            @RenderBody()
+         </div><!-- /ft-content -->
+      @*   </div> *@
+    </div><!-- /ft-main -->
+  </div><!-- /ft-shell -->
     @* add people modal  *@
     <div class="modal fade flowtic-modal" id="addPeopleModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered ">
@@ -387,7 +398,19 @@
             $('#ft-user-menu-avatar').text(getInitials(user.name));
             $('#ft-user-menu-name').text(user.name);
 
+            $('#sidebarUserAvatar').text(getInitials(user.name));
+            $('#sidebarUserName').text(user.name);
             //end
+            $('#bannerUserName').text(user.name);
+                    //show Day,Month, and Data in banner
+            const today = new Date();
+            const options = {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric'
+            };
+            const formattedDate = today.toLocaleDateString('en-US', options);
+            $('#bannerDate').text(formattedDate);
 
 
             var urlParameters = new URLSearchParams(window.location.search);
@@ -397,7 +420,7 @@
                     //set board name scrum / board
             $('#ft-board-badge').text(projectType + ' Board');
 
-            getMyProjects();
+            // getMyProjects();
             $('#toggleSidebar').on('click', function () {
                 $('#sidebar').toggleClass('collapsed');
                 $('#mainContent').toggleClass('expanded');
@@ -470,120 +493,119 @@
           });
 
         });
-        function getMyProjects() {
-            apiRequest({
-                url: 'flowtick/projects/me',
-                type: 'GET',
-                data: {},
-                callBack: getMyProjectsCallBack
-            });
-        }
-        var getMyProjectsCallBack = function (response) {
-            if (response.request.status === 201) {
+        // function getMyProjects() {
+        //     apiRequest({
+        //         url: 'flowtick/projects/me',
+        //         type: 'GET',
+        //         data: {},
+        //         callBack: getMyProjectsCallBack
+        //     });
+        // }
+        // var getMyProjectsCallBack = function (response) {
+        //     if (response.request.status === 201) {
 
-                var projects = response.data;
+        //         var projects = response.data;
 
-                var $container = $("#projectContainer");
-                var $sidebar = $("#sidebarProjects");
+        //         var $container = $("#projectContainer");
+        //         var $sidebar = $("#sidebarProjects");
 
-                $container.html("");
-                $sidebar.html("");
+        //         $container.html("");
+        //         $sidebar.html("");
 
-                $.each(projects, function (index, project) {
-                   let isOwner = project.role && project.role.name === "Owner";
+        //         $.each(projects, function (index, project) {
+        //            let isOwner = project.role && project.role.name === "Owner";
 
-                   let boardsHtml = '';
+        //            let boardsHtml = '';
 
-                    //  loop boards here
-                    if (project.boards && project.boards.length > 0) {
-                        $.each(project.boards, function (i, board) {
-                            let encBoardId = encryptNumber(board.id);
-                            boardsHtml += `
-                                <a href="#" class="nav-link" id="board-${board.id}"
-                                   onclick="redirectToAction('/Board/Project?project=${project.name}&type=${board.type}&boardId=${encBoardId}&id=', ${project.id})"
-                                   data-bs-toggle="tooltip" title="${board.name}">
-                                   <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
-                                   <span class="nav-link-text ">${board.name}</span>
-                                </a>
-                            `;
-                        });
-                    }
+        //             //  loop boards here
+        //             if (project.boards && project.boards.length > 0) {
+        //                 $.each(project.boards, function (i, board) {
+        //                     let encBoardId = encryptNumber(board.id);
+        //                     boardsHtml += `
+        //                         <a href="#" class="nav-link" id="board-${board.id}"
+        //                            onclick="redirectToAction('/Board/Project?project=${project.name}&type=${board.type}&boardId=${encBoardId}&id=', ${project.id})"
+        //                            data-bs-toggle="tooltip" title="${board.name}">
+        //                            <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
+        //                            <span class="nav-link-text ">${board.name}</span>
+        //                         </a>
+        //                     `;
+        //                 });
+        //             }
 
-                    $sidebar.append(
-                            `<div class="project-item">
+        //             $sidebar.append(
+        //                     `<div class="project-item">
 
-                                <!-- Parent Project -->
-                                <a href="#" class="nav-link project-toggle d-flex align-items-center"
-                                    onclick="toggleProjectMenu(event, ${project.id})"
-                                    data-bs-toggle="tooltip" title="${project.name}">
+        //                         <!-- Parent Project -->
+        //                         <a href="#" class="nav-link project-toggle d-flex align-items-center"
+        //                             onclick="toggleProjectMenu(event, ${project.id})"
+        //                             data-bs-toggle="tooltip" title="${project.name}">
 
-                                    <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
-                                    <span class="nav-link-text ">${project.name}</span>
+        //                             <img src="/img/logo/logo.png" style="width:15px; height:15px;" />
+        //                             <span class="nav-link-text ">${project.name}</span>
 
-                                    <span class="ms-auto three-dots" onclick="handleThreeDots(event, ${project.id}, ${isOwner}, '${project.name}')">
-                                        <i class="bi bi-three-dots"></i>
-                                    </span>
+        //                             <span class="ms-auto three-dots" onclick="handleThreeDots(event, ${project.id}, ${isOwner}, '${project.name}')">
+        //                                 <i class="bi bi-three-dots"></i>
+        //                             </span>
 
-                                </a>
+        //                         </a>
 
-                                <!-- Submenu -->
-                                <div class="project-submenu ps-4" id="submenu-${project.id}" style="display:none;">
-                                       ${boardsHtml}
-                                </div>
+        //                         <!-- Submenu -->
+        //                         <div class="project-submenu ps-4" id="submenu-${project.id}" style="display:none;">
+        //                                ${boardsHtml}
+        //                         </div>
 
-                            </div>`
-                            );
-                    // Dashboard project cards
-                    $container.append(`
-                                                                    <div class="col-12 col-sm-6 col-md-4">
-                                                                        <div class="app-card active open-project-board" data-id="${project.id}" data-name=" ${project.name}" >
-                                                                            <div class="d-flex align-items-center">
-                                                                                <div class="app-icon bg-light">
-                                                                                    <img src="/img/logo/logo.png" style="width:32px; height:32px;" />
-                                                                                </div>
-                                                                                <div class="ms-3">
-                                                                                    <h6 class="mb-0 fw-semibold">${project.name}</h6>
-                                                                                    <small class="text-muted">${project.description}</small>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                              `);
-                });
+        //                     </div>`
+        //                     );
+        //             // Dashboard project cards
+        //             $container.append(`
+        //                                                             <div class="col-12 col-sm-6 col-md-4">
+        //                                                                 <div class="app-card active open-project-board" data-id="${project.id}" data-name=" ${project.name}" >
+        //                                                                     <div class="d-flex align-items-center">
+        //                                                                         <div class="app-icon bg-light">
+        //                                                                             <img src="/img/logo/logo.png" style="width:32px; height:32px;" />
+        //                                                                         </div>
+        //                                                                         <div class="ms-3">
+        //                                                                             <h6 class="mb-0 fw-semibold">${project.name}</h6>
+        //                                                                             <small class="text-muted">${project.description}</small>
+        //                                                                         </div>
+        //                                                                     </div>
+        //                                                                 </div>
+        //                                                             </div>
+        //                                                       `);
+        //         });
 
-                $("#sidebarProjects a.nav-link").each(function () {
-                    const title = $(this).attr("title");
-                    if (title === $('#ProjectName').text()) {
-                        $("#sidebarProjects a.nav-link").removeClass("active");
-                      //  $(this).addClass("active");
-                        //open current project boards
-                      let submenu = $('#submenu-' + projectId);
-                       $('#board-' + boardId).addClass("active");;
-                      submenu.slideToggle(200);
+        //         $("#sidebarProjects a.nav-link").each(function () {
+        //             const title = $(this).attr("title");
+        //             if (title === $('#ProjectName').text()) {
+        //                 $("#sidebarProjects a.nav-link").removeClass("active");
+        //               //  $(this).addClass("active");
+        //                 //open current project boards
+        //               let submenu = $('#submenu-' + projectId);
+        //                $('#board-' + boardId).addClass("active");;
+        //               submenu.slideToggle(200);
                       
-                      //submenu.find("a.nav-link").addClass("active");
+        //               //submenu.find("a.nav-link").addClass("active");
 
-                    }
-                });
-                //  define trigger when sidebar is loadded  add the active class to that menu item by using this trigger name  on the project view js
-                //$(document).trigger("sidebarProjectsLoaded");
-            }
-            else {                
-                errorExtractor(response);
+        //             }
+        //         });
+        //     }
+        //     else {                
+        //         errorExtractor(response);
 
-            }
-        };
-        function toggleProjectMenu(e, projectId) {
-            e.preventDefault();
+        //     }
+        // };
+      
+        // function toggleProjectMenu(e, projectId) {
+        //     e.preventDefault();
 
-            let submenu = $('#submenu-' + projectId);
+        //     let submenu = $('#submenu-' + projectId);
 
-            // toggle current
-            submenu.slideToggle(200);
+        //     // toggle current
+        //     submenu.slideToggle(200);
 
-            // OPTIONAL: close others
-            $('.project-submenu').not(submenu).slideUp(200);
-        }
+        //     // OPTIONAL: close others
+        //     $('.project-submenu').not(submenu).slideUp(200);
+        // }
         // Initialize Tooltips
         function initTooltips() {
             const sidebar = $('#sidebar');
@@ -595,43 +617,43 @@
             }
         }
 
-        function handleThreeDots(event, projectId, isOwner,projectName) {
-            event.stopPropagation();   // stops parent <a> click
-            event.preventDefault();    // prevents link navigation (important)
+        // function handleThreeDots(event, projectId, isOwner,projectName) {
+        //     event.stopPropagation();   // stops parent <a> click
+        //     event.preventDefault();    // prevents link navigation (important)
 
-            $(".project-dropdown").remove();
+        //     $(".project-dropdown").remove();
 
-            //let projectId = $(this).closest('.menu-item').data('id');// <-- project id
+        //     //let projectId = $(this).closest('.menu-item').data('id');// <-- project id
 
-            const $el = $(event.currentTarget);
+        //     const $el = $(event.currentTarget);
 
-            let offset = $el.offset();
-            let height = $el.outerHeight();
+        //     let offset = $el.offset();
+        //     let height = $el.outerHeight();
 
-            $("body").append(`
-                                                <ul class="dropdown-menu project-dropdown"
+        //     $("body").append(`
+        //                                         <ul class="dropdown-menu project-dropdown"
 
-                                                 data-id="${projectId}"
-                                                 data-project-name="${projectName}"
-                                                    style="
-                                                        display:block;
-                                                        position:absolute;
-                                                        top:${offset.top + height}px;
-                                                        left:${offset.left - 10}px;
+        //                                          data-id="${projectId}"
+        //                                          data-project-name="${projectName}"
+        //                                             style="
+        //                                                 display:block;
+        //                                                 position:absolute;
+        //                                                 top:${offset.top + height}px;
+        //                                                 left:${offset.left - 10}px;
 
-                            ">
-                            <li><a class="dropdown-item" onclick="redirectToAction('/Project/Backlog?id=',${projectId});"><i class="bi bi-list-task me-2"></i>Backlog </a></li>
-                            <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add Member</a></li>
-                            <li><a class="dropdown-item" onclick="openAddBoardModal(${projectId});"><i class="bi bi-clipboard me-2"></i>Add Board</a></li>
-                            ${isOwner ? `
-                                <li><a class="dropdown-item" id="projectSetting" onclick="redirectToAction('/Project/Settings?id=',${projectId});"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                                <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete</a></li>
-                            ` : ''}
-                        </ul>
-                    `);
-            // Your custom logic here
-            // alert("Three dots clicked for project:", projectId);
-        }
+        //                     ">
+        //                     <li><a class="dropdown-item" onclick="redirectToAction('/Project/Backlog?id=',${projectId});"><i class="bi bi-list-task me-2"></i>Backlog </a></li>
+        //                     <li><a class="dropdown-item" id="addPeopleBtn"><i class="bi bi-person-add me-2"></i>Add Member</a></li>
+        //                     <li><a class="dropdown-item" onclick="openAddBoardModal(${projectId});"><i class="bi bi-clipboard me-2"></i>Add Board</a></li>
+        //                     ${isOwner ? `
+        //                         <li><a class="dropdown-item" id="projectSetting" onclick="redirectToAction('/Project/Settings?id=',${projectId});"><i class="bi bi-gear me-2"></i>Settings</a></li>
+        //                         <li><a class="dropdown-item delete-space"><i class="bi bi-trash3 me-2"></i>Delete</a></li>
+        //                     ` : ''}
+        //                 </ul>
+        //             `);
+        //     // Your custom logic here
+        //     // alert("Three dots clicked for project:", projectId);
+        // }
           //below code move to the AddMemberPartialView
         // $(document).on('click', '#addPeopleBtn', function (e) {
         //     e.preventDefault();
