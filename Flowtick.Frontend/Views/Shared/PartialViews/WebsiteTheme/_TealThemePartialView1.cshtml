@@ -1,0 +1,1439 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ePharmacy – Pharmacy Management System | BK-InfoTech</title>
+    <link rel="icon" href="~/CompanyLogos/bk-infotech.ico" type="image/x-icon">
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        :root {
+            --teal: #0D7377;
+            --teal-dark: #0A5557;
+            --teal-deep: #063B3D;
+            --teal-deeper: #031F20;
+            --mint: #14BDAC;
+            --mint-light: #7EE8DF;
+            --mint-pale: #E6F9F8;
+            --white: #ffffff;
+            --off-white: #F4FAFA;
+            --text-dark: #0D2B2C;
+            --text-mid: #2E6668;
+            --gray: #5C7A7B;
+            --border: #C5E8E8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--off-white);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            background: var(--teal-deeper);
+            padding: 13px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--mint);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .navbar-brand img {
+                height: 46px;
+                width: 46px;
+                border-radius: 50%;
+                object-fit: contain;
+                background: var(--white);
+                padding: 3px;
+            }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--mint-light);
+            letter-spacing: 1px;
+        }
+
+        .brand-sub {
+            font-size: 0.63rem;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.65) !important;
+            font-size: 0.88rem;
+            font-weight: 500;
+            padding: 6px 14px !important;
+            transition: color 0.2s;
+        }
+
+            .nav-link:hover {
+                color: var(--mint-light) !important;
+            }
+
+        .btn-nav-cta {
+            background: var(--mint) !important;
+            color: var(--teal-deeper) !important;
+            font-weight: 700 !important;
+            border-radius: 5px;
+            padding: 7px 20px !important;
+            transition: background 0.2s;
+        }
+
+            .btn-nav-cta:hover {
+                background: var(--mint-light) !important;
+            }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(140deg, var(--teal-deeper) 0%, var(--teal-dark) 55%, #0B6B6E 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .hero::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-image: radial-gradient(circle at 75% 35%, rgba(20,189,172,0.18) 0%, transparent 55%), radial-gradient(circle at 15% 80%, rgba(126,232,223,0.07) 0%, transparent 45%);
+            }
+
+            .hero::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2314BDAC' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+            }
+
+        .hero-pill {
+            display: inline-block;
+            background: rgba(20,189,172,0.15);
+            border: 1px solid rgba(20,189,172,0.4);
+            color: var(--mint-light);
+            font-size: 0.73rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            padding: 6px 18px;
+            border-radius: 100px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--white);
+            line-height: 1.12;
+            margin-bottom: 22px;
+        }
+
+            .hero h1 span {
+                color: var(--mint-light);
+            }
+
+        .hero p {
+            font-size: 1.08rem;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.8;
+            max-width: 510px;
+            margin-bottom: 36px;
+        }
+
+        .btn-primary-hero {
+            background: var(--mint);
+            color: var(--teal-deeper);
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 14px 34px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.25s;
+        }
+
+            .btn-primary-hero:hover {
+                background: var(--mint-light);
+                color: var(--teal-deeper);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(20,189,172,0.35);
+            }
+
+        .btn-outline-hero {
+            background: transparent;
+            color: rgba(255,255,255,0.8);
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 13px 28px;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.25s;
+        }
+
+            .btn-outline-hero:hover {
+                border-color: var(--mint);
+                color: var(--mint-light);
+            }
+
+        .hero-visual {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(20,189,172,0.25);
+            border-radius: 16px;
+            padding: 28px;
+            backdrop-filter: blur(12px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-stat-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(20,189,172,0.15);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: background 0.2s;
+        }
+
+            .hero-stat-card:hover {
+                background: rgba(20,189,172,0.1);
+            }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--mint);
+            color: var(--teal-deeper);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .stat-label {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .stat-value {
+            font-size: 0.97rem;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* ── SECTION BASE ── */
+        .section-eyebrow {
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--teal);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: clamp(1.85rem, 3.5vw, 2.7rem);
+            color: var(--text-dark);
+            margin-bottom: 14px;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--gray);
+            line-height: 1.75;
+            max-width: 560px;
+        }
+
+        .divider-teal {
+            width: 52px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--teal), var(--mint));
+            border-radius: 2px;
+            margin: 18px 0 30px;
+        }
+
+        /* ── FEATURES ── */
+        .features-section {
+            padding: 100px 0;
+            background: var(--off-white);
+        }
+
+        .feature-card {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 32px 28px;
+            height: 100%;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .feature-card::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: linear-gradient(90deg, var(--teal), var(--mint));
+                transform: scaleX(0);
+                transition: transform 0.3s;
+            }
+
+            .feature-card:hover {
+                border-color: var(--mint);
+                box-shadow: 0 12px 36px rgba(13,115,119,0.1);
+                transform: translateY(-4px);
+            }
+
+                .feature-card:hover::after {
+                    transform: scaleX(1);
+                }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--mint-pale);
+            color: var(--teal);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.55rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* ── MODULES ── */
+        .modules-section {
+            padding: 100px 0;
+            background: linear-gradient(180deg, #EAF7F7 0%, var(--off-white) 100%);
+        }
+
+        .module-tab-btn {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            color: var(--text-mid);
+            font-weight: 500;
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-size: 0.87rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+            .module-tab-btn.active, .module-tab-btn:hover {
+                background: var(--teal);
+                border-color: var(--teal);
+                color: var(--white);
+                font-weight: 600;
+            }
+
+        .module-detail-card {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            padding: 40px;
+            box-shadow: 0 4px 24px rgba(13,115,119,0.06);
+        }
+
+        .module-feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .module-feature-list li {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 10px 0;
+                border-bottom: 1px solid #EAF3F3;
+                font-size: 0.92rem;
+                color: var(--text-dark);
+            }
+
+                .module-feature-list li:last-child {
+                    border-bottom: none;
+                }
+
+                .module-feature-list li i {
+                    color: var(--teal);
+                    font-size: 1rem;
+                    margin-top: 2px;
+                    flex-shrink: 0;
+                }
+
+        .module-icon-big {
+            font-size: 3.5rem;
+            color: var(--teal);
+        }
+
+        /* ── PRICING ── */
+        .pricing-section {
+            padding: 100px 0;
+            background: var(--teal-deeper);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .pricing-section::before {
+                content: '';
+                position: absolute;
+                top: -80px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 900px;
+                height: 350px;
+                background: radial-gradient(ellipse, rgba(20,189,172,0.12) 0%, transparent 70%);
+            }
+
+            .pricing-section .section-title {
+                color: var(--white);
+            }
+
+            .pricing-section .section-subtitle {
+                color: rgba(255,255,255,0.5);
+            }
+
+            .pricing-section .section-eyebrow {
+                color: var(--mint-light);
+            }
+
+        .plan-card {
+            background: rgba(255,255,255,0.04);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 36px 30px;
+            height: 100%;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+            .plan-card:hover {
+                border-color: rgba(20,189,172,0.45);
+                background: rgba(20,189,172,0.06);
+                transform: translateY(-5px);
+            }
+
+            .plan-card.featured {
+                border-color: var(--mint);
+                background: rgba(20,189,172,0.08);
+            }
+
+        .popular-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--mint);
+            color: var(--teal-deeper);
+            font-size: 0.67rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 5px 18px;
+            border-radius: 100px;
+        }
+
+        .plan-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--white);
+            margin-bottom: 5px;
+        }
+
+        .plan-tagline {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 22px;
+        }
+
+        .plan-price {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--mint-light);
+            line-height: 1;
+        }
+
+            .plan-price sup {
+                font-size: 1rem;
+                vertical-align: top;
+                margin-top: 8px;
+            }
+
+            .plan-price span {
+                font-size: 0.88rem;
+                color: rgba(255,255,255,0.35);
+                font-weight: 400;
+            }
+
+        .plan-divider {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin: 22px 0;
+        }
+
+        .plan-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 0;
+            font-size: 0.87rem;
+        }
+
+            .plan-feature.available {
+                color: rgba(255,255,255,0.82);
+            }
+
+            .plan-feature.unavailable {
+                color: rgba(255,255,255,0.22);
+            }
+
+            .plan-feature i.bi-check-circle-fill {
+                color: var(--mint);
+            }
+
+            .plan-feature i.bi-x-circle {
+                color: rgba(255,255,255,0.2);
+            }
+
+        .btn-plan {
+            display: block;
+            width: 100%;
+            padding: 13px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 26px;
+            transition: all 0.25s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-plan-outline {
+            background: transparent;
+            border: 1.5px solid rgba(20,189,172,0.4);
+            color: var(--mint-light);
+        }
+
+            .btn-plan-outline:hover {
+                background: var(--mint);
+                color: var(--teal-deeper);
+            }
+
+        .btn-plan-filled {
+            background: var(--mint);
+            color: var(--teal-deeper);
+        }
+
+            .btn-plan-filled:hover {
+                background: var(--mint-light);
+                box-shadow: 0 6px 20px rgba(20,189,172,0.3);
+            }
+
+        /* ── WHY US ── */
+        .why-section {
+            padding: 100px 0;
+            background: var(--off-white);
+        }
+
+        .why-card {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            padding: 24px;
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 18px;
+            transition: all 0.25s;
+        }
+
+            .why-card:hover {
+                border-color: var(--mint);
+                box-shadow: 0 8px 24px rgba(13,115,119,0.09);
+            }
+
+        .why-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--mint-pale);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--teal);
+            flex-shrink: 0;
+        }
+
+        .why-card h6 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .why-card p {
+            font-size: 0.87rem;
+            color: var(--gray);
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        /* ── TESTIMONIALS ── */
+        .testimonials-section {
+            padding: 100px 0;
+            background: #EAF7F7;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            height: 100%;
+        }
+
+        .stars {
+            color: var(--teal);
+            font-size: 0.9rem;
+            margin-bottom: 14px;
+        }
+
+        .testimonial-text {
+            font-size: 0.92rem;
+            color: var(--text-mid);
+            line-height: 1.75;
+            font-style: italic;
+            margin-bottom: 22px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .author-role {
+            font-size: 0.77rem;
+            color: var(--gray);
+        }
+
+        /* ── CTA ── */
+        .cta-section {
+            padding: 90px 0;
+            background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-deeper) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .cta-section::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(ellipse at center, rgba(20,189,172,0.15) 0%, transparent 70%);
+            }
+
+            .cta-section h2 {
+                color: var(--white);
+                margin-bottom: 14px;
+                font-size: clamp(1.8rem, 3vw, 2.5rem);
+            }
+
+            .cta-section p {
+                color: rgba(255,255,255,0.55);
+                font-size: 1rem;
+                margin-bottom: 36px;
+            }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--teal-deeper);
+            padding: 70px 0 30px;
+            border-top: 2px solid rgba(20,189,172,0.2);
+        }
+
+        .footer-brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--mint-light);
+            font-weight: 900;
+        }
+
+        .footer-desc {
+            font-size: 0.87rem;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.7;
+            margin-top: 12px;
+        }
+
+        footer h6 {
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.83rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .footer-link {
+            display: block;
+            color: rgba(255,255,255,0.38);
+            font-size: 0.87rem;
+            text-decoration: none;
+            padding: 4px 0;
+            transition: color 0.2s;
+        }
+
+            .footer-link:hover {
+                color: var(--mint-light);
+            }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+            .footer-contact-item i {
+                color: var(--mint);
+                font-size: 0.95rem;
+                margin-top: 2px;
+            }
+
+            .footer-contact-item span {
+                font-size: 0.87rem;
+                color: rgba(255,255,255,0.45);
+            }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.07);
+            margin-top: 48px;
+            padding-top: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+            .footer-bottom p {
+                margin: 0;
+                font-size: 0.82rem;
+                color: rgba(255,255,255,0.28);
+            }
+
+            .footer-bottom a {
+                color: var(--mint-light);
+                text-decoration: none;
+            }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--teal-deeper);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--mint);
+            border-radius: 3px;
+        }
+
+        @@media (max-width: 768px) {
+            .hero {
+                padding: 80px 0;
+                min-height: auto;
+            }
+
+            .hero-visual {
+                margin-top: 46px;
+            }
+        }
+
+        footer {
+            padding: 3rem 5%;
+            background: #var(--teal-deeper);
+            ;
+            border-top: 1px solid rgba(234, 179, 55, 0.1);
+            text-align: center;
+            color: #a0aec0;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        body.purple-theme footer {
+            background: #0a0e27;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-brand {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="https://bkinfotech.net/">
+                <img src="~/CompanyLogos/bk-infotech.png" alt="BK-InfoTech Logo" />
+                <div class="brand-text">
+                    <span class="brand-name">ePharmacy</span>
+                    <span class="brand-sub" style="text-transform:none;">by BK-InfoTech</span>
+                </div>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" style="color:var(--mint)">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-1 py-3 py-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#modules">Modules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#why-us">Why Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item ms-lg-2"><a class="nav-link btn-nav-cta" href="@Url.Action("Login", "Auth", new { Area = "" })">Get Started</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="container position-relative" style="z-index:1;">
+            <div class="row align-items-center gy-5">
+                <div class="col-lg-6">
+                    <div class="hero-pill"><i class="bi bi-capsule-pill me-2"></i>Pharmacy Management System</div>
+                    <h1>
+                        Project Management,
+                        Reimagined
+                    </h1>
+                    <p>Streamline your workflow with Flowtick. Track, manage, and deliver projects with unparalleled efficiency.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#pricing" class="btn-primary-hero">View Pricing Plans</a>
+                        <a href="#features" class="btn-outline-hero">Explore Features</a>
+                    </div>
+                    <div class="d-flex gap-4 mt-5">
+                        <div>
+                            <div style="font-size:1.55rem;font-weight:700;color:var(--mint-light);font-family:'Playfair Display',serif;">3+</div>
+                            <div style="font-size:0.76rem;color:rgba(255,255,255,0.4);letter-spacing:1px;">Pharmacies Trusted</div>
+                        </div>
+                        <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
+                        <div>
+                            <div style="font-size:1.55rem;font-weight:700;color:var(--mint-light);font-family:'Playfair Display',serif;">4</div>
+                            <div style="font-size:0.76rem;color:rgba(255,255,255,0.4);letter-spacing:1px;">Flexible Plans</div>
+                        </div>
+                        <div style="width:1px;background:rgba(255,255,255,0.1);"></div>
+                        <div>
+                            <div style="font-size:1.55rem;font-weight:700;color:var(--mint-light);font-family:'Playfair Display',serif;">24/7</div>
+                            <div style="font-size:0.76rem;color:rgba(255,255,255,0.4);letter-spacing:1px;">Support Available</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="hero-visual">
+                        <div style="font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;">Live Dashboard Overview</div>
+                        <div class="hero-stat-card">
+                            <div class="stat-icon"><i class="bi bi-box-seam"></i></div>
+                            <div><div class="stat-label">Total Stock Items</div><div class="stat-value">2,847 Medicines</div></div>
+                        </div>
+                        <div class="hero-stat-card">
+                            <div class="stat-icon"><i class="bi bi-receipt-cutoff"></i></div>
+                            <div><div class="stat-label">Today's Sales</div><div class="stat-value">PKR 48,200</div></div>
+                        </div>
+                        <div class="hero-stat-card">
+                            <div class="stat-icon"><i class="bi bi-exclamation-triangle"></i></div>
+                            <div><div class="stat-label">Low Stock Alerts</div><div class="stat-value">12 Items Need Reorder</div></div>
+                        </div>
+                        <div class="hero-stat-card" style="margin-bottom:0;">
+                            <div class="stat-icon"><i class="bi bi-calendar-check"></i></div>
+                            <div><div class="stat-label">Expiry Alerts</div><div class="stat-value">5 Medicines Expiring Soon</div></div>
+                        </div>
+                        <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;">
+                            <div style="font-size:0.73rem;color:rgba(255,255,255,0.28);">Branch: Main Peshawar</div>
+                            <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 0 3px rgba(34,197,94,0.2);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-eyebrow">Powerful Features</div>
+                <h2 class="section-title">Everything Your Project Needs</h2>
+                <div class="divider-teal mx-auto"></div>
+                <p class="section-subtitle mx-auto">Streamline your workflow with Flowtick. Track, manage, and deliver projects with unparalleled efficiency.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h5>Visual Boards</h5>
+                        <p>
+                            Organize tasks with intuitive kanban boards, sprint planning, and customizable workflows that adapt
+                            to your team.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h5>Real-time Collaboration</h5>
+                        <p>
+                            Work together seamlessly with instant updates, comments, and notifications that keep everyone in
+                            sync.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h5>Advanced Analytics</h5>
+                        <p>Make data-driven decisions with powerful reporting, burndown charts, and velocity tracking.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h5>Integrations</h5>
+                        <p>Connect with your favorite tools including Slack, GitHub, and 100+ other apps.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            🎯
+                        </div>
+                        <h5>Custom Workflows</h5>
+                        <p>Design workflows that match your process with custom fields, statuses, and automation rules.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h5>Enterprise Security</h5>
+                        <p>Bank-level encryption, SSO, and compliance with SOC 2, GDPR, and ISO 27001 standards.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODULES -->
+    <section class="modules-section" id="modules">
+        <div class="container">
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6">
+                    <div class="section-eyebrow">System Modules</div>
+                    <h2 class="section-title">Powerful Modules, Seamlessly Integrated</h2>
+                    <div class="divider-teal"></div>
+                    <p class="section-subtitle">Each module is purpose-built for project workflows. Click a module to explore its features.</p>
+                </div>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <button class="module-tab-btn active" onclick="showModule('stock')">Project Management</button>
+                <button class="module-tab-btn" onclick="showModule('pos')">Project Boards</button>
+                <button class="module-tab-btn" onclick="showModule('purchase')">Sprints</button>
+                <button class="module-tab-btn" onclick="showModule('reports')">Backlog</button>
+                <button class="module-tab-btn" onclick="showModule('employee')">Tasking</button>
+                <button class="module-tab-btn" onclick="showModule('finance')">Assignee & Reviewer</button>
+            </div>
+
+            <div id="mod-stock" class="module-detail-card">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <div class="section-eyebrow">Stock Management</div>
+                        <h3 style="font-size:1.75rem;color:var(--text-dark);margin-bottom:20px;">Complete Inventory Control</h3>
+                        <ul class="module-feature-list">
+                            <li><i class="bi bi-check-circle-fill"></i>Add, edit &amp; categorize medicines with full details</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Batch &amp; expiry date tracking with automatic alerts</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Low stock threshold notifications</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Inter-branch stock transfer management</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Barcode &amp; SKU support</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Supplier-wise stock history</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                        <i class="bi bi-boxes module-icon-big"></i>
+                        <div style="background:var(--mint-pale);border-radius:12px;padding:20px;margin-top:20px;">
+                            <div style="font-size:2rem;font-weight:700;color:var(--teal);font-family:'Playfair Display',serif;">99.9%</div>
+                            <div style="font-size:0.82rem;color:var(--gray);">Inventory Accuracy Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="mod-pos" class="module-detail-card" style="display:none;">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <div class="section-eyebrow">POS &amp; Billing</div>
+                        <h3 style="font-size:1.75rem;color:var(--text-dark);margin-bottom:20px;">Fast &amp; Accurate Billing</h3>
+                        <ul class="module-feature-list">
+                            <li><i class="bi bi-check-circle-fill"></i>Touchscreen-friendly POS interface</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Barcode scanner integration</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Customer-wise sale history &amp; discounts</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Multiple payment methods (cash, card, credit)</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Thermal &amp; A4 receipt printing</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Return &amp; exchange billing</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                        <i class="bi bi-upc-scan module-icon-big"></i>
+                        <div style="background:var(--mint-pale);border-radius:12px;padding:20px;margin-top:20px;">
+                            <div style="font-size:2rem;font-weight:700;color:var(--teal);font-family:'Playfair Display',serif;">3x</div>
+                            <div style="font-size:0.82rem;color:var(--gray);">Faster Than Manual Billing</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="mod-purchase" class="module-detail-card" style="display:none;">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <div class="section-eyebrow">Purchase Management</div>
+                        <h3 style="font-size:1.75rem;color:var(--text-dark);margin-bottom:20px;">Smart Procurement</h3>
+                        <ul class="module-feature-list">
+                            <li><i class="bi bi-check-circle-fill"></i>Supplier directory with contact management</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Purchase order creation &amp; tracking</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Goods receiving with stock auto-update</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Purchase return management</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Supplier payment ledger</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Price comparison across suppliers</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                        <i class="bi bi-truck module-icon-big"></i>
+                        <div style="background:var(--mint-pale);border-radius:12px;padding:20px;margin-top:20px;">
+                            <div style="font-size:2rem;font-weight:700;color:var(--teal);font-family:'Playfair Display',serif;">40%</div>
+                            <div style="font-size:0.82rem;color:var(--gray);">Reduction in Overstock</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="mod-reports" class="module-detail-card" style="display:none;">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <div class="section-eyebrow">Reporting</div>
+                        <h3 style="font-size:1.75rem;color:var(--text-dark);margin-bottom:20px;">Data-Driven Insights</h3>
+                        <ul class="module-feature-list">
+                            <li><i class="bi bi-check-circle-fill"></i>Daily, monthly &amp; yearly sales reports</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Profit &amp; loss statements</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Medicine-wise sale analysis</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Expiry &amp; near-expiry stock reports</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Customer purchase history</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Export to PDF &amp; Excel</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                        <i class="bi bi-bar-chart-line module-icon-big"></i>
+                        <div style="background:var(--mint-pale);border-radius:12px;padding:20px;margin-top:20px;">
+                            <div style="font-size:2rem;font-weight:700;color:var(--teal);font-family:'Playfair Display',serif;">20+</div>
+                            <div style="font-size:0.82rem;color:var(--gray);">Built-in Report Templates</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="mod-employee" class="module-detail-card" style="display:none;">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <div class="section-eyebrow">Employee &amp; Payroll</div>
+                        <h3 style="font-size:1.75rem;color:var(--text-dark);margin-bottom:20px;">HR Made Simple</h3>
+                        <ul class="module-feature-list">
+                            <li><i class="bi bi-check-circle-fill"></i>Complete employee profile management</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Attendance tracking (manual &amp; biometric)</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Salary calculation with allowances &amp; deductions</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Payslip generation &amp; printing</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Advance salary &amp; loan management</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Employee documents &amp; contract storage</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                        <i class="bi bi-people module-icon-big"></i>
+                        <div style="background:var(--mint-pale);border-radius:12px;padding:20px;margin-top:20px;">
+                            <div style="font-size:0.75rem;color:var(--gray);margin-bottom:6px;">Available in</div>
+                            <div style="font-size:1.1rem;font-weight:700;color:var(--teal);">Professional &amp; Enterprise</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="mod-finance" class="module-detail-card" style="display:none;">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <div class="section-eyebrow">Financial Accounts</div>
+                        <h3 style="font-size:1.75rem;color:var(--text-dark);margin-bottom:20px;">Full Accounting Suite</h3>
+                        <ul class="module-feature-list">
+                            <li><i class="bi bi-check-circle-fill"></i>Chart of accounts &amp; general ledger</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Cash &amp; bank account management</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Journal vouchers &amp; contra entries</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Trial balance &amp; balance sheet</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Receivables &amp; payables management</li>
+                            <li><i class="bi bi-check-circle-fill"></i>Tax reporting &amp; expense tracking</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                        <i class="bi bi-journal-check module-icon-big"></i>
+                        <div style="background:var(--mint-pale);border-radius:12px;padding:20px;margin-top:20px;">
+                            <div style="font-size:0.75rem;color:var(--gray);margin-bottom:6px;">Available in</div>
+                            <div style="font-size:1.1rem;font-weight:700;color:var(--teal);">Enterprise Plan Only</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-eyebrow">Pricing Plans</div>
+                <h2 class="section-title">Simple, Transparent Pricing</h2>
+                <div class="divider-teal mx-auto"></div>
+                <p class="section-subtitle mx-auto">Choose the plan that fits your project requirements. No hidden charges. Cancel anytime.</p>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-3 col-md-6">
+                    <div class="plan-card">
+                        <div class="plan-name">Free</div>
+                        <div class="plan-tagline">Perfect for single-branch pharmacies</div>
+                        <div class="plan-price"><sup>PKR</sup> 0 <span>upto 500 invoices</span></div>
+                        <div class="plan-divider"></div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Stock Management</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> POS &amp; Billing</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Sale &amp; Purchase Module</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Multiple Branches</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> All Reports</div>
+                        <div class="plan-feature unavailable"><i class="bi bi-x-circle"></i> Employee Management</div>
+                        <div class="plan-feature unavailable"><i class="bi bi-x-circle"></i> Payroll Management</div>
+                        <div class="plan-feature unavailable"><i class="bi bi-x-circle"></i> Financial Accounts</div>
+                        <a href="@Url.Action("Login", "Auth", new { Area = "" })" class="btn-plan btn-plan-outline">Get Started</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="plan-card">
+                        <div class="plan-name">Starter</div>
+                        <div class="plan-tagline">Perfect for single-branch pharmacies</div>
+                        <div class="plan-price"><sup>PKR</sup> 1 <span>/ invoice</span></div>
+                        <div class="plan-divider"></div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Stock Management</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> POS &amp; Billing</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Sale &amp; Purchase Module</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Multiple Branches</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> All Reports</div>
+                        <div class="plan-feature unavailable"><i class="bi bi-x-circle"></i> Employee Management</div>
+                        <div class="plan-feature unavailable"><i class="bi bi-x-circle"></i> Payroll Management</div>
+                        <div class="plan-feature unavailable"><i class="bi bi-x-circle"></i> Financial Accounts</div>
+                        <a href="@Url.Action("Login", "Auth", new { Area = "" })" class="btn-plan btn-plan-outline">Get Started</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="plan-card featured">
+                        <div class="popular-badge">Most Popular</div>
+                        <div class="plan-name">Professional</div>
+                        <div class="plan-tagline">For growing pharmacies with staff</div>
+                        <div class="plan-price"><sup>PKR</sup>1,000<span> / month</span></div>
+                        <div class="plan-divider"></div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Everything in Starter</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Stock Management</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> POS &amp; Billing</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Sale &amp; Purchase Module</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Employee Management</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Payroll Management</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> All Reports</div>
+                        <div class="plan-feature unavailable"><i class="bi bi-x-circle"></i> Financial Accounts</div>
+                        <a href="@Url.Action("Login", "Auth", new { Area = "" })" class="btn-plan btn-plan-filled">Get Started</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="plan-card">
+                        <div class="plan-name">Enterprise</div>
+                        <div class="plan-tagline">Full suite for pharmacy chains</div>
+                        <div class="plan-price"><sup>PKR</sup> 5,000 <span>/ month</span></div>
+                        <div class="plan-divider"></div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Everything in Professional</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Stock Management</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> POS &amp; Billing</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Sale &amp; Purchase Module</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Employee Management</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Payroll Management</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> Financial Accounts</div>
+                        <div class="plan-feature available"><i class="bi bi-check-circle-fill"></i> All Reports</div>
+                        <a href="@Url.Action("Login", "Auth", new { Area = "" })" class="btn-plan btn-plan-outline">Get Started</a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <p style="color:rgba(255,255,255,0.3);font-size:0.84rem;">All plans include free onboarding, data migration &amp; software updates. <a href="#contact" style="color:var(--mint-light);">Contact us</a> for custom enterprise pricing.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY US -->
+    <section class="why-section" id="why-us">
+        <div class="container">
+            <div class="row align-items-center gy-5">
+                <div class="col-lg-5">
+                    <div class="section-eyebrow">Why ePharmacy</div>
+                    <h2 class="section-title">Built for Pakistan's Pharmacies</h2>
+                    <div class="divider-teal"></div>
+                    <p class="section-subtitle">We understand the unique challenges of running a pharmacy in Pakistan — from managing multiple suppliers to dealing with expiry-heavy inventory and ensuring compliance.</p>
+                    <div class="mt-4" style="background:var(--mint-pale);border:1.5px solid var(--border);border-radius:12px;padding:24px;">
+                        <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--text-dark);margin-bottom:8px;">"ePharmacy transformed how we run our pharmacy chain."</div>
+                        <div style="font-size:0.82rem;color:var(--gray);">— Pharmacy owner, Peshawar</div>
+                    </div>
+                </div>
+                <div class="col-lg-6 offset-lg-1">
+                    <div class="why-card">
+                        <div class="why-icon"><i class="bi bi-shield-check"></i></div>
+                        <div><h6>Secure &amp; Reliable</h6><p>Your data is protected with role-based access control and regular backups. We ensure 99.9% uptime so your pharmacy never stops.</p></div>
+                    </div>
+                    <div class="why-card">
+                        <div class="why-icon"><i class="bi bi-telephone-inbound"></i></div>
+                        <div><h6>Dedicated Local Support</h6><p>Our Urdu &amp; English speaking support team is just a call away. Free training provided for all your staff on day one.</p></div>
+                    </div>
+                    <div class="why-card">
+                        <div class="why-icon"><i class="bi bi-lightning-charge"></i></div>
+                        <div><h6>Quick Setup &amp; Go-Live</h6><p>Be up and running in less than a day. We handle data migration, setup, and training so you don't lose any business time.</p></div>
+                    </div>
+                    <div class="why-card" style="margin-bottom:0;">
+                        <div class="why-icon"><i class="bi bi-arrow-up-circle"></i></div>
+                        <div><h6>Always Improving</h6><p>Regular feature updates based on real pharmacy feedback — your subscription always includes the latest version at no extra cost.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials-section" hidden>
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-eyebrow">Testimonials</div>
+                <h2 class="section-title">What Pharmacists Say</h2>
+                <div class="divider-teal mx-auto"></div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                        <p class="testimonial-text">"Managing stock used to be a nightmare. With ePharmacy, I know exactly what's running low and about to expire. Saved us from huge losses."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">AK</div>
+                            <div><div class="author-name">Ahmed Khan</div><div class="author-role">Owner, ABC Pharmacy, Peshawar</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
+                        <p class="testimonial-text">"The billing system is incredibly fast. Customers no longer wait in queues. The Professional plan with payroll is exactly what we needed for our team of 8."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">SA</div>
+                            <div><div class="author-name">Sara Afridi</div><div class="author-role">Manager, ABC Pharmacy, Mardan</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i></div>
+                        <p class="testimonial-text">"We have 3 branches and ePharmacy handles all of them from one account. Financial reports across branches made our quarterly review so much easier."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">UR</div>
+                            <div><div class="author-name">Usman Rehman</div><div class="author-role">Director, ABC Chain, KPK</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container position-relative">
+            <h2>Ready to Automate Your Project?</h2>
+            <p>Start with a free demo today. No credit card required. Our team will walk you through the system.</p>
+            <div class="d-flex flex-wrap gap-3 justify-content-center">
+                <a href="#contact" class="btn-primary-hero">Request Free Demo</a>
+                <a href="#pricing" class="btn-outline-hero">See Pricing</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->  
+    <footer id="contact">
+        <div class="container">
+            <div class="row g-5" hidden>
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <img src="~/CompanyLogos/bk-infotech.png" alt="BK-InfoTech" style="height:44px;width:44px;border-radius:50%;background:var(--white);padding:3px;object-fit:contain;" />
+                        <div>
+                            <div class="footer-brand-name">ePharmacy</div>
+                            <div style="font-size:0.63rem;color:rgba(255,255,255,0.3);letter-spacing:2px;">by BK-InfoTech</div>
+                        </div>
+                    </div>
+                    <p class="footer-desc">A complete Pharmacy Management System designed for Pakistani pharmacies. Manage stock, billing, employees, and finances ! all in one place.</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="#" style="width:36px;height:36px;background:rgba(255,255,255,0.06);border-radius:6px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);text-decoration:none;font-size:1rem;"><i class="bi bi-facebook"></i></a>
+                        <a href="#" style="width:36px;height:36px;background:rgba(255,255,255,0.06);border-radius:6px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);text-decoration:none;font-size:1rem;"><i class="bi bi-whatsapp"></i></a>
+                        <a href="#" style="width:36px;height:36px;background:rgba(255,255,255,0.06);border-radius:6px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);text-decoration:none;font-size:1rem;"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h6>Product</h6>
+                    <a href="#features" class="footer-link">Features</a>
+                    <a href="#modules" class="footer-link">Modules</a>
+                    <a href="#pricing" class="footer-link">Pricing</a>
+                    <a href="#" class="footer-link">Changelog</a>
+                    <a href="#" class="footer-link">Roadmap</a>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h6>Company</h6>
+                    <a href="https://bkinfotech.net/" class="footer-link" target="_blank">About BK-InfoTech</a>
+                    <a href="https://bkinfotech.net/#team" class="footer-link" target="_blank">Our Team</a>
+                    <a href="https://bkinfotech.net/#services" class="footer-link" target="_blank">Services</a>
+                    <a href="https://bkinfotech.net/" class="footer-link" target="_blank">Privacy Policy</a>
+                    <a href="https://bkinfotech.net/" class="footer-link" target="_blank">Terms of Use</a>
+                </div>
+                <div class="col-lg-4">
+                    <h6>Get in Touch</h6>
+                    <div class="footer-contact-item"><i class="bi bi-geo-alt-fill"></i><span>Peshawar, Khyber Pakhtunkhwa, Pakistan</span></div>
+                    <div class="footer-contact-item"><i class="bi bi-telephone-fill"></i><span>+92 334 9212728</span></div>
+                    <div class="footer-contact-item"><i class="bi bi-envelope-fill"></i><span>info@bkinfotech.net</span></div>
+                    <div class="footer-contact-item"><i class="bi bi-clock-fill"></i><span>Mon–Sat: 9:00 AM – 6:00 PM</span></div>
+                    <div style="margin-top:20px;">
+                        <a href="mailto:info@bkinfotech.com" class="btn-primary-hero" style="font-size:0.85rem;padding:11px 24px;"><i class="bi bi-envelope me-2"></i>Email Us</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© @DateTime.Now.Year.ToString() <a href="#">Flowtick</a>. All rights reserved.</p>                
+                <p>Designed &amp; Developed by Fophex</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showModule(name) {
+            const modules = ['stock', 'pos', 'purchase', 'reports', 'employee', 'finance'];
+            modules.forEach(m => {
+                document.getElementById('mod-' + m).style.display = (m === name) ? 'block' : 'none';
+            });
+            document.querySelectorAll('.module-tab-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', modules[i] === name);
+            });
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.feature-card, .why-card, .plan-card, .testimonial-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(22px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });</script>
+</body>
+</html>
+
