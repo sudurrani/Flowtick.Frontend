@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="380" height="80" viewBox="0 0 380 80">
+  <title>Flowtick Text Wordmark – Dark Background Version</title>
+  <desc>Flowtick wordmark text only, Flow in white, tick in teal, with tagline — for use on dark backgrounds</desc>
+
+  <!-- "Flow" in white -->
+  <text x="0" y="52"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="52" font-weight="700" letter-spacing="-2"
+        fill="#ffffff">Flow</text>
+
+  <!-- "tick" in teal -->
+  <text x="112" y="52"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="52" font-weight="700" letter-spacing="-2"
+        fill="#0d9488">tick</text>
+
+  <!-- Tagline in soft white -->
+  <text x="2" y="72"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="13" font-weight="400" letter-spacing="0.4"
+        fill="rgba(255,255,255,0.6)">Project &amp; Task Management, Simplified</text>
+</svg>

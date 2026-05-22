@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <title>Flowtick Icon</title>
+  <desc>Flowtick round icon mark with flow bars and tick checkmark</desc>
+
+  <!-- Teal circle background -->
+  <circle cx="100" cy="100" r="100" fill="#0d9488"/>
+
+  <!-- Flow bars — staggered for motion feel -->
+  <rect x="52" y="118" width="64" height="14" rx="7" fill="rgba(255,255,255,0.35)"/>
+  <rect x="58" y="97"  width="78" height="14" rx="7" fill="rgba(255,255,255,0.65)"/>
+  <rect x="52" y="76"  width="70" height="14" rx="7" fill="#ffffff"/>
+
+  <!-- Tick checkmark top-right -->
+  <path d="M130,72 L140,90 L162,60"
+        fill="none" stroke="#ffffff" stroke-width="8"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

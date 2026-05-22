@@ -8,7 +8,7 @@ body {
 
 .wrapper {
     max-width: 900px;
-    margin: 25px auto;
+    margin: 5px auto;
     padding: 0 20px;
     text-align: center;
 }
@@ -19,10 +19,10 @@ body {
 }
 
 .top-logo-text img {
-    font-size: 42px;
-    height: 50px;
-    width: 50px;
-    margin-bottom: 15px;
+    /*font-size: 42px;*/
+    /*height: 50px;
+    width: 50px;*/
+    margin-bottom: 5px;
 }
 
 .top-logo-text span {
