@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="104" viewBox="0 0 420 104">
+  <title>Flowtick Wordmark – Icon + No Tagline</title>
+  <desc>Flowtick full horizontal logo with round teal icon and wordmark, no tagline</desc>
+
+  <!-- Icon mark -->
+  <circle cx="52" cy="52" r="52" fill="#0d9488"/>
+
+  <!-- Flow bars -->
+  <rect x="28" y="66" width="44" height="10" rx="5" fill="rgba(255,255,255,0.35)"/>
+  <rect x="32" y="50" width="54" height="10" rx="5" fill="rgba(255,255,255,0.65)"/>
+  <rect x="28" y="34" width="48" height="10" rx="5" fill="#ffffff"/>
+
+  <!-- Tick checkmark -->
+  <path d="M77,44 L83,54 L96,38"
+        fill="none" stroke="#ffffff" stroke-width="4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- "Flow" in dark -->
+  <text x="122" y="72"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="52" font-weight="700" letter-spacing="-2"
+        fill="#0f172a">Flow</text>
+
+  <!-- "tick" in teal -->
+  <text x="234" y="72"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="52" font-weight="700" letter-spacing="-2"
+        fill="#0d9488">tick</text>
+</svg>

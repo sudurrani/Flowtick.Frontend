@@ -25,7 +25,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 }
 
 /* logo row */
-.sb-logo{display:flex;align-items:center;gap:9px;padding:12px 12px 12px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;min-height:var(--top-h)}
+.sb-logo{display:flex;align-items:center;gap:9px;padding:12px 12px 12px 2px;border-bottom:1px solid var(--bd);flex-shrink:0;min-height:var(--top-h)}
 .sb-logo-icon{width:28px;height:28px;border-radius:8px;background:var(--pt);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0}
 .sb-logo-name{font-size:14px;font-weight:800;color:var(--txt);letter-spacing:-.03em;white-space:nowrap;flex:1;overflow:hidden}
 .sb-logo-name span{color:var(--pt)}
@@ -228,8 +228,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
     <!-- ═══ SIDEBAR ═══ -->
     <aside class="ft-sb" id="ft-sb">
         <div class="sb-logo">
-            <div class="sb-logo-icon"><i class="bi bi-lightning-charge-fill"></i></div>
-            <span class="sb-logo-name">Flow<span>tick</span></span>
+            @* <div class="sb-logo-icon"><i class="bi bi-lightning-charge-fill"></i></div> *@
+            @* <span class="sb-logo-name">Flow<span>tick</span></span> *@
+        <img src="/img/Logo/flowtick.svg" width="200" />
             <button class="sb-tog" id="sb-tog" aria-label="Toggle sidebar"><i class="bi bi-layout-sidebar-reverse" id="sb-tog-icon"></i></button>
         </div>
         <div class="sb-body">
