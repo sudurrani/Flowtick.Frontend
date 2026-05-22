@@ -61,7 +61,8 @@
                 </div>
                 <div class="ft-form-group" id="ft-fg-project-category">
                     <label class="ft-form-label" for="ft-project-category">Category</label>
-                    <select class="ft-input" id="ft-project-category">
+                    <select class="select2" id="ft-project-category">
+                        <option value="">Select Category</option>
                         <option value="Software development">Software development</option>
                         <option value="Design">Design</option>
                         <option value="Marketing">Marketing</option>
@@ -142,7 +143,6 @@
     $(function () {
 
         $("#ft-add-project").click(function () {
-
             $('#projectModalProjectId').val('0');
             $('#ft-project-name').val('');
             $('#ft-project-key').val('');

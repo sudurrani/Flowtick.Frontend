@@ -6,11 +6,6 @@
 <!-- Bootstrap Datepicker CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.10.0/dist/css/bootstrap-datepicker.min.css">
 <style>
-	* {
-		box-sizing: border-box;
-		margin: 0;
-		padding: 0
-	}
 
 	:root {
 		/* ── Backgrounds ── */
@@ -1094,6 +1089,7 @@
 		projectId = getAndDecryptID(id);
 
 
+
 	  $('.datepicker').datepicker({
 		format: 'dd-mm-yyyy',
 		autoclose: true,
@@ -1109,7 +1105,6 @@
 		getProjectSprints();
 		getSprintBacklog();
 		getSprintStatuses();
-
 
 	});
 	$(document).on("click", ".activate-sprint-btn", function () {
@@ -1302,6 +1297,9 @@
 			sprintBacklogArray = response.data; // your array
 			//console.log(sprintBacklogArray);
 			renderSprintsBacklog();
+
+		  $('#ft-bc-current-page').hide();
+	      $('#ft-board-badge').html('<i class="bi bi-kanban"></i> Backlog');
 		}
 		else {
 			errorExtractor(response);
@@ -1615,7 +1613,7 @@
 		let totalItemInBacklog = backlogArray.length;
 		$('#bl-count').text(totalItemInBacklog + ' items');
 		$('#bl-notsprint').text(totalItemInBacklog);
-		console.log(totalItemInBacklog);
+		//console.log(totalItemInBacklog);
 		var sprintList = "";
 		$.each(_projectSprintArray, function (i, sprint) {
 			sprintList += `
@@ -1642,7 +1640,7 @@
 							<td><div class="prio-cell"><span class="prio-dot med"></span><span class="prio-text">Medium</span></div></td>
 							<td><div class="assign-cell"><span class="av av-mn">${getInitials(task.assignee)}</span>${task.assignee}</div></td>
 							<td>${statusHtml}</td>
-							<td><select class="sprint-sel" onchange="addTaskToSprint(this)" data-task-id="${task.id}" >
+							<td><select class="sprint-sel select2" onchange="addTaskToSprint(this)" data-task-id="${task.id}" >
 								  <option value="">Select sprint</option>
 									${sprintList}
 							   </select>
@@ -1652,6 +1650,18 @@
 
 		  $backlogTbody.append(tr);
 		});
+	$('#backlogTableTbody .select2').each(function () {
+		if (!$(this).hasClass("select2-hidden-accessible")) {
+			$(this).select2({
+				width: '100%',
+				dropdownParent: $(this).closest('td')
+			});
+		}
+	});
+	setTimeout( function(){
+			$('body').css('overflow', 'hidden');
+	},1000);
+
 	}
 	function addTaskToSprint(selectEl){
 	   const sprintId = selectEl.value;

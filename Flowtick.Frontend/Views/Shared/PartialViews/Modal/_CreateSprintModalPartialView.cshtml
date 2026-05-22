@@ -43,7 +43,7 @@
                     <label class="ft-form-label" for="ft-sprint-status">
                         Status <span class="ft-label-required">*</span>
                     </label>
-                    <select class="ft-input" id="ft-sprint-status">
+                    <select class="select2" id="ft-sprint-status">
                         
                     </select>
                     <span class="ft-form-error ft-hidden" id="ft-error-sprint-status">
@@ -112,7 +112,7 @@
                     <label class="ft-form-label" for="ft-sprint-lead">
                         Sprint lead <span class="ft-label-optional">(optional)</span>
                     </label>
-                    <select class="ft-input" id="ft-sprint-lead">
+                    <select class="select2" id="ft-sprint-lead">
                        
                     </select>
                 </div>
@@ -210,7 +210,6 @@
       $('#ft-submit-sprint').on('click', function () {
           createSprint();
       });
-
 
     });
     function loadSprintStatusesDropdown(){
