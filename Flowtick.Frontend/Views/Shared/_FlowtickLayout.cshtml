@@ -118,9 +118,10 @@
                  ============================================================ -->
 
             <header class="ft-header" id="ft-header">
-
+                <button class="sb-tog" id="sb-tog-header" aria-label="Toggle sidebar" style="display:none;"><i class="bi bi-layout-sidebar-reverse" id="sb-tog-icon-header"></i></button>
                 <!-- LEFT: Breadcrumb navigation -->
                 <div class="ft-header__left" id="ft-header-left">
+              
   
                     <nav class="ft-breadcrumb" id="ft-breadcrumb" aria-label="Breadcrumb">
                         <span class="ft-breadcrumb__link" id="ft-bc-projects">
@@ -379,6 +380,12 @@
     @*    Add Board Modal Partial View *@
     @{
         @await Html.PartialAsync("~/Views/Shared/PartialViews/Modal/_AddBoardModalPartialView.cshtml")
+        ;
+    }
+
+    @*    Create Project Partial View *@
+    @{
+        @await Html.PartialAsync("~/Views/Shared/PartialViews/Modal/_CreateProjectModalPartialView.cshtml")
         ;
     }
     <script>

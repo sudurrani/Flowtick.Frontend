@@ -24,7 +24,7 @@
 
         <!-- Body -->
         <div class="ft-modal__body">
-
+            <input type="hidden" id="projectModalProjectId" />
             <!-- Project name -->
             <div class="ft-form-group" id="ft-fg-project-name">
                 <label class="ft-form-label" for="ft-project-name">
@@ -62,11 +62,11 @@
                 <div class="ft-form-group" id="ft-fg-project-category">
                     <label class="ft-form-label" for="ft-project-category">Category</label>
                     <select class="ft-input" id="ft-project-category">
-                        <option value="software">Software development</option>
-                        <option value="design">Design</option>
-                        <option value="marketing">Marketing</option>
-                        <option value="operations">Operations</option>
-                        <option value="other">Other</option>
+                        <option value="Software development">Software development</option>
+                        <option value="Design">Design</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Operations">Operations</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 <div class="ft-form-group" id="ft-fg-project-color">
                     <label class="ft-form-label">Project color</label>
                     <div class="ft-color-picker" id="ft-color-picker">
-                        <div class="ft-color-dot ft-color--selected" style="background:#0d9488" title="Teal" onclick="ftSelectColor(this)"></div>
+                        <div class="ft-color-dot select-one ft-color--selected" style="background:#0d9488" title="Teal" onclick="ftSelectColor(this)"></div>
                         <div class="ft-color-dot" style="background:#6366f1" title="Indigo" onclick="ftSelectColor(this)"></div>
                         <div class="ft-color-dot" style="background:#f59e0b" title="Amber" onclick="ftSelectColor(this)"></div>
                         <div class="ft-color-dot" style="background:#ef4444" title="Red" onclick="ftSelectColor(this)"></div>
@@ -143,6 +143,7 @@
 
         $("#ft-add-project").click(function () {
 
+            $('#projectModalProjectId').val('0');
             $('#ft-project-name').val('');
             $('#ft-project-key').val('');
             $('#ft-project-description').val('');
@@ -159,6 +160,8 @@
             $('#ft-overlay-project').removeClass('ft-hidden').addClass('ft-overlay--visible');
             $('.ft-dropdown-panel--right').addClass('ft-dropdown--hidden');
             $('#ft-add-btn').attr('aria-expanded', 'false');
+
+            $('#ft-submit-project').html('<i class="bi bi-folder-plus"></i> Create Project');
 
            loadProjectLeadDropdown();
         })
@@ -205,7 +208,7 @@
         function createProject() {
 
           if (!ftValidateProject()) return;
-
+          const dueDate = $("#ft-project-due").val();
             var inputJSON = {
                   name:        $('#ft-project-name').val().trim(),
                   key:         $('#ft-project-key').val().trim().toUpperCase(),
@@ -213,12 +216,26 @@
                   color:       $('.ft-color-dot.ft-color--selected').css('background-color'),
                   category:    $('#ft-project-category').val(),
                   projectLeadId: $('#ft-project-lead').val() || null,
-                  endDate:     $('#ft-project-due').val()
+                  endDate:     dueDate ? dueDate : null
             };
             //console.log(inputJSON);
+            let projectId = $('#projectModalProjectId').val();
+            let url;
+            let requestType;
+
+            if(projectId > 0){
+               url = `flowtick/projects/${projectId}`;
+               requestType = 'PUT';
+            } 
+            else{
+               url = 'flowtick/projects';
+               requestType = 'POST';
+            }
+        
+           
             apiRequest({
-                  url: 'flowtick/projects',
-                  type: 'POST',
+                  url: url,
+                  type: requestType,
                   data: inputJSON,
                   callBack: createProjectCallBack
             });
@@ -229,8 +246,12 @@
                 $('#ft-overlay-project').removeClass('ft-overlay--visible').addClass('ft-hidden');
                 location.reload();
             }
+            if (response.request.status === 204) {
+                $('#ft-overlay-project').removeClass('ft-overlay--visible').addClass('ft-hidden');
+                location.reload();
+            }
             else if (response.request.status === 422) {
-                infoToastr('The Name field is required', 'info');
+                infoToastr('Required feild is missing', 'info');
             }
             else {
                 errorExtractor(response);
@@ -260,7 +281,81 @@
 
 
             return valid;
+      }
+
+      function updateProject(projectId){
+          
+            $('#projectModalProjectId').val('0');
+            $('#ft-project-name').val('');
+            $('#ft-project-key').val('');
+            $('#ft-project-description').val('');
+            $("#ft-project-category").val('');
+            $("#ft-project-lead").val('');
+            $("#ft-project-due").val('');
+           // $('.ft-color-dot').removeClass('ft-color--selected');
+
+            //remove validation message when modal open
+            $('#ft-project-name').removeClass('ft-input--error');
+            $('#ft-error-project-name').addClass('ft-hidden');
+            $('#ft-project-key').removeClass('ft-input--error');
+            $('#ft-error-project-key').addClass('ft-hidden');
+
+            $('#ft-overlay-project').removeClass('ft-hidden').addClass('ft-overlay--visible');
+            $('#ft-submit-project').html('<i class="bi bi-folder-plus"></i> Update Project');
+
+            //alert(projectId);
+            getProjectById(projectId);
+      }
+
+    function getProjectById(id = 0) {
+        let url = `flowtick/projects/${id}`;
+        apiRequest({
+            url: url,
+            type: 'GET',
+            data: {
+
+            },
+            callBack: getProjectByIdCallBack
+        });
+    }
+    var getProjectByIdCallBack = function (response) {
+        if (response.request.status === 200) {
+            if (response.data) {
+                let data = response.data;
+                console.log(data);
+                $('#projectModalProjectId').val(data.id);
+                $('#ft-project-name').val(data.name);
+                $('#ft-project-key').val(data.key);
+                $('#ft-project-description').val(data.description);
+
+                // category dropdown
+                $("#ft-project-category").val(data.category);
+
+                // due date
+                $("#ft-project-due").val( data.endDate && data.endDate !== "0001-01-01" ? data.endDate : '');
+                // remove previous selection
+                $('.ft-color-dot').removeClass('ft-color--selected');
+
+                let currentColor = data.color;
+                if(currentColor){
+                      // find matching color dot
+                    $('.ft-color-dot').each(function () {
+
+                        const dotColor = $(this).css('background-color');
+
+                        if (dotColor === currentColor) {
+                            $(this).addClass('ft-color--selected');
+                        }
+
+                    });
+                }
+                else{
+                    $('.select-one').addClass('ft-color--selected');
+                }
+              
+            }
         }
+    }
     function closeModal(modalId){
           $('#' + modalId).removeClass('ft-overlay--visible').addClass('ft-hidden');
     }
