@@ -452,7 +452,7 @@ select.ft-input {
     align-items: center;
     justify-content: center;
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 500 !important;
     color: #ffffff;
     flex-shrink: 0;
 }
