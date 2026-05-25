@@ -276,6 +276,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
             <button class="sb-nav" hidden><i class="bi bi-calendar3"></i><span class="sb-nav-txt">Calendar</span></button>
             <button class="sb-nav"><i class="bi bi-bar-chart-line"></i><span class="sb-nav-txt">Reports</span></button>
             <button class="sb-nav" hidden><i class="bi bi-people"></i><span class="sb-nav-txt">Team</span></button>
+            <button class="sb-nav" onclick="redirectToAction('/Timesheet/List?id=',0);"><i class="bi bi-clock-history"></i><span class="sb-nav-txt">Timesheet</span></button>
             <div class="sb-div"></div>
             <div class="sb-lbl">Projects</div>
         <div  id="sidebarProjectsContainer">
@@ -377,8 +378,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
       
                 var projects = response.data;
                 var $sidebar = $("#sidebarProjectsContainer");
+                var $dashboardProjects = $("#dashboardProjectsContainer");
 
                 $sidebar.html("");
+                $dashboardProjects.html("");
 
                 $.each(projects, function (index, project) {
                    let isOwner = project.role && project.role.name === "Owner";
@@ -400,7 +403,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
                         });
                     }
 
-                    $sidebar.append(
+                      $sidebar.append(
                             `
                                 <div class="sb-proj" data-pid="${project.id}"
         
@@ -416,8 +419,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
                                 </div>
                                `
                             );
+                     let boardLegnth = project.boards.length;
+
+                     let usersHtml = '';
+                    //  loop On Users here
+                    if (project.users && project.users.length > 0) {
+                        $.each(project.users, function (i, user) {
+                            usersHtml += `
+                                <div class="pmem" style="background:${user.colorCode}"data-bs-toggle="tooltip" title="${user.fullName}">${getInitials(user.fullName)}</div>
+                            `;
+                        });
+                    }
+                    let firstBoard = project.boards[0];
+                    let encBoardId = encryptNumber(firstBoard.id);
+                    let totalTask = project.totalTasks;
+                    let completeTask = project.completedTasks;
+                    let percentage = totalTask === 0 ? 0 : ((completeTask * 100) / totalTask).toFixed(0);
+                      $dashboardProjects.append(
+                            `
+                                <div class="pc"  onclick="redirectToAction('/Board/Project?project=${project.name}&type=${firstBoard.type}&boardId=${encBoardId}&id=', ${project.id})">
+                                     <div class="pc-top">
+                                         <div class="pc-av" style="background:${project.color ?? '#0d9488'}">${getProjectInitial(project.name)}</div>
+                                         <div><div class="pc-name">${project.name}</div>
+                                         <div class="pc-key">${project.key  ?? getInitials(project.name) } · ${boardLegnth} boards</div></div>
+                                         </div><div class="prog"><div class="prog-f" style="width:${percentage}%"></div>
+                                      </div>
+                                      <div class="pc-meta">
+                                          <div class="pc-avs">
+                                              ${usersHtml}
+                                           </div>
+                                          <span>${percentage}%</span>
+                                      </div>
+                                  </div>
+                            `
+                            );
           
-                   });
+                });
                        /* active current project + board */
                     $('.sb-board').removeClass('on');
              
