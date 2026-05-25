@@ -214,7 +214,7 @@
                 <div class="ft-dropdown-panel__section-label">
                     <i class="bi bi-folder"></i> Project
                 </div>
-                <div class="ft-dropdown-panel__item ft-dropdown-panel__item--featured" id="ft-add-project" role="menuitem">
+                <div class="ft-dropdown-panel__item ft-dropdown-panel__item--featured add-new-project" id="ft-add-project" role="menuitem">
                     <i class="bi bi-folder-plus"></i>
                     <span>New Project</span>
                     <i class="bi bi-arrow-right" style="margin-left:auto;font-size:12px;color:var(--ft-primary)"></i>
@@ -241,11 +241,6 @@
 }
 @{
     @await Html.PartialAsync("~/Views/Shared/PartialViews/Board/_ProjectTaskModalPartialView.cshtml")
-    ;
-}
-
-@{
-    @await Html.PartialAsync("~/Views/Shared/PartialViews/Board/_createtaskmodalpartialview.cshtml")
     ;
 }
 

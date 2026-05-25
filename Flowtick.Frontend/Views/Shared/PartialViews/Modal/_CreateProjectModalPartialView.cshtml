@@ -142,7 +142,7 @@
 <script>
     $(function () {
 
-        $("#ft-add-project").click(function () {
+        $(".add-new-project").click(function () {
             $('#projectModalProjectId').val('0');
             $('#ft-project-name').val('');
             $('#ft-project-key').val('');
@@ -162,6 +162,7 @@
             $('#ft-add-btn').attr('aria-expanded', 'false');
 
             $('#ft-submit-project').html('<i class="bi bi-folder-plus"></i> Create Project');
+            $('.ft-modal__title').text(' Create Project');
 
            loadProjectLeadDropdown();
         })
@@ -302,6 +303,7 @@
 
             $('#ft-overlay-project').removeClass('ft-hidden').addClass('ft-overlay--visible');
             $('#ft-submit-project').html('<i class="bi bi-folder-plus"></i> Update Project');
+            $('.ft-modal__title').text(' Update Project');
 
             //alert(projectId);
             getProjectById(projectId);
@@ -327,9 +329,8 @@
                 $('#ft-project-name').val(data.name);
                 $('#ft-project-key').val(data.key);
                 $('#ft-project-description').val(data.description);
-
                 // category dropdown
-                $("#ft-project-category").val(data.category);
+               $("#ft-project-category").val(data.category).trigger("change");
 
                 // due date
                 $("#ft-project-due").val( data.endDate && data.endDate !== "0001-01-01" ? data.endDate : '');
