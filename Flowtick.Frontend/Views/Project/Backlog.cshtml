@@ -1327,6 +1327,13 @@
 			`;
 		});
 
+	 var sprintList = "";
+		$.each(_projectSprintArray, function (i, sprint) {
+			sprintList += `
+				<option class="add-sprint-item" value="${sprint.id}">${sprint.name}</option>
+			`;
+		});
+
 	  $.each(sprintArray, function (sIndex, sprint) {
 
 			let totalTasks = sprint.taskStatusCount.all;
@@ -1405,7 +1412,8 @@
 								<th style="width:44%">Title</th>
 								<th>Priority</th>
 								<th>Assignee</th>
-								<th>Status</th></tr></thead>
+								<th>Status</th>
+								<th>Add to sprint</th></tr></thead>
 								<tbody class="sprint-task-tbody">
 
 								</tbody>
@@ -1469,7 +1477,8 @@
 								<th style="width:44%">Title</th>
 								<th>Priority</th>
 								<th>Assignee</th>
-								<th>Status</th></tr></thead>
+								<th>Status</th>
+								<th>Add to sprint</th></tr></thead>
 								<tbody class="sprint-task-tbody">
 
 								</tbody>
@@ -1532,7 +1541,8 @@
 								<th style="width:44%">Title</th>
 								<th>Priority</th>
 								<th>Assignee</th>
-								<th>Status</th></tr></thead>
+								<th>Status</th>
+								<th>Add to sprint</th></tr></thead>
 								<tbody class="sprint-task-tbody">
 
 								</tbody>
@@ -1593,8 +1603,12 @@
 							</div>
 						</div>
 						</td>
-
 						<td>${statusHtml}</td>
+						<td><select class="sprint-sel select2" onchange="addTaskToSprint(this)" data-task-id="${task.id}" >
+								  <option value="">Select sprint</option>
+									${sprintList}
+							   </select>
+						</td>
 					</tr>
 		  `;
 
@@ -1614,12 +1628,7 @@
 		$('#bl-count').text(totalItemInBacklog + ' items');
 		$('#bl-notsprint').text(totalItemInBacklog);
 		//console.log(totalItemInBacklog);
-		var sprintList = "";
-		$.each(_projectSprintArray, function (i, sprint) {
-			sprintList += `
-				<option class="add-sprint-item" value="${sprint.id}">${sprint.name}</option>
-			`;
-		});
+
 	  $.each(backlogArray, function (tIndex, task) {
 		 var statusHtml = "";
 		   if (task.status === "ToDo") {
