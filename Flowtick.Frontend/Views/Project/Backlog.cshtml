@@ -1616,6 +1616,17 @@
 		  $tbody.append(tr);
 		});
 
+		$tbody.find('.select2').each(function () {
+			if (!$(this).hasClass("select2-hidden-accessible")) {
+				$(this).select2({
+					width: '100%',
+					dropdownParent: $(this).closest('td')
+				});
+			}
+		});
+		setTimeout( function(){
+				$('body').css('overflow', 'hidden');
+		},1000);
 		// Append whole sprint block into container
 		$container.append($sprintElement);
 	  });
