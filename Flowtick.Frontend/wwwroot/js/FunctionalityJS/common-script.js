@@ -138,14 +138,15 @@ function errorExtractor(error) {
     if (error.request.status == 401) {
         //alert(`You're not authorized or logged in`);
         swal.fire({
-            title: `Logout`,
+            title: `🔒 Session Expired`,
             type: "info",
             text: `Your session has been expired, would you like to re-login`,
             showCancelButton: true,
             confirmButtonText: 'Yes Re-Login',
             cancelButtonText: 'No',
             closeOnConfirm: false,
-            closeOnCancel: true
+            closeOnCancel: true,
+            allowOutsideClick: false
         }).then(
             function (isConfirm) {
                 if (isConfirm.value == true) {
