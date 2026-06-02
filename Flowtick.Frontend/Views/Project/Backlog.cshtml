@@ -1100,9 +1100,10 @@
 		dropdownParent: $('#createSprintModal'),
 		width: "100%",
 	  });
+
+		getProjectSprints();
 	    getProjectMembers()
 		getTaskTypes();
-		getProjectSprints();
 		getSprintBacklog();
 		getSprintStatuses();
 
@@ -1327,12 +1328,15 @@
 			`;
 		});
 
-	 var sprintList = "";
+	 var sprintDropdownList = "";
 		$.each(_projectSprintArray, function (i, sprint) {
-			sprintList += `
+			sprintDropdownList += `
 				<option class="add-sprint-item" value="${sprint.id}">${sprint.name}</option>
 			`;
 		});
+		sprintDropdownList += `
+				<option class="add-sprint-item" value="0">Move to Backlog</option>
+		`;
 
 	  $.each(sprintArray, function (sIndex, sprint) {
 
@@ -1606,7 +1610,7 @@
 						<td>${statusHtml}</td>
 						<td><select class="sprint-sel select2" onchange="addTaskToSprint(this)" data-task-id="${task.id}" >
 								  <option value="">Select sprint</option>
-									${sprintList}
+									${sprintDropdownList}
 							   </select>
 						</td>
 					</tr>
@@ -1640,6 +1644,13 @@
 		$('#bl-notsprint').text(totalItemInBacklog);
 		//console.log(totalItemInBacklog);
 
+		 var backlogSprintDropdownList = "";
+		$.each(_projectSprintArray, function (i, sprint) {
+			backlogSprintDropdownList += `
+				<option class="add-sprint-item" value="${sprint.id}">${sprint.name}</option>
+			`;
+		});
+
 	  $.each(backlogArray, function (tIndex, task) {
 		 var statusHtml = "";
 		   if (task.status === "ToDo") {
@@ -1662,7 +1673,7 @@
 							<td>${statusHtml}</td>
 							<td><select class="sprint-sel select2" onchange="addTaskToSprint(this)" data-task-id="${task.id}" >
 								  <option value="">Select sprint</option>
-									${sprintList}
+									${backlogSprintDropdownList}
 							   </select>
 							</td>
 			</tr>
@@ -1687,7 +1698,13 @@
 	   const sprintId = selectEl.value;
 	   const taskId = selectEl.dataset.taskId;
 
-		let url = `flowtick/tasks/${taskId}/sprint/${sprintId}`;
+		let url = '';
+
+		if (sprintId == 0) {
+			url = `flowtick/tasks/${taskId}/move-to-backlog`;
+		} else {
+			url = `flowtick/tasks/${taskId}/sprint/${sprintId}`;
+		}
 			apiRequest({
 				url: url,
 				type: 'PUT',
@@ -1697,7 +1714,7 @@
 	}
 	var addTaskToSprintCallBack = function (response) {
 		if (response.request.status === 204) {
-			successToastr("Assigned successfully", 'Sprint');
+			successToastr("Moved successfully", 'Task');
 			getSprintBacklog();
 		}
 		else {
